@@ -1,0 +1,18 @@
+# Raw data: third-party dataset, not redistributed (see README "Data and reuse").
+data/
+
+# Locally generated experiment outputs.
+outputs/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# macOS
+.DS_Store
