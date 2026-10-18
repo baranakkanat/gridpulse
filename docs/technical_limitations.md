@@ -207,3 +207,38 @@ specific limits are repeated next to the results in `docs/experiment_results.md`
   1.055.
 - **The evaluation guard checks output file names only.** A different output directory or
   deleted outputs would get around it.
+
+## Phase 6 (measurement integrity, noise-aware feedback)
+
+- **Replication, not confirmation.**
+  - Same networks, profiles and periods as Phases 4–5. The author knew the ORIGINAL
+    Phase 5 evaluation results when setting the criteria.
+  - The primary rule and several criteria were set or amended after development data
+    (disclosed in protocol s. 9 and amendment 6A).
+- **Noise model.**
+  - The realistic condition puts the meter error into independent per-reading noise
+    (σ 0.01 p.u.). That is the pessimistic end of the plausible range, and the case
+    that persistence can filter.
+  - Real meters average over minutes and can carry substantial systematic error
+    (calibration offsets; JCGM 100, and AMI data-quality studies such as Blakely et al.
+    2019). The bias conditions show that outcomes then depend on the individual meters'
+    offsets.
+  - No meter model (averaging window, quantisation, clock error) is simulated.
+- **The persistence rule is not a reliability mechanism.**
+  - With exact readings it misses most closed-loop violations, which are shorter than
+    45 min.
+  - Its mismatch reliability under noise depends on the noise level.
+  - A rule fed by a continuous, noise-unbiased statistic was not tested.
+- **The chi-square test** checks a feeder's power balance. It is not calibrated under the
+  correct model, it is blind to voltage offsets, and in winter it is weak against
+  reactive-power errors. It cannot certify a state estimate.
+- **Statistics.**
+  - One noise path per paired interval; 5 networks; the 15 cells share days and
+    profiles.
+  - Noise replications 1–4 vary only the noise, not the data.
+  - Nothing is a significance test.
+- **Run protection is local.**
+  - `runguard` protects against accidents in one output directory.
+  - It cannot stop a deliberate rerun in another directory, and it is not a
+    tamper-proof record. The outputs and the provenance folder are not under version
+    control until the user commits them.

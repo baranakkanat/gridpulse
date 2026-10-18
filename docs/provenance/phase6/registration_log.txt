@@ -1,0 +1,97 @@
+2026-10-18T17:57:49Z Phase 6 protocol registered before the Phase 6 development and evaluation stages. Development-only diagnostics were run before registration (protocol s. 9). The Phase 6 code has read no evaluation day; the author knows the ORIGINAL Phase 5 evaluation results for the same days, and the Phase 5 reproduction check re-ran Phase 5's own analysis on semiurb4 evaluation days (disclosed in s. 9). This record supersedes a first registration record written at 17:57:36Z, before any registered run, to which only that disclosure paragraph was added.
+protocol and literature:
+fb9f6ee11c079895b8985f113eec5a6617386095b73d93674c8fb26c0bc9edc5  docs/phase6_protocol.md
+27fdfd336b08faadcb1d4510a7dc365cc85e1ce7b0299eb00fc0230012a71c3f  docs/phase6_literature.md
+source:
+6bce1a2b9f93a3b043fef2c2c7fc39c8e3a2a8f2d040a81bea7095bb2649ffc7  src/gridpulse/__init__.py
+c85a7279f5facfea2694f9626da6914f9c77d3208e2b9060979063658a5961e2  src/gridpulse/__main__.py
+ba2ee1e2860ea72982ec111709bcca42e182a6a145e6426b961a06409f732c50  src/gridpulse/baseline.py
+81f79eee5f9c4b9972d8f32a9bd0e8cab83ce2a5fc29afbaea89dd4e4ba9edab  src/gridpulse/calendar_analysis.py
+516bab19590c74d550c36da19ca3ff852306185ded575a2af6c1cb4ea8a279b4  src/gridpulse/data.py
+668bd51caada6e6c75424aed69cecdb2dd3ed6a597a9740751e69343c135e9a7  src/gridpulse/dual_study.py
+909e4258ca57a740fdc1ab0dc5be503d1575048df00cf068f999474fd4ac3a56  src/gridpulse/estimation.py
+c82e02d1ffe0f450091766010a452113182703f13e0b19cdcbde4db556820677  src/gridpulse/evaluation.py
+b78cbd8fd2e7be2842a30a4df5fd3fba0a185784df956bb80850d8b63773945e  src/gridpulse/features.py
+95f225603f10ba88dd85bd515115006ed3ba8fdbe4be7ad0b95d1a9f50df9f98  src/gridpulse/forecast_study.py
+3d282c79f60f10278a024a904660881600e82f0ba11a8709d0cbfe8ee776cd6e  src/gridpulse/fullstate.py
+ffce015bab478e47cfdf6f3bf286c7ce70a25c5a4f0f86d8f9fff7723422f7f6  src/gridpulse/grid.py
+173e223a94d943359627a2b2c77ebb2d4b15ac00f408e966340956efc2a652a2  src/gridpulse/grid_study.py
+7165b6c596c247a4e595e75489e2a29dd24f0e97d4e2b3fa942c611aee663c04  src/gridpulse/model.py
+1e028766ab8c20fc6c61e3b7d93c71e2c578ebe92bafa8fde54a1611ba3ae371  src/gridpulse/noise_study.py
+5368e01d32ab140a8674087e4d4d7ad15dc544abc47b9c01c804190ce782a93f  src/gridpulse/runguard.py
+88b20bf90f3a36537324b934f1290060abef1d4240367fa5de353288d036915e  src/gridpulse/sensing.py
+a8655dde621339d6f68823cf07be17b914dbce1fc1d538f3680845bb7a2d035c  src/gridpulse/uncertainty.py
+exploratory development diagnostics (outputs, git-ignored):
+109c13eb60950d1c620cc0475c51f3c821aadc911b2c2138de04004a1cda9363  outputs/noise_study/exploratory/development_diagnostics.json
+01ae7b3c121c857120a4727187f8a21b2181f4b539fc732355157a4215e9dae6  outputs/noise_study/exploratory/se_diagnostics.json
+diagnostic scripts:
+67a1fb912030781d9d4857e9c13429c337a0cdc8eb9e395c30e0912d94991391  docs/provenance/phase6/scripts/development_diagnostics.py
+85311a5ca27f54ff9be1fb76aa504bbf09a4af00bbfa1f94180bae2e8b26f966  docs/provenance/phase6/scripts/se_diagnostics.py
+
+2026-10-18T18:15:21Z amendment 6A recorded (protocol s. Amendment 6A), before any freeze or evaluation. First registered development stage completed 2026-10-18 (16 min) with the registered code and is archived unchanged in outputs/noise_study/development_v1/ (hashes below); its log is logs/development_v1_stage.log. Code changed per 6A (H6 implementation, persist3_meters primary rule, H2b, H1 evaluability, biased_meters_matched, replication reporting, block lengths, warm-up fields, runguard hardening incl. file mode 0644). Development stage now re-run. Current hashes:
+bde0f204cf0ad3b1cfb2b4136a33e265d6f8f8efc23231e59fda2c19c46501ed  docs/phase6_protocol.md
+27fdfd336b08faadcb1d4510a7dc365cc85e1ce7b0299eb00fc0230012a71c3f  docs/phase6_literature.md
+6bce1a2b9f93a3b043fef2c2c7fc39c8e3a2a8f2d040a81bea7095bb2649ffc7  src/gridpulse/__init__.py
+c85a7279f5facfea2694f9626da6914f9c77d3208e2b9060979063658a5961e2  src/gridpulse/__main__.py
+ba2ee1e2860ea72982ec111709bcca42e182a6a145e6426b961a06409f732c50  src/gridpulse/baseline.py
+81f79eee5f9c4b9972d8f32a9bd0e8cab83ce2a5fc29afbaea89dd4e4ba9edab  src/gridpulse/calendar_analysis.py
+516bab19590c74d550c36da19ca3ff852306185ded575a2af6c1cb4ea8a279b4  src/gridpulse/data.py
+668bd51caada6e6c75424aed69cecdb2dd3ed6a597a9740751e69343c135e9a7  src/gridpulse/dual_study.py
+909e4258ca57a740fdc1ab0dc5be503d1575048df00cf068f999474fd4ac3a56  src/gridpulse/estimation.py
+c82e02d1ffe0f450091766010a452113182703f13e0b19cdcbde4db556820677  src/gridpulse/evaluation.py
+b78cbd8fd2e7be2842a30a4df5fd3fba0a185784df956bb80850d8b63773945e  src/gridpulse/features.py
+95f225603f10ba88dd85bd515115006ed3ba8fdbe4be7ad0b95d1a9f50df9f98  src/gridpulse/forecast_study.py
+3d282c79f60f10278a024a904660881600e82f0ba11a8709d0cbfe8ee776cd6e  src/gridpulse/fullstate.py
+ffce015bab478e47cfdf6f3bf286c7ce70a25c5a4f0f86d8f9fff7723422f7f6  src/gridpulse/grid.py
+173e223a94d943359627a2b2c77ebb2d4b15ac00f408e966340956efc2a652a2  src/gridpulse/grid_study.py
+7165b6c596c247a4e595e75489e2a29dd24f0e97d4e2b3fa942c611aee663c04  src/gridpulse/model.py
+d0989386d8494e3804dbb451487fb587af8c492503dfa846a4681f0e2c673ce6  src/gridpulse/noise_study.py
+2c5139ea643bedd2b4bd3a79d1480c284fea232b5e5f5d6a4c2e47522b7e543c  src/gridpulse/runguard.py
+e51165222bfb34d996327e7edb6b1f8758795d3796dd28911bb3889420151458  src/gridpulse/sensing.py
+a8655dde621339d6f68823cf07be17b914dbce1fc1d538f3680845bb7a2d035c  src/gridpulse/uncertainty.py
+9a83314c3d3266158dfeb72f03fd842dc344c10adedaa04e6b62f14a94273a4d  pyproject.toml
+4c8809c63fddc04c1b410fe8149f5087c7347889311ffbcb3f683726641e2216  uv.lock
+67a1fb912030781d9d4857e9c13429c337a0cdc8eb9e395c30e0912d94991391  docs/provenance/phase6/scripts/development_diagnostics.py
+b0aea7ba162e6c8af5910638e72534f20c06687d314e8eaeb8ce3810874e8522  docs/provenance/phase6/scripts/report.py
+85311a5ca27f54ff9be1fb76aa504bbf09a4af00bbfa1f94180bae2e8b26f966  docs/provenance/phase6/scripts/se_diagnostics.py
+archived development_v1 outputs:
+e21d20ac966d96f79a26fe8943de177ae9880a9725ec3735c72220ac8a1d7603  outputs/noise_study/development_v1/development_hypotheses.json
+7cea4c1b0055f556d795fa9012490e75bd13109b51abebc5c8b214e71eca37bf  outputs/noise_study/development_v1/development_manifest.json
+81844ad1d750adecd6f7ad03d9cc01ac8fc19bf83156b54c7392061893ae197d  outputs/noise_study/development_v1/development_results.json
+50fe837615350ad44f5a6145fca3021d13a62391179ef5e761f9455dd9b30fc7  outputs/noise_study/development_v1/development_run_metadata.json
+
+2026-10-18T18:16:25Z the development re-run was refused by runguard before any computation (nothing written): the archive folder development_v1/ matched the stale-output glob. runguard now treats only files as stage outputs (test added). New hashes:
+847b450e824c8200d16973d543a19b6faaddad9a3a0af5aeddaf0283215c3c39  src/gridpulse/runguard.py
+b1283a54f30e0c2c6b91ff4bbf4c3db1d5230919c1ba734e545323bacc7cfa51  tests/test_runguard.py
+
+2026-10-18T18:35:56Z development stage (amended, 19 min) completed and verified; reviewed; FROZEN (outputs/noise_study/freeze.json: code, dependency pins and protocol equal those that produced the development outputs). Freeze record sha256:
+e8db5df51b6ba5c0b3f2928042e8dcaf755ba2e76804ed29184d6963b237de6b  outputs/noise_study/freeze.json
+59472ce73efa90b8b65804a549a5ef87acefb85199dbd86b658932ad7dd8bed4  outputs/noise_study/development_hypotheses.json
+7686d161c039e8b46d2a0c470fc033f1cd1ca1a59685e105a661710e7d317692  outputs/noise_study/development_manifest.json
+8c587b16d1898e133f63ebcbc55c63e1efc828233a3bbf3c1a067a57f1923dbd  outputs/noise_study/development_results.json
+8c01db770857d9fa0af3355cc81e6973b2e964f6fbc6add853d6152b2bec2c7a  outputs/noise_study/development_run_metadata.json
+
+2026-10-18T18:53:13Z evaluation stage completed (single run) and verified. Output sha256:
+3249d4cf422fdf29e68027a643b9c4f482b7a48ec33aaa3de24e9df79475f50e  outputs/noise_study/evaluation_hypotheses.json
+eb8b46e2c09f0cbdb7cbfaddc9f13953b72ec413b4d809021a931acd25e92fc5  outputs/noise_study/evaluation_manifest.json
+10d8f995b0edc23d86096c07cbc705d09721cbb6adebdcea669b06af196412bc  outputs/noise_study/evaluation_results.json
+0b5f9abd089258b7c8cd15f38cd2dae8bd020f751c488e4b0a59db72c7b89aa5  outputs/noise_study/evaluation_run_metadata.json
+
+2026-10-18T18:55:41Z post-evaluation diagnostic (not registered): docs/provenance/phase6/scripts/post_evaluation_runs.py re-ran the frozen policy for + 2 topology, exact readings, evaluation half, mismatch truths; 166 of 207 violation days have a longest run < 3 quarter-hours. Script sha256:
+bf75e4f71f52653325ecf1a48908b0ab67d90e49d84c8faced35f82076cfe0e9  docs/provenance/phase6/scripts/post_evaluation_runs.py
+
+2026-10-18T19:09:30Z post-evaluation: four independent read-only reviews (A+B physics/SE, C statistics, D software/reproducibility, E novelty/readiness) completed; documentation corrected (docs/phase6_results.md s. 11). Post-evaluation engineering corrections (no registered computation changed): runguard.complete re-checks code hashes; freeze created exclusively; legacy Phase 4/5 commands refuse a guarded directory; AlarmRule validates at construction; tests added. Evaluation outputs unchanged. Hashes after the corrections:
+48f054225e9cf2e8c9bd847a62ddf077eb8095fea5ad4f8efcc69e53fa4e027d  src/gridpulse/runguard.py
+9c84cf0af265cafcb2248335bdb647ad38a8fa23bd82c5e40754ba63527908ea  src/gridpulse/sensing.py
+dcefa6fde854543a51bce9e5e2205e7d0b3321c7bdee26e405a11d0a518719fa  src/gridpulse/__main__.py
+d0989386d8494e3804dbb451487fb587af8c492503dfa846a4681f0e2c673ce6  src/gridpulse/noise_study.py
+909e4258ca57a740fdc1ab0dc5be503d1575048df00cf068f999474fd4ac3a56  src/gridpulse/estimation.py
+3249d4cf422fdf29e68027a643b9c4f482b7a48ec33aaa3de24e9df79475f50e  outputs/noise_study/evaluation_hypotheses.json
+eb8b46e2c09f0cbdb7cbfaddc9f13953b72ec413b4d809021a931acd25e92fc5  outputs/noise_study/evaluation_manifest.json
+10d8f995b0edc23d86096c07cbc705d09721cbb6adebdcea669b06af196412bc  outputs/noise_study/evaluation_results.json
+0b5f9abd089258b7c8cd15f38cd2dae8bd020f751c488e4b0a59db72c7b89aa5  outputs/noise_study/evaluation_run_metadata.json
+
+2026-10-18T19:17:48Z final readiness gate (Reality Checker): ~60 recomputed numbers match; four documentation issues fixed (learning-guide sigma wording, literature contribution scope, reference URLs/DOIs, full-metering bias cost) plus non-blocking precision fixes. docs/phase6_literature.md was edited after registration (post-evaluation corrections, disclosed in the document); current hashes of the documents:
+8ebb215567049188ac19a8b341e9d71af632168d6b5e3f0c47761c75d9d32949  docs/phase6_literature.md
+d252b72a61f7e7f9b414945b5d0ee63b018b895b531e24adb127f0fc573d9b36  docs/phase6_results.md
+b818a21abfee42284d9db75a8494a50f6b50a867f1a907f2d8b1bcdd1c4582b3  docs/kibtek_pilot_concept.md

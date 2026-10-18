@@ -1,7 +1,7 @@
 """Command-line entry point.
 
 `python -m gridpulse {validate,baseline,compare,train-lightgbm,forecast-study,grid-study,
-dual-study,sense-study}`
+dual-study,sense-study,noise-study}`
 """
 
 from __future__ import annotations
@@ -96,7 +96,9 @@ def _checked_provenance(path: Path) -> dict:
 
 
 def _write_json(path: Path, content: dict) -> None:
-    path.write_text(json.dumps(content, indent=2) + "\n")
+    from gridpulse.runguard import atomic_write_text
+
+    atomic_write_text(path, json.dumps(content, indent=2) + "\n")
 
 
 def run_validate(input_path: Path) -> int:
@@ -563,6 +565,8 @@ def run_dual_study(stage: str, output_dir: Path, workers: int | None, networks) 
         _write_json(output_dir / "physics_provenance.json", provenance)
         print(f"physics cached in {cache_dir}")
         return 0
+    if any(output_dir.glob("*_manifest.json")):
+        raise RuntimeError(f"{output_dir} holds a guarded (Phase 6) study; use its own command")
     if stage == "evaluation" and any(output_dir.glob("evaluation_*")):
         raise RuntimeError(
             "evaluation outputs already exist; the protocol (s. 4.6) allows one evaluation run"
@@ -661,6 +665,8 @@ def run_sense_study(stage: str, output_dir: Path, workers: int | None, networks)
         _write_json(output_dir / "fullstate_provenance.json", provenance)
         print(f"full states cached in {cache_dir}")
         return 0
+    if any(output_dir.glob("*_manifest.json")):
+        raise RuntimeError(f"{output_dir} holds a guarded (Phase 6) study; use its own command")
     if stage == "evaluation" and any(output_dir.glob("evaluation_*")):
         raise RuntimeError(
             "evaluation outputs already exist; the protocol allows one evaluation run"
@@ -711,6 +717,80 @@ def run_sense_study(stage: str, output_dir: Path, workers: int | None, networks)
     }
     _write_json(output_dir / f"{stage}_run_metadata.json", metadata)
     print(json.dumps(_json_safe(output["hypotheses"]["P"]), indent=1))
+    print(f"outputs written to {output_dir}")
+    return 0
+
+
+def run_noise_study(stage: str, output_dir: Path, workers: int | None, networks) -> int:
+    """Phase 6 (docs/phase6_protocol.md): development, then freeze, then one evaluation.
+    Each stage is guarded by `runguard`: no rerun, no stale or partial outputs, and the
+    evaluation runs only with the code and protocol frozen after development."""
+    try:
+        from gridpulse import dual_study, noise_study, runguard
+    except ImportError as error:
+        raise RuntimeError(f"{error}; install the grid extra: uv sync --all-extras") from error
+
+    networks = list(networks or dual_study.HOSTING_CAPACITY)
+    unknown = sorted(set(networks) - set(dual_study.HOSTING_CAPACITY))
+    if unknown:
+        raise ValueError(f"unregistered networks: {unknown}")
+    protocol = noise_study.PROTOCOL
+    if stage == "freeze":
+        record = runguard.freeze(output_dir, protocol)
+        print(f"frozen at {record['frozen_utc']}: {len(record['code_sha256'])} hashes")
+        return 0
+    placements = None
+    if stage == "evaluation":
+        runguard.require_freeze(output_dir, protocol)
+        development = json.loads((output_dir / "development_results.json").read_text())
+        placements = development["placements"]
+        if set(networks) != set(placements):
+            raise ValueError("the evaluation must use the networks of the development stage")
+    identity = {
+        "study": "phase6-noise-study",
+        "experiment": "CORRECTED (identity-based noise); exploratory replication on "
+        "previously examined SimBench networks and 2016 profiles",
+        "stage": stage,
+        "networks": networks,
+    }
+    runguard.begin(output_dir, stage, identity, protocol)
+    started = datetime.now(UTC)
+    output = noise_study.run_study(
+        stage, Path("outputs/dual_study/physics_cache"),
+        Path("outputs/sense_study/fullstate_cache"), networks, workers or 3, placements,
+    )  # fmt: skip
+    written = [output_dir / f"{stage}_results.json", output_dir / f"{stage}_hypotheses.json"]
+    _write_json(written[0], _json_safe(
+        {"placements": output["placements"], "results": output["results"]}
+    ))  # fmt: skip
+    _write_json(written[1], _json_safe(output["hypotheses"]))
+    metadata = {
+        "gridpulse_version": version("gridpulse"),
+        "run_started_utc": started.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "identity": identity,
+        "conditions": {name: asdict(m) for name, m in noise_study.CONDITIONS.items()},
+        "primary_condition": noise_study.PRIMARY_CONDITION,
+        "rules": {name: asdict(r) for name, r in noise_study.RULES.items()},
+        "primary_rule": noise_study.PRIMARY_RULE,
+        "chi2_alpha": noise_study.CHI2_ALPHA,
+        "gross_error": {"vm_pu": noise_study.GROSS_VM, "loading": noise_study.GROSS_LOADING},
+        "replications": [0, *noise_study.REPLICATIONS],
+        "phase4_physics_fingerprint": dual_study.physics_fingerprint(),
+        "environment": {
+            "python": platform.python_version(),
+            "platform": platform.platform(),
+            **{
+                name: version(name)
+                for name in ("numpy", "pandas", "pandapower", "simbench", "scipy")
+            },
+        },
+        "data_license": "SimBench data: ODbL 1.0 / DbCL; not redistributed",
+    }
+    path = output_dir / f"{stage}_run_metadata.json"
+    _write_json(path, metadata)
+    written.append(path)
+    runguard.complete(output_dir, stage, written)
+    print(json.dumps(_json_safe(output["hypotheses"]), indent=1)[:4000])
     print(f"outputs written to {output_dir}")
     return 0
 
@@ -873,6 +953,16 @@ def main(argv: list[str] | None = None) -> int:
     sense.add_argument("--workers", type=int, default=None, help="parallel power-flow workers")
     sense.add_argument("--networks", nargs="*", default=None, help="subset of registered networks")
 
+    noise = commands.add_parser(
+        "noise-study",
+        help="Phase 6: noise-aware feedback, measurement integrity and sensor value "
+        "(development, freeze, then one evaluation; reuses the Phase 4/5 physics caches)",
+    )
+    noise.add_argument("--stage", choices=("development", "freeze", "evaluation"), required=True)
+    noise.add_argument("--output-dir", type=Path, required=True, help="directory for outputs")
+    noise.add_argument("--workers", type=int, default=None, help="parallel workers (default 3)")
+    noise.add_argument("--networks", nargs="*", default=None, help="subset of registered networks")
+
     args = parser.parse_args(argv)
     try:
         if args.command == "validate":
@@ -889,6 +979,8 @@ def main(argv: list[str] | None = None) -> int:
             return run_dual_study(args.stage, args.output_dir, args.workers, args.networks)
         if args.command == "sense-study":
             return run_sense_study(args.stage, args.output_dir, args.workers, args.networks)
+        if args.command == "noise-study":
+            return run_noise_study(args.stage, args.output_dir, args.workers, args.networks)
         return run_train_lightgbm(args.input, args.output_dir)
     except (OSError, ValueError, RuntimeError) as error:
         print(f"error: {error}", file=sys.stderr)

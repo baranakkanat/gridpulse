@@ -1,143 +1,140 @@
-# GridPulse: limited-measurement distribution grid risk assessment pilot (concept)
+# GridPulse: offline measurement-sufficiency pilot for one LV feeder (concept)
 
-**Status:** a concept for a future technical discussion. No contact has been made, no
-utility data has been requested or used, and nothing here describes KIB-TEK's actual
-measurements, systems or practices.
+**Status.**
 
-GridPulse is an offline research system. It is not operational software and must not be
-used for real-time decisions.
+- This is a concept for a future technical discussion.
+- No contact has been made. No utility data has been requested or used.
+- Nothing here describes KIB-TEK's actual network, measurements, systems or practices.
+- GridPulse is an offline research system. It is not operational software, it is not
+  certified, and it must not be used for real-time decisions.
 
-## 1. Pilot question
+## 1. Problem definition
 
-> Using the measurements the utility already has, can we identify important voltage and
-> loading risks on one LV feeder? And can we determine whether a few targeted additional
-> measurements would improve decisions?
+> Can we determine whether the measurements that already exist on one distribution
+> feeder are sufficient to identify its important constraints (feeder-end voltage,
+> cable loading, transformer loading) and to support reliable planning decisions, such
+> as PV connection approvals or curtailment limits? And would a few targeted additional
+> measurements change those decisions?
 
-## 2. What GridPulse can currently do (on synthetic benchmark networks)
+The question is about *planning and assessment*, offline, from historical data. It is not
+about controlling equipment.
 
-**Simulation and comparison.**
+## 2. What GridPulse can do today, and what is still a prototype
 
-- AC power flow (pandapower) of an LV feeder with its MV/LV transformer over a year of
-  quarter-hours.
-- Simulated PV curtailment decisions, with violations and curtailed energy counted on the
-  simulated "true" grid.
-- Comparison of what different measurement sets would detect:
-  - substation only;
-  - substation plus a few smart-meter voltages;
-  - state estimation with pseudo-measurements.
-- Rules for where a few extra sensors would help, designed only on historical data.
+All of this has been shown only on SimBench benchmark networks with synthetic 2016
+profiles (`docs/phase5_results.md`, `docs/phase6_results.md`). None of it has been
+validated on a real feeder.
 
-**Checking assumptions.**
+| Capability | Status |
+|---|---|
+| Quarter-hourly AC power flow of an LV feeder and its MV/LV transformer over a year (pandapower) | Implemented and tested on benchmarks; not field-validated |
+| Counting voltage and loading violations, and the PV curtailment needed to avoid them | Implemented and tested on benchmarks; not field-validated |
+| Simulating what a given measurement set would report: noise, per-meter bias, missing data, reporting delay; each reading's noise tied to its sensor | Implemented and tested on benchmarks. The averaging behaviour of real meters (often 15-min means) is not modelled |
+| Which risks a given measurement set can and cannot see (detection, false alarms, misses) | Implemented on benchmarks. The results depend strongly on the assumed meter error structure (random vs bias) |
+| Model-consistency check: measured substation voltage and reactive power against the model's prediction from metered consumption and generation | Research prototype; idealised test only |
+| Ranking a few candidate meter locations (feeder ends, largest PV, decision-aware) | Research prototype |
+| Online margin calibration from measured violations, with a noise-aware alarm rule | Research prototype; **not part of this pilot**, which involves no control |
+| WLS state estimation with forecast pseudo-measurements and a chi-square consistency test | Research prototype. It can flag a wrong reactive-power model only when there is enough PV (78 % of estimates flagged in December in the benchmark). It gives 1.5–37 % false flags under a correct model and cannot see voltage offsets. It cannot certify an estimate |
 
-- A model-consistency check: measured substation voltage and reactive power against the
-  network model's prediction from metered consumption and generation.
-- Explicit labels for when the evidence is insufficient or inconsistent.
+## 3. Required network data (minimum)
 
-The quantitative findings (`docs/phase5_results.md`) come from SimBench benchmark networks
-with synthetic 2016 profiles. They are **not** evidence about any real utility's network.
+| Item | Why |
+|---|---|
+| Single-line diagram of the feeder: buses, cable sections, connection points | Where violations can occur; the power-flow model |
+| Cable types and lengths (or R, X per section) and thermal ratings | Voltage rise and cable loading |
+| MV/LV transformer: rating, impedance, tap range and **registered tap position** | Transformer loading and LV voltage level. A wrong tap is a key model error |
+| PV connections: location, installed power, inverter settings if known (cos φ, Q(U)) | PV-driven overvoltage and reverse flow. A wrong reactive-power setting is the other key model error |
+| Customer connection points with annual energy or load profiles. Customer-level series are personal data: aggregated or pseudonymised, for the minimum period needed, and without identifiers | Load model; pseudo-measurements |
+| The utility's operational limits (voltage band, loading limits) | What counts as a violation |
 
-### What the benchmark study suggests a pilot could test
+## 4. Minimum measurement requirements
 
-These are hypotheses for a real feeder, not results about one.
+| Item | Why |
+|---|---|
+| Historical transformer measurements (current or P and Q; LV busbar voltage if available), with interval, period and accuracy | The main measured signal. With metered consumption and generation it also allows the model-consistency check |
+| Metered customer consumption and PV generation for the same period, with interval | Model consistency; pseudo-measurements |
 
-1. **Is the network model consistent with what is measured?**
-   - Comparing the measured substation voltage and reactive power with the model's
-     prediction from metered consumption and generation flagged every day with a wrong
-     tap or MV voltage.
-   - It raised no false flag under the correct model.
-   - This was idealised: exact metering and a constant MV voltage. It also cannot say
-     which parameter is wrong.
-   - It is the cheapest and clearest first step, and it needs no new sensors.
-2. **What do the existing measurements miss?**
-   - Substation telemetry saw transformer and feeder-head overloads.
-   - It detected no remote overvoltage as such, and missed most of them when the model
-     had a voltage offset (recall 0.14–0.45).
-   - It missed overloads of mid-feeder cable segments.
-3. **Would one or two extra voltage readings change decisions?**
-   - In the benchmarks with realistic meter noise, one or two smart-meter voltages near
-     the feeder end or the largest PV raised the cases meeting the violation target from
-     4 to 12–14 of 15. The fourth added nothing.
-   - About half of that gain came from noise-driven conservatism. With exact readings,
-     two sensors reached 9 of 15, and placement chosen for the decision did better
-     (13 of 15).
-   - The answer for a real feeder therefore depends on the meters' actual accuracy.
-4. **How noisy are the readings?**
-   - Meter noise near the voltage limit created false alarms. A feedback rule then turned
-     them into extra curtailment, under the correct model: about 3× with two sensors and
-     6× with every bus metered.
-   - With exact readings, extra sensors cost no extra curtailment.
-   - A pilot should establish meter accuracy and averaging before any feedback use is
-     considered.
+## 5. Optional measurement improvements, and what they would add
 
-## 3. Proposed pilot scope
-
-- **One** small LV feeder, chosen with the utility's engineer.
-- **Offline**, historical analysis only. No connection to SCADA, no automated control, no
-  operational integration, no production deployment.
-- **Deliverable:** a short technical report covering:
-  - which risks the existing measurements can and cannot observe;
-  - how sensitive the conclusions are to uncertain network parameters (transformer tap,
-    MV voltage, inverter reactive-power settings);
-  - whether the measured substation quantities are consistent with the model (a
-    model-consistency check);
-  - whether the binding limit is a voltage at a feeder end or the loading of a cable
-    section. Only the latter needs current sensing;
-  - whether and where 1–4 additional voltage measurements would change the conclusions.
-- **Confidentiality:**
-  - Utility data would stay outside the public repository.
-  - It would be used only under written authorisation.
-  - It would be deleted or returned on request.
-
-## 4. Data requirements
-
-| Item | Priority | Why it is needed |
+| Item | What it would add | Caveat from the benchmark studies |
 |---|---|---|
-| Single-line diagram of the feeder (buses, cable sections, connection points) | REQUIRED | The power-flow model; where violations can occur |
-| Cable types and lengths (or R, X per section) and thermal ratings | REQUIRED | Voltage rise and line loading |
-| MV/LV transformer: rating, impedance, tap range and **registered tap position** | REQUIRED | Transformer loading and LV voltage level. A wrong tap is a key model uncertainty |
-| Historical transformer loading (current or P/Q), with interval and period | REQUIRED | Validates the model; the main measured signal |
-| PV connections: location, installed power, inverter settings if known (cos φ / Q(U)) | REQUIRED | PV-driven overvoltage and reverse flow |
-| Customer connection points and annual energy or load profiles | REQUIRED | Load model; pseudo-measurements |
-| Any existing voltage measurements (substation LV busbar, smart meters, PQ recorders) with accuracy class, averaging interval and reporting delay | USEFUL | Detection of remote violations; model-consistency checks. In the benchmarks, meter noise near the limit decided how much a feedback rule curtailed |
-| Any current or loading measurements on feeder cable sections | USEFUL | Voltage readings cannot reveal mid-feeder cable overloads |
-| Operational limits used by the utility (voltage band, loading limits) | USEFUL | Defines what counts as a violation |
-| MV voltage at the secondary substation, or its typical range | USEFUL | Second main model uncertainty |
-| Known operating events (complaints, inverter trips, tap changes) | OPTIONAL | Validation of detected risks |
-| Communication and data-availability characteristics (latency, missing data) | OPTIONAL | Realistic measurement model |
-| Historical curtailment or PV control actions | OPTIONAL | Comparison with simulated decisions |
+| Existing smart-meter or power-quality voltage readings (with accuracy class, averaging interval, reporting delay) | Direct evidence of feeder-end voltages | Violations are often smaller than single-reading meter noise. Averaging or persistence helps against random noise, but per-meter bias does not average out. Real overvoltages are often short (minutes; Kreuwel et al. 2021), so 15-min averages or persistence filters can hide them |
+| One or two additional voltage measurements near feeder ends or the largest PV | The main candidates for "worth adding" | Their value depends on meter accuracy and on how alarms are filtered |
+| Current measurements on mid-feeder cable sections | The only direct way to see cable overloads away from the substation | Voltage readings cannot reveal them |
+| MV voltage at the secondary substation, or its range | Separates MV-voltage from tap-position errors | — |
+| Known events: complaints, inverter trips, tap changes | Validation | — |
 
-## 5. What can be concluded at different data levels
+## 6. Expected validation procedure (for a pilot)
 
-| Data available | Can be concluded | Cannot be concluded |
-|---|---|---|
-| Diagram + parameters + transformer loading only | Whether transformer overload or reverse flow occurs, and how often. Model-based estimates of remote voltage risk, labelled as model-based | Whether remote voltage violations actually occur. Errors in tap or MV voltage stay undetected |
-| … + substation LV busbar voltage and metered consumption and generation | The above, plus detection of a voltage offset between model and reality (wrong tap, high MV voltage) | Feeder-end voltages and mid-feeder cable loading, except by model-based inference (state estimation, whose false-alarm rate in the benchmarks exceeded the registered limit) |
-| … + a few smart-meter voltages (with timestamps) | Direct evidence of feeder-end voltages at those points, and an estimate of the value of further sensors | Loading of unmeasured cable sections. Behaviour of unmeasured inverters |
-| … + inverter settings | Assessment of reactive-power effects on transformer loading and voltage | Real-time state, unless real-time telemetry exists |
+1. **Model check.** Run the feeder model against historical transformer measurements.
+   Report the residuals, and whether tap or MV-voltage assumptions need correcting.
+2. **Detection capability.** From the existing measurements, report which constraint
+   types can be observed, and with which uncertainty.
+3. **Sensor value.** Compare the existing measurements with "+1–2 voltage meters" and
+   "+ cable current" alternatives. Simulate on the calibrated model, with the actual
+   meter accuracy and reporting.
+4. **Review.** The utility's engineers review every finding. Any recommendation is an
+   engineering input, not an instruction.
+5. **Independent check, where possible.** Compare against known events or a short
+   independent measurement campaign.
 
-In every case the result is an engineering assessment that supports a decision. It is not
-a certified safety conclusion.
+## 7. Confidentiality and data handling
 
-## 6. Five questions for a technical conversation
+- Utility data would be used only under written authorisation and for the agreed offline
+  analysis.
+- Utility data and anything derived from it stay **outside** the GridPulse repository and
+  any public release. Whether and how GridPulse is published is still undecided.
+- Customer-level data are personal data. Only the minimum needed, aggregated or
+  pseudonymised, would be requested.
+- Data are deleted or returned on request. No connection to operational systems.
+- A technical needs discussion can precede any formal data-sharing agreement. No data
+  should be shared through informal channels.
 
-1. Which measurements exist today at the secondary substations and on LV feeders? For each:
-   quantities, accuracy, interval, and how quickly the data become available.
-2. Which operational decisions on LV feeders are hardest today? For example PV connection
-   approvals, curtailment, voltage complaints, transformer upgrades.
-3. Which risks are hardest to observe with current measurements? For example voltage at
-   feeder ends, cable loading, reverse power flow, unknown tap positions.
-4. Which of the data above could be shared for an offline study, under what authorisation
-   and confidentiality terms?
-5. What result from a pilot would be useful enough to justify the engineer's time? For
-   example a risk map, a sensor-placement recommendation, or a model-consistency check.
+## 8. Pilot success criteria (proposed, to be agreed)
 
-## 7. What remains unsuitable for operational use
+| Criterion | Measure |
+|---|---|
+| Technical feasibility | A feeder model whose transformer-level predictions match historical measurements within a tolerance agreed with the engineer |
+| Feeder-end check | An independent feeder-end voltage check, from an existing power-quality recorder or a short measurement campaign. A transformer-level match cannot validate feeder-end voltages, because tap and MV-voltage offsets are absorbed |
+| Meter error bounded | Meter accuracy and bias bounded from specifications or a reference comparison, with results reported across plausible bias values |
+| Not a criterion | Acceptance by a state-estimation chi-square test is not evidence of a correct state, and is not a success criterion |
+| Usefulness of the finding | The engineer judges the observability findings ("which risks the current measurements can and cannot see") correct and relevant |
+| Usefulness of the recommendation | Either a reasoned recommendation for 0–2 additional measurements, or a reasoned statement that none would change the planning decision |
+| Data handling | All agreed confidentiality conditions met; nothing published |
 
-- **Benchmarks only.** All results so far come from benchmark networks with synthetic
-  profiles.
-- **Simplified model.** The network model is balanced (single-phase equivalent), and
-  curtailment is modelled as a uniform cap.
-- **No field validation.** No result has been validated against field measurements.
-- **No guarantees.** The online calibration provides long-run averages, not per-day
-  guarantees. Labels such as "insufficient evidence" are research outputs, not
+No savings or monetary figures are estimated in advance.
+
+## 9. Five questions for the engineering contact
+
+1. **Measurement infrastructure** (ask first).
+   - Which voltage measurements exist today on LV feeders: substation busbar, smart
+     meters, power-quality recorders?
+   - For each: are the values instantaneous or averaged, and over what interval?
+   - What accuracy is specified? Has any meter been compared against a reference
+     instrument?
+   - How soon are the data available?
+   - The benchmark studies show that meter accuracy, bias and averaging decide whether
+     added sensing has any value. The question asks for no data.
+2. **Network model.** Is there a technical model or single-line diagram of LV feeders
+   with cable data and registered transformer tap positions? How reliable is it
+   considered to be?
+3. **Current problems.** Which voltage, transformer-loading or solar-connection
+   assessment problems occur today? For example complaints, approvals, curtailment or
+   reverse flow.
+4. **Methods and their limits.** How are these assessed today, and where do the current
+   methods fall short? For example missing measurements, uncertain models, effort.
+5. **Value of a pilot.** Would an authorised, offline analysis of one feeder with
+   appropriately protected historical data give useful planning insight? What result
+   would justify the engineer's time?
+
+## 10. What remains unsuitable for operational use
+
+- **No real data yet.** All results so far come from benchmark networks with synthetic
+  profiles. Nothing is validated against field measurements.
+- **Simplified model.** Balanced single-phase-equivalent model; uniform PV caps; no
+  inverter protection or dynamic effects.
+- **Simplified measurement model.** Noise and bias are modelled as statistical
+  assumptions, not as specific meter types.
+- **No guarantees.** The online calibration gives long-run averages, not per-day
+  guarantees. The evidence labels and the chi-square test are research outputs, not
   certifications.

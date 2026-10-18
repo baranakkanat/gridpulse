@@ -188,11 +188,17 @@ def estimate(net, observability_cache: dict | None = None) -> dict:
     success = bool(outcome["success"]) if isinstance(outcome, dict) else bool(outcome)
     vm = net.res_bus_est["vm_pu"] if success else None
     if success and np.isfinite(vm.to_numpy()).all():
+        # Phase 6: the weighted residual sum J = r' R^-1 r and its degrees of freedom
+        # (measurements, incl. zero-injection rows, minus states) for a chi-square test
+        r = np.asarray(se.solver.r).ravel()
+        weights = np.diag(se.solver.R_inv)
         result.update(
             success=True,
             vm=vm.to_dict(),
             line_loading=net.res_line_est["loading_percent"].to_numpy(),
             iterations=int(outcome["num_iterations"]),
+            objective=float(np.sum(r**2 * weights)),
+            dof=int(len(r) - len(se.solver.eppci.E)),
         )
     return result
 

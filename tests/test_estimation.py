@@ -125,3 +125,12 @@ def test_estimator_inputs_drop_current_magnitudes_but_keep_the_rest():
     inputs = es.estimator_inputs(config)
     assert inputs.transformer and inputs.voltages == (5,)
     assert inputs.heads == () and inputs.lines == ()
+
+
+def test_objective_and_degrees_of_freedom_count_zero_injection_rows(feeder):
+    net, b = feeder
+    exact = es.estimate(_with(net, _substation(net, b) + _pseudo(net, b)), {})
+    # 3 substation + 4 pseudo + 2 zero-injection buses x (P, Q) = 11 rows; 5 buses -> 9 states
+    assert exact["success"] and exact["dof"] == 2 and exact["objective"] < 1.0
+    biased = es.estimate(_with(net, _substation(net, b) + _pseudo(net, b, error=0.5)), {})
+    assert biased["success"] and biased["objective"] > 100 * max(exact["objective"], 1e-6)

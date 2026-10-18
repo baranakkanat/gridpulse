@@ -462,3 +462,76 @@ Phase 5 tested three labels.
   - Without that condition the primary verdict would have been read as a clean success.
 - **"Is my model wrong?" is easier to answer than "where is my grid violated?".** It is
   worth asking first.
+
+## 12. Phase 6 concepts: noisy feedback, common random numbers, and what a test can certify
+
+### 12.1 Compare like with like: common random numbers
+
+When two configurations share a sensor, that sensor should report the *same* noise in
+both. Then a difference in outcome comes from the configurations, not from luck.
+
+- **What Phase 5 did.** It drew noise from one random stream per run, seeded from the
+  configuration's name.
+  - Two rules that chose identical meters still "differed".
+  - Those differences decided its placement tie-breaks.
+- **What Phase 6 does.** It derives each reading's noise from the identity of the
+  physical observation: network, truth, quantity, sensor, day, quarter-hour.
+  - The derivation uses a stable hash.
+  - Python's `hash` is salted per process, so it is not used.
+
+### 12.2 When the noise is bigger than the signal
+
+**The numbers.**
+
+- Simulated voltage violations here exceed the limit by about 0.001–0.014 p.u.
+- The study models a smart-meter reading as uncertain by 0.01 p.u., independent per
+  reading. That is a pessimistic value: specifications bound it at about 0.008 p.u. or
+  below.
+
+**Why no single-reading rule works.**
+
+- *Unfiltered:* every noisy exceedance is an alarm. A count-based controller then
+  curtails until no meter reads near the limit. That is safe-looking and expensive.
+- *Guard band* (alarm above limit + 2σ): false alarms vanish, but so do most real
+  violations.
+
+**Averaging or persistence helps against independent noise** (√n). It fails in two
+cases:
+
+- *against bias*: a meter that reads 0.01 p.u. high does so every time;
+- *against short events*: here most closed-loop violations last under 45 min, so a
+  45-min persistence rule cannot see them with exact readings.
+
+**Lesson.** Always run the "exact readings" condition next to the noisy one. If a method
+does better with noise than without, part of what it does is driven by the noise.
+
+### 12.3 What a residual test can and cannot tell you
+
+**What a chi-square test checks.** A WLS state estimate passes when its weighted
+residuals look like noise. With only substation measurements here, that checks just one
+thing: does the measured transformer P and Q match the sum of the forecast injections?
+
+**What it catches and what it misses.**
+
+- It catches a wrong inverter reactive-power setting, because Q does not balance. Late
+  in the year, with little PV, it can miss even that: in one network only 51 % of
+  December estimates were flagged.
+- It is blind to a wrong tap or MV voltage: the estimator absorbs the offset.
+- It is blind to a large error at one customer when the totals balance.
+
+**Lesson.** "Converged" and "passed the bad-data test" are not evidence that the state
+is right.
+
+### 12.4 Questions to be ready for (Phase 6)
+
+1. *Did fixing the seeding change Phase 5?* No: 14 cells and about 145 MWh before and
+   after. It did make Phase 5's placement tie-breaks meaningless.
+2. *So is noise-aware feedback solved?*
+   - The cost under the correct model is, for independent per-reading noise: 55 MWh
+     against 53 MWh with exact readings. Under per-meter bias it is not.
+   - Reliability under model errors still borrows from noise.
+   - The next step is a feedback signal that estimates how far the voltage is from the
+     limit, not whether a reading crossed it.
+3. *Should a utility install more meters?*
+   - In this benchmark, two well-placed meters gave most of the value.
+   - Their accuracy, and especially their bias, decide whether that value is real.

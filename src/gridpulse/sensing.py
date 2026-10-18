@@ -16,6 +16,7 @@ from the LV busbar into the transformer (reverse flow).
 
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass
 
 import networkx as nx
@@ -133,6 +134,7 @@ class MeasurementModel:
     sigma_loading: float = 0.0  # relative (fraction of the reading)
     remote_missing: float = 0.0  # probability that a remote sensor-day is missing
     remote_delay_days: int = 0
+    sigma_bias_remote: float = 0.0  # p.u.; fixed per meter (Phase 6 sensitivity only)
 
 
 def _noisy(values: np.ndarray, sigma: float, rng, relative: bool = False) -> np.ndarray:
@@ -142,11 +144,120 @@ def _noisy(values: np.ndarray, sigma: float, rng, relative: bool = False) -> np.
     return values + rng.normal(0.0, 1.0, size=values.shape) * scale
 
 
-def measure(state: dict, levels: np.ndarray, config: Config, layout: Layout, model, rng) -> dict:
+def _stable_int(text: str) -> int:
+    """A 64-bit integer from text that is the same in every process and on every platform
+    (unlike Python's salted `hash`)."""
+    return int.from_bytes(hashlib.sha256(text.encode()).digest()[:8], "little")
+
+
+class NoiseBank:
+    """Measurement noise tied to the identity of the physical observation (Phase 6).
+
+    A reading's standard-normal noise is a function of (network, truth, replication,
+    quantity, sensor element, day, quarter-hour) only, and a remote sensor-day's
+    missingness draw of (network, truth, replication, quantity, element, day). It does not
+    depend on the configuration's name, on which other sensors are installed, on the
+    applied caps, or on which days are simulated: shared sensors see common random numbers
+    across configurations, policies and measurement conditions. A meter's calibration bias
+    is a property of the device, so it depends on (network, replication, element) only.
+
+    Quantities: `busbar_voltage`, `trafo_loading`, `trafo_p`, `trafo_q` (element 0, the
+    transformer device), `line_current` (line index; feeder-head and other line sensors
+    measure the same physical current), `meter_voltage` (bus index).
+
+    Phase 5 used one random stream per run, seeded from the configuration name
+    (`seed_of`): identical sensors received different noise (docs/phase5_results.md s. 11).
+    That path is kept unchanged so the frozen Phase 5 results stay reproducible."""
+
+    DAYS = 366  # day-of-year index of the 2016 profiles
+
+    def __init__(self, network: str, truth: str, replication: int = 0) -> None:
+        self.network, self.truth, self.replication = network, truth, int(replication)
+        self._streams: dict = {}
+
+    def _generator(self, *parts) -> np.random.Generator:
+        entropy = [_stable_int(self.network), self.replication, *(_stable_int(p) for p in parts)]
+        return np.random.default_rng(np.random.SeedSequence(entropy))
+
+    def _stream(self, kind: str, quantity: str, element: int) -> np.ndarray:
+        key = (kind, quantity, int(element))
+        if key not in self._streams:
+            if kind == "bias":
+                gen = self._generator("bias", quantity, str(int(element)))
+                self._streams[key] = gen.standard_normal()
+            else:
+                gen = self._generator(self.truth, kind, quantity, str(int(element)))
+                shape = (self.DAYS, STEPS) if kind == "normal" else (self.DAYS,)
+                draw = gen.standard_normal if kind == "normal" else gen.random
+                self._streams[key] = draw(shape)
+        return self._streams[key]
+
+    def normal(self, quantity: str, elements, day: int) -> np.ndarray:
+        """Standard-normal noise of day `day`, quarter-hours x elements."""
+        return np.stack([self._stream("normal", quantity, e)[day] for e in elements], axis=1)
+
+    def uniform(self, quantity: str, elements, day: int) -> np.ndarray:
+        """One uniform draw per element for day `day` (sensor-day missingness)."""
+        return np.array([self._stream("uniform", quantity, e)[day] for e in elements])
+
+    def bias(self, quantity: str, elements) -> np.ndarray:
+        """One standard-normal calibration offset per device (constant over time)."""
+        return np.array([self._stream("bias", quantity, e) for e in elements])
+
+
+def _measure_identified(
+    state: dict, levels: np.ndarray, config: Config, layout: Layout, model, noise: NoiseBank,
+    day: int,
+) -> dict:  # fmt: skip
+    """`measure` with noise from `noise` (observation identity, common random numbers)."""
+    steps = np.arange(STEPS)
+    column = {b: i for i, b in enumerate(layout.buses)}
+
+    def noisy(values, sigma, quantity, elements, relative=False):
+        if sigma == 0:
+            return values
+        scale = sigma * np.abs(values) if relative else sigma
+        return values + noise.normal(quantity, elements, day) * scale
+
+    out = {}
+    if config.transformer:
+        trafo = state["trafo"][steps, levels]
+        sigma = model.sigma_loading
+        out["trafo_loading"] = noisy(trafo[:, 2:3], sigma, "trafo_loading", (0,), True)
+        out["busbar_vm"] = noisy(trafo[:, 3:4], model.sigma_v_substation, "busbar_voltage", (0,))
+        out["trafo_p"] = noisy(trafo[:, 0:1], sigma, "trafo_p", (0,), True)
+        out["trafo_q"] = noisy(trafo[:, 1:2], sigma, "trafo_q", (0,), True)
+    if config.heads:
+        heads = state["line"][steps, levels][:, list(config.heads)]
+        out["head_loading"] = noisy(heads, model.sigma_loading, "line_current", config.heads, True)
+    if config.lines:
+        lines = state["line"][steps, levels][:, list(config.lines)]
+        out["line_loading"] = noisy(lines, model.sigma_loading, "line_current", config.lines, True)
+    if config.voltages:
+        vm = state["vm"][steps, levels][:, [column[b] for b in config.voltages]]
+        vm = noisy(vm, model.sigma_v_remote, "meter_voltage", config.voltages)
+        if model.sigma_bias_remote:
+            vm = vm + noise.bias("meter_voltage", config.voltages) * model.sigma_bias_remote
+        out["remote_vm"] = vm
+        available = noise.uniform("meter_voltage", config.voltages, day) >= model.remote_missing
+        out["remote_available"] = available
+    return out
+
+
+def measure(
+    state: dict, levels: np.ndarray, config: Config, layout: Layout, model, rng, *,
+    noise: NoiseBank | None = None, day: int | None = None,
+) -> dict:  # fmt: skip
     """Readings of `config` on one day whose caps were `levels` (96), from the true state.
 
     Returns per-quantity arrays (96 x sensors) plus `remote_available` (sensor mask). This
-    is the only place where a decision-side quantity is derived from ground truth."""
+    is the only place where a decision-side quantity is derived from ground truth. With a
+    `noise` bank (Phase 6) the noise of day `day` is tied to the observation identity;
+    without one, `rng` is drawn in configuration order (Phase 5, kept for reproduction)."""
+    if noise is not None:
+        if day is None:
+            raise ValueError("identity-based noise needs the day")
+        return _measure_identified(state, levels, config, layout, model, noise, day)
     steps = np.arange(STEPS)
     column = {b: i for i, b in enumerate(layout.buses)}
     out = {}
@@ -169,10 +280,53 @@ def measure(state: dict, levels: np.ndarray, config: Config, layout: Layout, mod
     return out
 
 
-def flagged_steps(readings: dict, config: Config, layout: Layout) -> tuple[np.ndarray, np.ndarray]:
+@dataclass(frozen=True)
+class AlarmRule:
+    """How readings become violation alarms (Phase 6, docs/phase6_protocol.md).
+
+    - `guard`: each limit is raised by `guard` standard uncertainties of that reading
+      (voltage: the sensor's sigma in p.u., for meters including calibration bias; loading:
+      `sigma_loading` x 100 %), a guarded decision rule in the sense of JCGM 106;
+    - `persistence`: a sensor's exceedance counts only inside a run of at least this many
+      consecutive quarter-hours of that sensor;
+    - `scope`: "all" applies the rule to every reading; "meters" only to remote meter
+      voltages, leaving substation readings unfiltered (amendment 6A).
+
+    The Phase 5 rule is AlarmRule("unfiltered") (no guard, persistence 1)."""
+
+    name: str
+    guard: float = 0.0
+    persistence: int = 1
+    scope: str = "all"
+
+    def __post_init__(self) -> None:
+        if self.scope not in ("all", "meters") or self.persistence < 1 or self.guard < 0:
+            raise ValueError(f"invalid alarm rule {self}")
+
+
+def _persistent(over: np.ndarray, length: int) -> np.ndarray:
+    """Exceedances (steps x sensors) that lie in a run of >= `length` consecutive steps."""
+    if length <= 1:
+        return over
+    keep = np.zeros_like(over)
+    for j in range(over.shape[1]):
+        edges = np.diff(np.concatenate(([0], over[:, j].astype(int), [0])))
+        for start, end in zip(np.flatnonzero(edges == 1), np.flatnonzero(edges == -1), strict=True):
+            if end - start >= length:
+                keep[start:end, j] = True
+    return keep
+
+
+def flagged_steps(
+    readings: dict, config: Config, layout: Layout, *, alarm: AlarmRule | None = None,
+    model: MeasurementModel | None = None,
+) -> tuple[np.ndarray, np.ndarray]:  # fmt: skip
     """Steps at which a reading shows a limit violation: (substation sensors, remote).
 
-    Direct detection: voltage above the bus's limit, loading above 100 %. No inference."""
+    Direct detection: voltage above the bus's limit, loading above 100 %. No inference.
+    An `alarm` rule other than the Phase 5 one needs the measurement `model` (its sigmas)."""
+    if alarm is not None and (alarm.guard != 0 or alarm.persistence != 1):
+        return _flagged_with_rule(readings, config, layout, alarm, model)
     column = {b: i for i, b in enumerate(layout.buses)}
     sub = np.zeros(STEPS, dtype=bool)
     if "trafo_loading" in readings:
@@ -189,6 +343,46 @@ def flagged_steps(readings: dict, config: Config, layout: Layout) -> tuple[np.nd
         limits = np.array([layout.max_vm[column[b]] for b in config.voltages])
         over = (readings["remote_vm"] > limits) & readings["remote_available"]
         remote = over.any(axis=1)
+    return sub, remote
+
+
+def _flagged_with_rule(
+    readings: dict, config: Config, layout: Layout, alarm: AlarmRule, model: MeasurementModel
+) -> tuple[np.ndarray, np.ndarray]:
+    """`flagged_steps` under a guard band and/or persistence rule (same quantities)."""
+    if model is None:
+        raise ValueError("a guard or persistence rule needs the measurement model")
+    if alarm.scope not in ("all", "meters"):
+        raise ValueError(f"unknown alarm scope {alarm.scope!r}")
+    column = {b: i for i, b in enumerate(layout.buses)}
+    station = alarm.scope == "all"  # does the rule apply to substation readings?
+    guard_station = alarm.guard if station else 0.0
+    loading_limit = 100.0 * (1.0 + guard_station * model.sigma_loading)
+
+    def over(values, limit, rule_applies=station):
+        return _persistent(values > limit, alarm.persistence if rule_applies else 1)
+
+    sub = np.zeros(STEPS, dtype=bool)
+    if "trafo_loading" in readings:
+        sub |= over(readings["trafo_loading"], loading_limit).any(axis=1)
+        busbar_limit = layout.max_vm[column[layout.lv_busbar]]
+        busbar_limit += guard_station * model.sigma_v_substation
+        sub |= over(readings["busbar_vm"], busbar_limit).any(axis=1)
+        if config.export_threshold_mw is not None:
+            sub |= readings["trafo_p"][:, 0] > config.export_threshold_mw
+    if "head_loading" in readings:
+        sub |= over(readings["head_loading"], loading_limit).any(axis=1)
+    if "line_loading" in readings:
+        sub |= over(readings["line_loading"], loading_limit).any(axis=1)
+    remote = np.zeros(STEPS, dtype=bool)
+    if "remote_vm" in readings:
+        limits = np.array([layout.max_vm[column[b]] for b in config.voltages])
+        # the meter's total standard uncertainty: the operator knows the accuracy class,
+        # not the individual calibration offset
+        uncertainty = float(np.hypot(model.sigma_v_remote, model.sigma_bias_remote))
+        exceed = over(readings["remote_vm"], limits + alarm.guard * uncertainty, True)
+        exceed &= readings["remote_available"]
+        remote = exceed.any(axis=1)
     return sub, remote
 
 
@@ -268,7 +462,7 @@ def greedy(candidates, k: int, objective) -> tuple[int, ...]:
 
 def detection_counts(
     days, states: dict, truth_norm: dict, config: Config, layout: Layout, model, seed: int,
-    available: np.ndarray,
+    available: np.ndarray, *, noise: NoiseBank | None = None, alarm=None,
 ) -> np.ndarray:  # fmt: skip
     """Per day (rows): TP, FP, FN, TN of direct detection of avoidable violations at no
     action on daylight steps, plus TP/positives by type (voltage, line, trafo)."""
@@ -276,8 +470,11 @@ def detection_counts(
     rows = []
     for day in days:
         daylight = available[day].sum(axis=1) > 0
-        readings = measure(states[day], np.zeros(STEPS, dtype=int), config, layout, model, rng)
-        sub, remote = flagged_steps(readings, config, layout)
+        readings = measure(
+            states[day], np.zeros(STEPS, dtype=int), config, layout, model, rng, noise=noise,
+            day=day,
+        )  # fmt: skip
+        sub, remote = flagged_steps(readings, config, layout, alarm=alarm, model=model)
         flagged = (sub | remote) & daylight
         events = true_events(truth_norm[day], states[day], 0, layout)
         actual = events["any"] & daylight
@@ -335,7 +532,7 @@ def consistency_residuals(readings: dict, nominal_state: dict, levels, daylight,
 
 def run_feedback_policy(
     ctx: DecisionContext, policy: str, config: Config, model: MeasurementModel, seed: int,
-    online: ds.OnlineSettings, detector=None,
+    online: ds.OnlineSettings, detector=None, *, noise: NoiseBank | None = None, alarm=None,
 ) -> list[dict]:  # fmt: skip
     """Run one policy day by day from the first decision day; return records of the scored
     days.
@@ -379,9 +576,11 @@ def run_feedback_policy(
         if policy not in ("replay_aci", "replay_robust"):
             no_feasible = False
         daylight = ctx.available[day].sum(axis=1) > 0
-        readings = measure(ctx.states[day], levels, config, ctx.layout, model, rng)
+        readings = measure(
+            ctx.states[day], levels, config, ctx.layout, model, rng, noise=noise, day=day
+        )
         if detector is None:
-            sub, remote = flagged_steps(readings, config, ctx.layout)
+            sub, remote = flagged_steps(readings, config, ctx.layout, alarm=alarm, model=model)
         else:
             sub, remote = detector(day, levels, readings)
         pending[day] = remote & ~sub & daylight
@@ -391,6 +590,10 @@ def run_feedback_policy(
             result = ds.score(ctx.truth_norm[day], levels, ctx.available[day], ctx.rating)
             events = true_events(ctx.truth_norm[day], ctx.states[day], 0, ctx.layout)
             needed = bool((events["any"] & daylight).any())
+            # scoring-side bookkeeping (never read by the controller): the day's own alarms
+            # against the true violations of the applied schedule
+            violated = ctx.truth_norm[day][np.arange(STEPS), levels] > 0
+            flagged = (sub | remote) & daylight
             records.append(
                 {
                     "day": day,
@@ -401,6 +604,10 @@ def run_feedback_policy(
                     "unneeded_curtailment_mwh": 0.0 if needed else result["curtailed_mwh"],
                     "no_feasible_action": no_feasible,
                     "model_inconsistency": inconsistent,  # known at the decision time
+                    "flagged_steps": int(flagged.sum()),
+                    "false_alarm_steps": int((flagged & ~violated).sum()),
+                    "missed_steps": int((~flagged & violated & daylight).sum()),
+                    "intervention_steps": int(((levels > 0) & daylight).sum()),
                 }
             )
         if ctx.nominal_states is not None and config.transformer:

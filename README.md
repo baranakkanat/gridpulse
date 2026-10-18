@@ -10,7 +10,7 @@ forecasts, one learned model (LightGBM), and leakage-free, paired temporal evalu
 Phase 3 adds pre-registered research experiments: forecast reliability on national load,
 and uncertainty-aware decisions on a simulated distribution grid.
 
-## Current scope (Phases 0, 1, 1B, 2A, 3, 4 and 5)
+## Current scope (Phases 0, 1, 1B, 2A, 3, 4, 5 and 6)
 
 Implemented:
 
@@ -46,6 +46,11 @@ Implemented:
   - sensor placement rules;
   - WLS state estimation with an observability test;
   - evidence labels.
+- **Phase 6:**
+  - measurement noise tied to sensor identity;
+  - noise-aware alarm rules for the feedback;
+  - a chi-square test for state estimation;
+  - protected, frozen study stages.
 - Chronological train / validation / test periods, with 2020 reserved and unused.
 - MAE, RMSE and WAPE on valid prediction/target pairs only, overall and per lead hour,
   with explicit counts of excluded pairs.
@@ -539,6 +544,75 @@ Notes on the Phase 5 runs:
 uv run python docs/provenance/phase5/scripts/report.py evaluation > outputs/sense_study/logs/evaluation_report.md
 ```
 
+## Research experiments (Phase 6: measurement integrity and noise-aware feedback)
+
+**Question.** Can measurement-aware feedback improve reliability without the noise-driven
+over-curtailment found in Phase 5? And which measurements have real decision value once
+noise and false alarms are accounted for?
+
+**What changed.**
+
+- **Measurement noise is now tied to the physical observation.** Identical sensors get
+  identical noise in every comparison. Phase 5 seeded noise from configuration names.
+- **Registered study stages are protected.** Manifests, atomic writes, a freeze bound to
+  the development code, and refusal of reruns or stale outputs.
+- **The Phase 5 code path and its frozen results are unchanged.** The repair is a new,
+  opt-in path.
+
+The protocol (with amendment 6A) is [docs/phase6_protocol.md](docs/phase6_protocol.md),
+and the results are in [docs/phase6_results.md](docs/phase6_results.md). This is a
+corrected, exploratory replication on previously examined benchmark data, not a
+confirmatory test.
+
+**Headline results** (five PV-stressed SimBench networks, evaluation half-year):
+
+- **The Phase 5 over-curtailment is real.** It survives the seeding repair: with two
+  noisy meters, unfiltered feedback curtails 144 MWh under the correct grid model,
+  against 53 MWh with exact readings.
+- **A 45-minute persistence rule on meter voltages removes almost all of it**, under the
+  correct model and for meter noise that is independent per reading: 55 MWh with two
+  meters, 69 MWh with every bus metered. With per-meter calibration bias it does not.
+- **But under model errors, its reliability largely comes from the noise.**
+  - Its mismatch-case count rises with noise, from 4 to 14 of 15 between exact readings
+    and σ = 0.02.
+  - With exact readings, two meters under this rule add nothing over substation
+    telemetry (4 vs 4). Closed-loop violations are mostly shorter than 45 minutes.
+  - It is a cost control, not a noise-robust reliability mechanism.
+- **Remote voltage readings do carry information.** With exact readings and unfiltered
+  feedback, two meters meet 9 of 15 cases against 4.
+  - Under the persistence rule, placement matters: well-placed pairs meet 11–14 cases,
+    random pairs a median of 7.
+  - No tested rule realises the meters' exact-reading value under noise without relying
+    on the noise.
+- **Per-meter calibration bias makes the outcomes depend on the individual meters'
+  offsets.** Two meters meet 6–11 of 15 cases, depending on the bias draw. Full metering
+  stays reliable but curtails 90–150 MWh under the correct model. No reading-level filter
+  removes a constant offset; that needs calibration.
+- **The chi-square bad-data test detects a reactive-power imbalance, but it cannot
+  certify a state estimate.** Under the correct model it is miscalibrated and misses
+  plausible gross errors.
+
+Run the development stage, freeze, then the single evaluation. All reuse the Phase 4 and
+Phase 5 physics caches:
+
+```bash
+uv run python -m gridpulse noise-study --stage development --output-dir outputs/noise_study
+```
+
+```bash
+uv run python -m gridpulse noise-study --stage freeze --output-dir outputs/noise_study
+```
+
+```bash
+uv run python -m gridpulse noise-study --stage evaluation --output-dir outputs/noise_study
+```
+
+Each stage took about 17–19 minutes with 3 workers. Report tables:
+
+```bash
+uv run python docs/provenance/phase6/scripts/report.py evaluation > outputs/noise_study/logs/evaluation_report.md
+```
+
 ## Tests and checks
 
 ```bash
@@ -568,6 +642,8 @@ src/gridpulse/dual_study.py  Phase 4 model variants, PV stress rule, policies, o
 src/gridpulse/fullstate.py   Phase 5 full network states per true model (cached)
 src/gridpulse/sensing.py     Phase 5 measurement model, placement, detection, feedback, labels
 src/gridpulse/estimation.py  Phase 5 WLS state estimation, pseudo-measurements, observability
+src/gridpulse/noise_study.py Phase 6 noise-aware feedback study, hypotheses, state-estimation test
+src/gridpulse/runguard.py    Phase 6 stage manifests, atomic writes, freeze and rerun protection
 src/gridpulse/__main__.py    command-line interface and output/metadata writing
 tests/                       unit tests and end-to-end CLI tests on synthetic data
 docs/methodology.md          Phase 0-2A protocol, decisions, limitations
@@ -576,5 +652,8 @@ docs/experiment_results.md   Phase 3 and 4 results, exploratory and negative fin
 docs/phase5_protocol.md      Phase 5 pre-registered protocol and amendments
 docs/phase5_literature.md    Phase 5 literature review
 docs/phase5_results.md       Phase 5 results, verdicts and limitations
+docs/phase6_protocol.md      Phase 6 pre-registered protocol and amendment 6A
+docs/phase6_literature.md    Phase 6 literature review
+docs/phase6_results.md       Phase 6 results, verdicts and limitations
 docs/kibtek_pilot_concept.md concept for a possible offline utility pilot (no contact made)
 ```
