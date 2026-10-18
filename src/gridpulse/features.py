@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 
 from gridpulse.baseline import DAILY_SEASON, WEEKLY_SEASON, seasonal_naive_forecast
-from gridpulse.calendar_analysis import local_times
+from gridpulse.calendar_analysis import is_national_holiday, local_times
 
 # Model features in model order, with the reason each is available at the forecast origin.
 FEATURE_DEFINITIONS = {
@@ -24,6 +24,14 @@ FEATURE_DEFINITIONS = {
 }
 FEATURES = tuple(FEATURE_DEFINITIONS)
 TARGET = "actual_load_mw"
+# Optional known-ahead holiday flags (Track 1 experiment C2), 1 if the Europe/Berlin local
+# date is a nationwide public holiday. They depend only on calendar dates.
+HOLIDAY_FEATURE_DEFINITIONS = {
+    "target_is_holiday": "the target's local date is a nationwide public holiday",
+    "lag_24h_source_is_holiday": "the 24-hour lag source's local date is a holiday",
+    "lag_168h_source_is_holiday": "the 168-hour lag source's local date is a holiday",
+}
+HOLIDAY_FEATURES = tuple(HOLIDAY_FEATURE_DEFINITIONS)
 
 
 def feature_table(load: pd.Series, origins: pd.DatetimeIndex) -> pd.DataFrame:
@@ -56,19 +64,34 @@ def feature_table(load: pd.Series, origins: pd.DatetimeIndex) -> pd.DataFrame:
     )
 
 
-def has_features(rows: pd.DataFrame) -> np.ndarray:
-    """Whether every model feature of each row is available (finite)."""
-    return np.isfinite(rows[list(FEATURES)].to_numpy(dtype=float)).all(axis=1)
+def with_holiday_flags(rows: pd.DataFrame) -> pd.DataFrame:
+    """Add the holiday flags for the target and both lag sources (0/1 integers)."""
+    sources = {
+        "target_is_holiday": "target_timestamp_utc",
+        "lag_24h_source_is_holiday": "lag_24h_source_utc",
+        "lag_168h_source_is_holiday": "lag_168h_source_utc",
+    }
+    return rows.assign(
+        **{
+            flag: is_national_holiday(rows[column]).astype(np.int8)
+            for flag, column in sources.items()
+        }
+    )
 
 
-def is_usable(rows: pd.DataFrame) -> np.ndarray:
+def has_features(rows: pd.DataFrame, features: tuple[str, ...] = FEATURES) -> np.ndarray:
+    """Whether every listed feature of each row is available (finite)."""
+    return np.isfinite(rows[list(features)].to_numpy(dtype=float)).all(axis=1)
+
+
+def is_usable(rows: pd.DataFrame, features: tuple[str, ...] = FEATURES) -> np.ndarray:
     """Whether each row has all features and an observed target, i.e. can be fitted on."""
-    return has_features(rows) & np.isfinite(rows[TARGET].to_numpy())
+    return has_features(rows, features) & np.isfinite(rows[TARGET].to_numpy())
 
 
-def availability_counts(rows: pd.DataFrame) -> dict:
+def availability_counts(rows: pd.DataFrame, features: tuple[str, ...] = FEATURES) -> dict:
     """Rows, complete rows and the (overlapping) reasons why other rows cannot be used."""
-    usable = is_usable(rows)
+    usable = is_usable(rows, features)
     return {
         "n_rows": len(rows),
         "n_usable": int(usable.sum()),

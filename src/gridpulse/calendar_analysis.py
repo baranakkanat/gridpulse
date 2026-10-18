@@ -16,14 +16,42 @@ from gridpulse.evaluation import COMMON_VALID, common_sample_scores, mae_differe
 
 LOCAL_TIMEZONE = "Europe/Berlin"
 HOLIDAY_SOURCE = (
-    "timeanddate.com, 'Holidays and Observances in Germany' for 2017-2020, rows of type "
+    "timeanddate.com, 'Holidays and Observances in Germany' for 2014-2020, rows of type "
     "'National Holiday' (checked 2026-10-17); Easter-dependent dates cross-checked with the "
     "Gregorian computus in the test suite"
 )
-# Nationwide statutory public holidays on the local dates that evaluated targets and their
-# daily or weekly references can fall on. Regional holidays (e.g. Epiphany, Corpus
-# Christi, Reformation Day from 2018), Christmas Eve and New Year's Eve are not included.
+# Nationwide statutory public holidays on the local dates that targets from 2015 onward and
+# their daily or weekly references can fall on. Regional holidays (e.g. Epiphany, Corpus
+# Christi, Reformation Day except in 2017), Christmas Eve and New Year's Eve are excluded.
 NATIONAL_HOLIDAYS = {
+    pd.Timestamp("2014-12-25"): "Christmas Day",
+    pd.Timestamp("2014-12-26"): "Second Day of Christmas",
+    pd.Timestamp("2015-01-01"): "New Year's Day",
+    pd.Timestamp("2015-04-03"): "Good Friday",
+    pd.Timestamp("2015-04-06"): "Easter Monday",
+    pd.Timestamp("2015-05-01"): "Labour Day",
+    pd.Timestamp("2015-05-14"): "Ascension Day",
+    pd.Timestamp("2015-05-25"): "Whit Monday",
+    pd.Timestamp("2015-10-03"): "Day of German Unity",
+    pd.Timestamp("2015-12-25"): "Christmas Day",
+    pd.Timestamp("2015-12-26"): "Second Day of Christmas",
+    pd.Timestamp("2016-01-01"): "New Year's Day",
+    pd.Timestamp("2016-03-25"): "Good Friday",
+    pd.Timestamp("2016-03-28"): "Easter Monday",
+    pd.Timestamp("2016-05-01"): "Labour Day",
+    pd.Timestamp("2016-05-05"): "Ascension Day",
+    pd.Timestamp("2016-05-16"): "Whit Monday",
+    pd.Timestamp("2016-10-03"): "Day of German Unity",
+    pd.Timestamp("2016-12-25"): "Christmas Day",
+    pd.Timestamp("2016-12-26"): "Second Day of Christmas",
+    pd.Timestamp("2017-01-01"): "New Year's Day",
+    pd.Timestamp("2017-04-14"): "Good Friday",
+    pd.Timestamp("2017-04-17"): "Easter Monday",
+    pd.Timestamp("2017-05-01"): "Labour Day",
+    pd.Timestamp("2017-05-25"): "Ascension Day",
+    pd.Timestamp("2017-06-05"): "Whit Monday",
+    pd.Timestamp("2017-10-03"): "Day of German Unity",
+    pd.Timestamp("2017-10-31"): "Reformation Day (nationwide in 2017 only)",
     pd.Timestamp("2017-12-25"): "Christmas Day",
     pd.Timestamp("2017-12-26"): "Second Day of Christmas",
     pd.Timestamp("2018-01-01"): "New Year's Day",
@@ -47,7 +75,7 @@ NATIONAL_HOLIDAYS = {
     pd.Timestamp("2020-01-01"): "New Year's Day",
 }
 # Local dates for which the table above is complete.
-CALENDAR_COVERAGE = (pd.Timestamp("2017-12-25"), pd.Timestamp("2020-01-01"))
+CALENDAR_COVERAGE = (pd.Timestamp("2014-12-25"), pd.Timestamp("2020-01-01"))
 
 HOLIDAY_CATEGORIES = (
     "neither_holiday",

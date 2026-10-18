@@ -7,8 +7,10 @@ how well electricity load forecasting models perform, and how reliable they rema
 when temporal and data conditions change. This repository currently contains only the
 research foundation: a validated dataset pipeline, two deliberately simple reference
 forecasts, one learned model (LightGBM), and leakage-free, paired temporal evaluation.
+Phase 3 adds pre-registered research experiments: forecast reliability on national load,
+and uncertainty-aware decisions on a simulated distribution grid.
 
-## Current scope (Phases 0, 1, 1B and 2A)
+## Current scope (Phases 0, 1, 1B, 2A, 3, 4 and 5)
 
 Implemented:
 
@@ -26,6 +28,24 @@ Implemented:
   known at the forecast origin (24-hour and 168-hour load lags, and the target's local
   hour, weekday and month). It is trained on 2015–2017, with early stopping on 2018, and
   compared with both baselines on identical pairs.
+- **Phase 3, Track 1 (national load):**
+  - a boosting-cap check;
+  - a known-ahead holiday-flag ablation;
+  - rolling split-conformal day-ahead intervals, with coverage by lead, calendar
+    condition and month.
+- **Phase 3, Track 2 (SimBench LV grid, pandapower AC power flow):**
+  - day-ahead PV feed-in-cap policies (point, scenario-risk, robust, selective with
+    explicit deferral criteria and simulated fallbacks, static caps, oracle) on
+    identical physics;
+  - risk-calibration scoring;
+  - per-decision evidence records ("decision passports").
+- **Phase 4:** PV-cap decisions when both the forecast and the grid model are uncertain,
+  with online-calibrated margins.
+- **Phase 5:** the same decisions under limited measurement:
+  - a measurement model separating truth, readings, estimates and plans;
+  - sensor placement rules;
+  - WLS state estimation with an observability test;
+  - evidence labels.
 - Chronological train / validation / test periods, with 2020 reserved and unused.
 - MAE, RMSE and WAPE on valid prediction/target pairs only, overall and per lead hour,
   with explicit counts of excluded pairs.
@@ -34,10 +54,11 @@ Implemented:
 Not implemented (and not claimed):
 
 - hyperparameter tuning, other model families, deep learning or ensembles;
-- holiday-aware forecasting;
-- explainability, uncertainty estimation or calibration;
-- distribution-shift experiments;
+- explainability, and uncertainty guarantees (intervals and risks are empirical, with no
+  coverage guarantee);
+- controlled distribution-shift experiments (2020 stays reserved);
 - weather or other external data;
+- real feeder data, operator validation, or any control of real equipment;
 - any service, dashboard, or deployment infrastructure.
 
 See [docs/methodology.md](docs/methodology.md) for the full experimental protocol and its
@@ -78,12 +99,20 @@ No software license has been chosen for this repository yet.
 Requires Python ≥ 3.11 and [uv](https://docs.astral.sh/uv/). The exact environment
 (Python 3.12, NumPy, pandas, LightGBM, pytest, ruff) is pinned in `uv.lock`.
 
+The distribution-grid track (Track 2) needs the optional `grid` extra (pandapower,
+SimBench). SimBench ships its benchmark data inside the package, about 87 MB.
+
 ```bash
-uv sync
+uv sync --all-extras
 ```
 
-Without uv: create a virtual environment, then `pip install -e . pytest ruff`
-(dependency versions will then not be locked).
+- **pandas version:** the project uses pandas 2.3 and NumPy < 2.5, because pandapower
+  3.5.6 supports only those. Phase 0–2A outputs were verified byte-identical under the
+  earlier pandas 3 environment.
+- **Without the extra:** `uv sync` installs only the forecasting track, and the grid
+  tests are skipped.
+- **Without uv:** create a virtual environment, then `pip install -e ".[grid]" pytest
+  ruff` (dependency versions will then not be locked).
 
 On macOS, LightGBM's prebuilt wheel needs the OpenMP runtime, installed once outside the
 project:
@@ -236,6 +265,280 @@ These are descriptive results:
   confirmatory period. The LightGBM model itself was fixed before its single evaluation
   run.
 
+## Research experiments (Phase 3)
+
+**Headline results** (details, intervals and caveats in
+[docs/experiment_results.md](docs/experiment_results.md)):
+
+- **Track 1:**
+  - Known-ahead holiday flags cut LightGBM MAE by about 15 % overall and by 81–85 % on
+    holiday targets (exploratory: 2019 had been inspected before).
+  - Rolling 56-day split-conformal 90 % intervals reach 0.89–0.91 average coverage, but
+    under-cover in transition months (e.g. 0.79 in March 2018, 0.81 in December 2019) and
+    on rare calendar days.
+- **Track 2, evaluation half-year:**
+  - Scenario-aware PV-cap rules cut simulated transformer overloads by 87–95 %, at
+    1.6–1.8× the oracle's curtailed energy.
+  - The point-forecast rule barely helps (448 → 439 violation steps).
+  - The static 70 % cap never binds in this benchmark.
+- **Negative results:**
+  - The scenario risk scores show no evidence of skill relative to a 28-day
+    violation-frequency reference (BSS −0.09 [−0.20, 0.01]), which also discriminates
+    better.
+  - Realised violations at the chosen caps were about 3× the predicted count.
+  - The selective decision-assurance layer is indistinguishable from always applying the
+    conservative rule. Its deferrals mark a season-long miscalibration, not individually
+    unreliable days.
+  - Deferral with a no-action fallback increases violations, so deferral alone is not
+    safety.
+- **Scope of the Track 2 results:** one 15-bus benchmark grid with synthetic profiles,
+  naive forecasts and storage held at 0 MW. Depending on how the benchmark's storage data
+  are read, no-action violations range from 4 to 1,571 development steps.
+
+The pre-registered protocol is in [docs/research_protocol.md](docs/research_protocol.md).
+Results, including negative ones, are in
+[docs/experiment_results.md](docs/experiment_results.md).
+
+**Track 1** studies national load: boosting cap (C1), holiday-flag ablation (C2) and
+rolling split-conformal day-ahead intervals (C3).
+
+```bash
+uv run python -m gridpulse forecast-study --input data/raw/time_series_60min_singleindex.csv --output-dir outputs/forecast_study
+```
+
+**Track 2** studies the SimBench LV grid `1-LV-rural1--2-sw` with pandapower AC power
+flow. It compares day-ahead PV feed-in-cap policies:
+
+- no action;
+- a static 70 % cap;
+- a point-forecast rule;
+- a scenario risk rule;
+- a selective rule that can defer to human review, with explicit fallbacks;
+- an oracle.
+
+Every policy runs on identical physics. Run the development period first, then the
+evaluation period:
+
+```bash
+uv run python -m gridpulse grid-study --period development --output-dir outputs/grid_study
+```
+
+```bash
+uv run python -m gridpulse grid-study --period evaluation --output-dir outputs/grid_study
+```
+
+Notes on the grid runs:
+
+- Power flows run in parallel and are cached per day in
+  `outputs/grid_study/physics_cache/`, which is git-ignored. A full period takes about
+  10–30 minutes on 10 cores.
+- Outputs per period: daily outcomes (CSV), a summary with hypothesis checks and
+  block-bootstrap intervals, risk calibration, metadata, and one JSON "decision passport"
+  per day. A passport records only the evidence available at the decision time.
+- The two tracks are kept separate: national load is never mapped onto feeder buses.
+
+Supporting documents:
+
+- [docs/literature_review.md](docs/literature_review.md): prior work and an honest
+  novelty assessment;
+- [docs/technical_limitations.md](docs/technical_limitations.md);
+- [docs/learning_guide.md](docs/learning_guide.md): the concepts needed to explain and
+  defend the work.
+
+## Research experiments (Phase 4: reliability under dual uncertainty)
+
+**Question.** Can physically grounded, reliability-aware PV-cap decisions beat simple,
+well-validated policies when the forecast *and* the grid model are uncertain?
+
+**Design.**
+
+- **Networks:** six SimBench LV networks. rural1 is now a development network.
+- **Forecast information:** perfect, or the naive day-ahead forecast.
+- **Physical model:** nine model variants of the "true" grid:
+  - transformer tap;
+  - MV voltage;
+  - PV reactive power;
+  - two readings of home-storage behaviour;
+  - joint cases.
+- **Policies:**
+  - static caps: development-tuned, and adapted online;
+  - deterministic forecast rules with and without a margin;
+  - historical replay;
+  - robust and risk scenario rules;
+  - online-calibrated (ACI-style) margins;
+  - a model-ensemble rule.
+
+The protocol and its amendments are in s. 4 of
+[docs/research_protocol.md](docs/research_protocol.md).
+
+**Headline results** (evaluation half-year, five new networks; details, intervals and
+caveats in [docs/experiment_results.md](docs/experiment_results.md)):
+
+- **Only one SimBench LV topology is congested on its own.** In their 2034 scenario,
+  rural2, rural3, semiurb4, semiurb5 and urban6 have no violations. They were scaled to the
+  same PV stress as rural1 by a rule registered in advance.
+- **Correct grid model.** A static cap tuned on development data curtails 30 % more than
+  the oracle, with 3 violation quarter-hours in 183 days.
+  - Neither online-calibrated rule beats it in aggregate.
+  - The robust replay and scenario rules curtail about 5 % less, but with 16 and 34
+    violation quarter-hours against 3.
+  - The 7-day-mean forecast adds no value over replaying past days.
+- **Model errors break model-tuned rules.** With the grid model wrong (tap, MV voltage, PV
+  reactive power, joints), static and robust rules tuned with the nominal model fail the
+  violation target in about half of the 50 cells.
+  - The largest failures are overvoltage stress brackets on the −1-tapped networks.
+  - Excluding them, they still fail 15 of 41 cells.
+- **Measured feedback restores the target, under full observation.** Online margin
+  calibration meets it in 46–49 of 50 cells, whether or not a grid model is used.
+  - This assumes every bus voltage and branch current is observed; substation metering
+    alone would miss every voltage and line violation here.
+  - Replaying measured days through the AC model on top of feedback saves a median 5 % of
+    curtailment, with a uniform cap across all PV units.
+- **The registered H3 criterion gives "genuine value"** for that replay-plus-feedback rule,
+  and for no forecast-based rule. The nominal-truth advantage is small and not uniform
+  (rural3: +44 % curtailment).
+- **Explicit robustness over a model ensemble** protects only against the modelled
+  variants. Its out-of-list failures are marginal overvoltages. It is 5.4× as costly,
+  driven by one voltage-offset member.
+- **H1, selection optimism as the cause of Phase 3's 3× under-prediction,** was supported
+  on rural1 by an exploratory cross-fit over most of the year.
+  - On the new networks it was untestable: too few autumn violations.
+  - rural1's own evaluation half is mixed: it passes for scenarios but fails the
+    registered replay criteria.
+
+Run the physics once (this is long: AC power flows for 6 networks × 10 models × 330 days;
+cached and resumable), then the development and evaluation stages:
+
+```bash
+uv run python -m gridpulse dual-study --stage physics --output-dir outputs/dual_study
+```
+
+```bash
+uv run python -m gridpulse dual-study --stage development --output-dir outputs/dual_study
+```
+
+```bash
+uv run python -m gridpulse dual-study --stage evaluation --output-dir outputs/dual_study
+```
+
+Notes on the Phase 4 runs:
+
+- **Runtime.** The physics is the long part.
+  - Here it took about 55 CPU-hours in total, roughly 7 hours of wall time with
+    `--workers 10` on a shared 11-core machine.
+  - It is cached per network, model and day, so an interrupted run resumes where it
+    stopped.
+- **One evaluation run only.** The evaluation stage refuses to run when any
+  `evaluation_*` output already exists.
+- **Report tables.** They are regenerated from a stage's JSON outputs with:
+
+```bash
+uv run python docs/provenance/phase4/scripts/report/report.py evaluation > outputs/dual_study/evaluation_report.md
+```
+
+- **Provenance.** Registration timestamps, hashes and the scripts behind quoted numbers
+  are in `docs/provenance/phase4/`.
+
+## Research experiments (Phase 5: decisions under limited observability)
+
+**Question.** How much measurement does an operator need for a reliable PV-cap decision
+when most LV states are unobserved and the grid model may be wrong? And which additional
+measurement is worth collecting?
+
+**Design.**
+
+- **Networks and periods.** The Phase 4 networks and periods are reused. rural1 is the
+  development network.
+- **True models.** Four:
+  - correct;
+  - transformer tap one step off;
+  - MV voltage 1.055 p.u.;
+  - PV at fixed cos φ 0.95.
+- **Measurement chain.** Ground truth is separated from readings. One function turns the
+  true state into readings, with:
+  - noise;
+  - 5 % missing remote sensor-days;
+  - a one-day delay for smart-meter data.
+- **Measurement configurations.**
+  - transformer only;
+  - substation (transformer plus feeder heads);
+  - substation plus 1, 2 or 4 smart-meter voltages, placed by six rules on development
+    data;
+  - every bus and cable ("full").
+- **Methods.**
+  - WLS state estimation with forecast pseudo-measurements and a numerical observability
+    test;
+  - evidence labels: INSUFFICIENT_EVIDENCE, MODEL_INCONSISTENCY, NO_FEASIBLE_ACTION.
+
+The protocol, with amendments 5A–5C, is
+[docs/phase5_protocol.md](docs/phase5_protocol.md). The results are in
+[docs/phase5_results.md](docs/phase5_results.md).
+
+**Headline results** (exploratory replication on five PV-stressed benchmark networks;
+reviewed after the run, details in the results document):
+
+- **Substation telemetry sees transformer and feeder-head overloads but detects no remote
+  overvoltage as such.**
+  - Under voltage-offset model errors its voltage recall is 0.14–0.45.
+  - Feedback driven by it meets the violation target in 4 of 15 model-error cases.
+- **With realistic meter noise, one or two smart-meter voltages raised this to 12–14 of
+  15.** Every bus metered gives 15. The registered primary hypothesis is supported, but
+  only in the evaluation half-year.
+  - In the development half, where the online margin is still being learned, the counts
+    were 0, 4 and 6.
+  - With exact readings, two sensors reach only 9.
+- **Much of that recovery is noise.**
+  - Noisy readings near the limit raise false alarms, which the feedback turns into
+    curtailment.
+  - Under the correct model, curtailment is 145 MWh with two sensors and 321 MWh with
+    full metering, against about 53 MWh with exact readings in every configuration.
+  - In one network, the alarms drove the margin to its bound, and the NO_FEASIBLE_ACTION
+    fallback curtailed all PV on the affected quarter-hours of up to 28 days.
+- **Placement.**
+  - Under noise, decision-aware placement was no better than simple rules, but all rules
+    tied on cells.
+  - With exact readings it met 13 cells against 9 for feeder-end placement.
+- **Threshold detection on remote voltages misses mid-feeder cable overloads.**
+- **Substation readings plus metered injections flag a wrong model** on 88–100 % of
+  model-error days and on no correct-model day. This is idealised and does not say which
+  parameter is wrong.
+- **State estimation from substation readings plus forecasts.**
+  - It detects 0.88–1.0 of the remote overvoltages caused by voltage offsets.
+  - It gives confident gross errors under a PV reactive-power model error. It has no
+    bad-data test.
+  - Its false alarms exceeded the registered gate, narrowly, so it was not used for
+    decisions in the evaluation.
+
+Run the full-state physics once (4 truths × 6 networks × 330 days, cached and
+resumable), then the development and evaluation stages:
+
+```bash
+uv run python -m gridpulse sense-study --stage physics --output-dir outputs/sense_study
+```
+
+```bash
+uv run python -m gridpulse sense-study --stage development --output-dir outputs/sense_study
+```
+
+```bash
+uv run python -m gridpulse sense-study --stage evaluation --output-dir outputs/sense_study
+```
+
+Notes on the Phase 5 runs:
+
+- **Dependency.** The development and evaluation stages read the Phase 4 physics cache in
+  `outputs/dual_study/physics_cache` for the nominal-model plans, so run the Phase 4
+  physics first.
+- **Runtime and size.** The full-state cache takes about 0.9 GB. The evaluation stage
+  took about 17 minutes of wall time on a shared 11-core machine.
+- **One evaluation run only.** As in Phase 4, the evaluation stage refuses to run when
+  any `evaluation_*` output exists.
+- **Report tables.** Regenerate them with:
+
+```bash
+uv run python docs/provenance/phase5/scripts/report.py evaluation > outputs/sense_study/logs/evaluation_report.md
+```
+
 ## Tests and checks
 
 ```bash
@@ -257,7 +560,21 @@ src/gridpulse/evaluation.py  timestamp alignment, exclusion accounting, metrics,
 src/gridpulse/calendar_analysis.py  German holiday table, local-time labels, calendar breakdown
 src/gridpulse/features.py    leak-free feature table (lags by timestamp, local calendar)
 src/gridpulse/model.py       LightGBM configuration, training, prediction, save/reload check
+src/gridpulse/uncertainty.py rolling split-conformal intervals, circular block bootstrap
+src/gridpulse/forecast_study.py  Track 1 experiments C1-C3
+src/gridpulse/grid.py        SimBench network and profiles, AC power-flow margins, PV cap
+src/gridpulse/grid_study.py  Track 2 scenarios, policies, deferral, calibration, passports
+src/gridpulse/dual_study.py  Phase 4 model variants, PV stress rule, policies, online calibration
+src/gridpulse/fullstate.py   Phase 5 full network states per true model (cached)
+src/gridpulse/sensing.py     Phase 5 measurement model, placement, detection, feedback, labels
+src/gridpulse/estimation.py  Phase 5 WLS state estimation, pseudo-measurements, observability
 src/gridpulse/__main__.py    command-line interface and output/metadata writing
 tests/                       unit tests and end-to-end CLI tests on synthetic data
-docs/methodology.md          experimental protocol, decisions, limitations
+docs/methodology.md          Phase 0-2A protocol, decisions, limitations
+docs/research_protocol.md    pre-registered protocols: Phase 3 (both tracks) and Phase 4
+docs/experiment_results.md   Phase 3 and 4 results, exploratory and negative findings
+docs/phase5_protocol.md      Phase 5 pre-registered protocol and amendments
+docs/phase5_literature.md    Phase 5 literature review
+docs/phase5_results.md       Phase 5 results, verdicts and limitations
+docs/kibtek_pilot_concept.md concept for a possible offline utility pilot (no contact made)
 ```

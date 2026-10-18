@@ -5,7 +5,14 @@ import pytest
 from conftest import hourly_index
 
 from gridpulse.evaluation import mae
-from gridpulse.features import FEATURES, TARGET, feature_table, is_usable
+from gridpulse.features import (
+    FEATURES,
+    HOLIDAY_FEATURES,
+    TARGET,
+    feature_table,
+    is_usable,
+    with_holiday_flags,
+)
 from gridpulse.model import (
     NUM_BOOST_ROUND,
     PARAMS,
@@ -113,3 +120,17 @@ def test_repeated_training_gives_an_identical_model(tables, fitted):
     booster, _ = fitted
     again, _ = train(tables["train"], tables["validation"])
     assert again.model_to_string() == booster.model_to_string()
+
+
+def test_a_model_with_extra_features_predicts_from_its_own_feature_list(tables):
+    extended = {split: with_holiday_flags(rows) for split, rows in tables.items()}
+    features = FEATURES + HOLIDAY_FEATURES
+    booster, info = train(extended["train"], extended["validation"], features, num_boost_round=50)
+
+    assert booster.feature_name() == list(features)
+    assert info["num_boost_round"] == 50
+    # predict() selects the booster's own features, whatever other columns are present.
+    np.testing.assert_array_equal(
+        predict(booster, extended["test"]),
+        booster.predict(feature_matrix(extended["test"], features)),
+    )

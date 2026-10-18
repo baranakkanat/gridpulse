@@ -1,0 +1,122 @@
+{
+  "1-LV-rural1--2-sw/nominal": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-rural1--2-sw/tap_raise_lv": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-rural1--2-sw/mv_high": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-rural1--2-sw/pv_fixed_095": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-rural2--2-sw/nominal": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-rural2--2-sw/tap_raise_lv": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-rural2--2-sw/mv_high": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-rural2--2-sw/pv_fixed_095": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-rural3--2-sw/nominal": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-rural3--2-sw/tap_raise_lv": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-rural3--2-sw/mv_high": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-rural3--2-sw/pv_fixed_095": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-semiurb4--2-sw/nominal": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-semiurb4--2-sw/tap_raise_lv": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-semiurb4--2-sw/mv_high": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-semiurb4--2-sw/pv_fixed_095": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-semiurb5--2-sw/nominal": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-semiurb5--2-sw/tap_raise_lv": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-semiurb5--2-sw/mv_high": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-semiurb5--2-sw/pv_fixed_095": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-urban6--2-sw/nominal": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-urban6--2-sw/tap_raise_lv": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-urban6--2-sw/mv_high": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  },
+  "1-LV-urban6--2-sw/pv_fixed_095": {
+    "fingerprint": "6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f",
+    "computed": 330,
+    "from_cache": 0
+  }
+}

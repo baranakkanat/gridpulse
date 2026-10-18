@@ -1,0 +1,53 @@
+Phase 5 registration log
+
+2026-10-18T15:25:03Z protocol registered before any Phase 5 development-stage or evaluation-stage run.
+Prior to this: rural1 development-period debug run of the analysis code; SE trial on six rural2 development days; one SE-feedback timing run (rural2, tap_raise_lv, development stage contexts; scores development days only).
+fullstate fingerprint: 6898a6b3271d923fc7a73393ce732fe207a2137d26b719016ab32c162996c18f
+phase4 physics fingerprint: 290e73712c31de53eac372a9edbd8b313d8e65266f078123b7c5f82aad85b91f
+
+131ba632294ff7edb6e71b12b7e8f2ab914f0c3081bc69ee236486309c9c4e18  docs/phase5_protocol.md
+7f5bf420fc35ae4bcb74b6194a54b4d3ba6fddb216cbe66d15a4becf95479dc9  docs/phase5_literature.md
+6bce1a2b9f93a3b043fef2c2c7fc39c8e3a2a8f2d040a81bea7095bb2649ffc7  src/gridpulse/__init__.py
+6bb61c04fa993ae42351c6b7025f5005b33d826e0ac9a99878c946f4ef8f8744  src/gridpulse/__main__.py
+ba2ee1e2860ea72982ec111709bcca42e182a6a145e6426b961a06409f732c50  src/gridpulse/baseline.py
+81f79eee5f9c4b9972d8f32a9bd0e8cab83ce2a5fc29afbaea89dd4e4ba9edab  src/gridpulse/calendar_analysis.py
+516bab19590c74d550c36da19ca3ff852306185ded575a2af6c1cb4ea8a279b4  src/gridpulse/data.py
+668bd51caada6e6c75424aed69cecdb2dd3ed6a597a9740751e69343c135e9a7  src/gridpulse/dual_study.py
+8f290f001ff99a236b8443e23071242d38e2c86a137144e76e62d4fbdec76037  src/gridpulse/estimation.py
+c82e02d1ffe0f450091766010a452113182703f13e0b19cdcbde4db556820677  src/gridpulse/evaluation.py
+b78cbd8fd2e7be2842a30a4df5fd3fba0a185784df956bb80850d8b63773945e  src/gridpulse/features.py
+95f225603f10ba88dd85bd515115006ed3ba8fdbe4be7ad0b95d1a9f50df9f98  src/gridpulse/forecast_study.py
+3d282c79f60f10278a024a904660881600e82f0ba11a8709d0cbfe8ee776cd6e  src/gridpulse/fullstate.py
+ffce015bab478e47cfdf6f3bf286c7ce70a25c5a4f0f86d8f9fff7723422f7f6  src/gridpulse/grid.py
+173e223a94d943359627a2b2c77ebb2d4b15ac00f408e966340956efc2a652a2  src/gridpulse/grid_study.py
+7165b6c596c247a4e595e75489e2a29dd24f0e97d4e2b3fa942c611aee663c04  src/gridpulse/model.py
+7fc24025d1880ac248b314feec71b6a397fb26c3d412282728566db40f860736  src/gridpulse/sensing.py
+a8655dde621339d6f68823cf07be17b914dbce1fc1d538f3680845bb7a2d035c  src/gridpulse/uncertainty.py
+2026-10-18T15:47:22Z amendments 5A/5B recorded; development re-run started. protocol sha256 7f854c76dc3f9e44c9e0b9317daf8d4a6f3181950ee616ba18fe708e9e56d290
+
+2026-10-18T16:03:27Z development re-run complete (amendments 5A/5B). SE gate CLOSED (2 of 5). Amendment 5C recorded. Evaluation freeze:
+ea712326938439ca231ab73204284578e296c82377b1a637e944c7802b312666  docs/phase5_protocol.md
+6bce1a2b9f93a3b043fef2c2c7fc39c8e3a2a8f2d040a81bea7095bb2649ffc7  src/gridpulse/__init__.py
+6bb61c04fa993ae42351c6b7025f5005b33d826e0ac9a99878c946f4ef8f8744  src/gridpulse/__main__.py
+ba2ee1e2860ea72982ec111709bcca42e182a6a145e6426b961a06409f732c50  src/gridpulse/baseline.py
+81f79eee5f9c4b9972d8f32a9bd0e8cab83ce2a5fc29afbaea89dd4e4ba9edab  src/gridpulse/calendar_analysis.py
+516bab19590c74d550c36da19ca3ff852306185ded575a2af6c1cb4ea8a279b4  src/gridpulse/data.py
+668bd51caada6e6c75424aed69cecdb2dd3ed6a597a9740751e69343c135e9a7  src/gridpulse/dual_study.py
+c94bba10b1054581706c91abbd5851469e908b6cf2606e8cbb41e210ff1d9d48  src/gridpulse/estimation.py
+c82e02d1ffe0f450091766010a452113182703f13e0b19cdcbde4db556820677  src/gridpulse/evaluation.py
+b78cbd8fd2e7be2842a30a4df5fd3fba0a185784df956bb80850d8b63773945e  src/gridpulse/features.py
+95f225603f10ba88dd85bd515115006ed3ba8fdbe4be7ad0b95d1a9f50df9f98  src/gridpulse/forecast_study.py
+3d282c79f60f10278a024a904660881600e82f0ba11a8709d0cbfe8ee776cd6e  src/gridpulse/fullstate.py
+ffce015bab478e47cfdf6f3bf286c7ce70a25c5a4f0f86d8f9fff7723422f7f6  src/gridpulse/grid.py
+173e223a94d943359627a2b2c77ebb2d4b15ac00f408e966340956efc2a652a2  src/gridpulse/grid_study.py
+7165b6c596c247a4e595e75489e2a29dd24f0e97d4e2b3fa942c611aee663c04  src/gridpulse/model.py
+ab8d0e64ebaf9e58609314af55d0a9051514a1161f1eba8583e225355dbd2231  src/gridpulse/sensing.py
+a8655dde621339d6f68823cf07be17b914dbce1fc1d538f3680845bb7a2d035c  src/gridpulse/uncertainty.py
+2026-10-18T16:04:43Z first evaluation launch refused by the guard before any computation (its own log file matched evaluation_*); log moved to outputs/sense_study/logs/; relaunched.
+
+2026-10-18T16:43:13Z post-evaluation: four independent read-only reviews (power systems + state estimation; leakage + reproducibility; statistics; novelty) completed. No source file and not the protocol changed after the evaluation run; documentation corrected (docs/phase5_results.md s. 11 lists the findings). Confirmed code defects left unfixed to keep the evaluation reproducible: name-based noise seeds without common random numbers (seed_of collisions), file-name-only evaluation guard, NO_FEASIBLE_ACTION over 96 steps, no SE bad-data test. Post-evaluation check: full-state margins bit-identical to the Phase 4 cache (7,920 of 7,920 day arrays). Current hashes:
+ea712326938439ca231ab73204284578e296c82377b1a637e944c7802b312666  docs/phase5_protocol.md
+ab8d0e64ebaf9e58609314af55d0a9051514a1161f1eba8583e225355dbd2231  src/gridpulse/sensing.py
+c94bba10b1054581706c91abbd5851469e908b6cf2606e8cbb41e210ff1d9d48  src/gridpulse/estimation.py
+3d282c79f60f10278a024a904660881600e82f0ba11a8709d0cbfe8ee776cd6e  src/gridpulse/fullstate.py
+6bb61c04fa993ae42351c6b7025f5005b33d826e0ac9a99878c946f4ef8f8744  src/gridpulse/__main__.py

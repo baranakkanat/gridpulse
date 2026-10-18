@@ -1,0 +1,21 @@
+2026-10-17T14:07:25Z
+48f7509c0c901b2bd8492980e5e7c188e23e1e438f2182d8bb1743218f92b70f  docs/research_protocol.md
+2026-10-17T14:31:46Z
+f26ce6e7936271420f5aae6c7a17aa6358915bc1cec677d1256742e13d5da6c5  docs/research_protocol.md
+bc4714f4f18333ca43b1218bb3ca4a10d1cd33de75d21676cc627d4fcb767ed0  src/gridpulse/dual_study.py
+964b44878624e4277688e2d601023e09551aae68a199940fe065c867083ec4a7  src/gridpulse/__main__.py
+2026-10-17T14:44:26Z
+105b89c04f238d4f2011d00706718f492798752db52a2ed6ee0ca7e3342700ba  docs/research_protocol.md
+6ef692277e4818f95cb8247d9f71f3e998762f68f979a13dc6d276e011aa8cc5  src/gridpulse/dual_study.py
+964b44878624e4277688e2d601023e09551aae68a199940fe065c867083ec4a7  src/gridpulse/__main__.py
+2026-10-18T01:22:18Z pre-commitment: static_aci gamma_level 0.1 -> 0.03 (match tau controllers' effective step in level units); if any network still fails the 4A item-10 check, no further revision; record failure and proceed.
+evaluation-freeze 2026-10-18T01:23:57Z
+1c3f46f8f6602e37575af247f06c6fc32e1e385e4a1eab7e7d2b61aa5e13534c  docs/research_protocol.md
+6bce1a2b9f93a3b043fef2c2c7fc39c8e3a2a8f2d040a81bea7095bb2649ffc7  src/gridpulse/__init__.py
+6f6d07ab85e2bb5a97f6a88c20f7be24c04506919c2d9860b2f6542293301138  src/gridpulse/__main__.py
+ba2ee1e2860ea72982ec111709bcca42e182a6a145e6426b961a06409f732c50  src/gridpulse/baseline.py
+81f79eee5f9c4b9972d8f32a9bd0e8cab83ce2a5fc29afbaea89dd4e4ba9edab  src/gridpulse/calendar_analysis.py
+516bab19590c74d550c36da19ca3ff852306185ded575a2af6c1cb4ea8a279b4  src/gridpulse/data.py
+2026-10-18T01:39:37Z post-evaluation check: all src/gridpulse/*.py hashes equal evaluation_run_metadata.json; docs/research_protocol.md differs only by the added status row '| 4 Evaluation run |' (without it the SHA-256 equals the recorded 1c3f46f8...).
+2026-10-18T01:48:33Z post-evaluation code change (no effect on analysis): __main__.py re-run guard fixed (checked 'evaluation_summary.json', run writes 'evaluation_summaries.json'; now refuses if any evaluation_* exists). __main__.py sha256 old 6f6d07ab85e2bb5a97f6a88c20f7be24c04506919c2d9860b2f6542293301138 new 837cdbb5a42d1513f80c271ddcc69088b2a39aa3799cf84128b302e297efb8b7. Found by the post-evaluation readiness gate.
+2026-10-18T01:49:26Z post-evaluation: removed the status row '| 4 Evaluation run |' from docs/research_protocol.md again, restoring its registered SHA-256 1c3f46f8...; evaluation status moved to docs/experiment_results.md. Provenance copied to tracked docs/provenance/phase4/.

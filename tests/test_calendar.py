@@ -36,8 +36,8 @@ def easter_sunday(year: int) -> date:
 
 def test_holiday_table_matches_an_independent_derivation():
     """Fixed-date holidays plus Easter-dependent ones, restricted to the covered dates."""
-    expected = set()
-    for year in (2017, 2018, 2019, 2020):
+    expected = {date(2017, 10, 31)}  # Reformation Day: nationwide in 2017 only
+    for year in (2014, 2015, 2016, 2017, 2018, 2019, 2020):
         easter = easter_sunday(year)
         expected |= {date(year, 1, 1), date(year, 5, 1), date(year, 10, 3)}
         expected |= {date(year, 12, 25), date(year, 12, 26)}
@@ -46,6 +46,7 @@ def test_holiday_table_matches_an_independent_derivation():
     expected = {d for d in expected if first <= d <= last}
 
     assert {d.date() for d in NATIONAL_HOLIDAYS} == expected
+    assert easter_sunday(2015) == date(2015, 4, 5)
     assert easter_sunday(2018) == date(2018, 4, 1)
     assert easter_sunday(2019) == date(2019, 4, 21)
 
@@ -95,6 +96,7 @@ def test_local_calendar_days_have_23_and_25_hours_at_dst_transitions():
         "2018-01-06",  # Epiphany: BW, BY, ST only
         "2018-05-31",  # Corpus Christi: some states only
         "2018-10-31",  # Reformation Day: some states only (nationwide only in 2017)
+        "2016-10-31",  # Reformation Day before the 2017 one-off: some states only
         "2018-11-01",  # All Saints' Day: some states only
         "2018-12-24",  # Christmas Eve: not a statutory holiday
         "2018-12-31",  # New Year's Eve: not a statutory holiday
@@ -125,7 +127,7 @@ def test_missing_timestamps_are_rejected_not_assumed_ordinary():
 
 def test_dates_outside_the_holiday_table_are_rejected_not_assumed_ordinary():
     with pytest.raises(ValueError, match="coverage"):
-        is_national_holiday(utc("2017-12-23 12:00"))
+        is_national_holiday(utc("2014-12-23 12:00"))
     with pytest.raises(ValueError, match="coverage"):
         is_national_holiday(utc("2020-01-01 23:00"))  # local 2020-01-02
 

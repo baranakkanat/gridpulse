@@ -1,0 +1,189 @@
+{
+  "gridpulse_version": "0.1.0",
+  "run_started_utc": "2026-10-18T01:24:01Z",
+  "protocol": "docs/research_protocol.md section 4 with amendment 4A",
+  "period": "evaluation",
+  "scored_days_utc": {
+    "first": "2016-07-01T00:00:00Z",
+    "last": "2016-12-30T00:00:00Z",
+    "count": 183
+  },
+  "development_tuning_days": "2016-02-05 .. 2016-06-30 (UTC days 35..181)",
+  "confirmatory_networks": [
+    "1-LV-rural2--2-sw",
+    "1-LV-rural3--2-sw",
+    "1-LV-semiurb4--2-sw",
+    "1-LV-semiurb5--2-sw",
+    "1-LV-urban6--2-sw"
+  ],
+  "development_network": "1-LV-rural1--2-sw",
+  "source_sha256": {
+    "__init__.py": "6bce1a2b9f93a3b043fef2c2c7fc39c8e3a2a8f2d040a81bea7095bb2649ffc7",
+    "__main__.py": "6f6d07ab85e2bb5a97f6a88c20f7be24c04506919c2d9860b2f6542293301138",
+    "baseline.py": "ba2ee1e2860ea72982ec111709bcca42e182a6a145e6426b961a06409f732c50",
+    "calendar_analysis.py": "81f79eee5f9c4b9972d8f32a9bd0e8cab83ce2a5fc29afbaea89dd4e4ba9edab",
+    "data.py": "516bab19590c74d550c36da19ca3ff852306185ded575a2af6c1cb4ea8a279b4",
+    "dual_study.py": "668bd51caada6e6c75424aed69cecdb2dd3ed6a597a9740751e69343c135e9a7",
+    "evaluation.py": "c82e02d1ffe0f450091766010a452113182703f13e0b19cdcbde4db556820677",
+    "features.py": "b78cbd8fd2e7be2842a30a4df5fd3fba0a185784df956bb80850d8b63773945e",
+    "forecast_study.py": "95f225603f10ba88dd85bd515115006ed3ba8fdbe4be7ad0b95d1a9f50df9f98",
+    "grid.py": "ffce015bab478e47cfdf6f3bf286c7ce70a25c5a4f0f86d8f9fff7723422f7f6",
+    "grid_study.py": "173e223a94d943359627a2b2c77ebb2d4b15ac00f408e966340956efc2a652a2",
+    "model.py": "7165b6c596c247a4e595e75489e2a29dd24f0e97d4e2b3fa942c611aee663c04",
+    "uncertainty.py": "a8655dde621339d6f68823cf07be17b914dbce1fc1d538f3680845bb7a2d035c",
+    "docs/research_protocol.md": "1c3f46f8f6602e37575af247f06c6fc32e1e385e4a1eab7e7d2b61aa5e13534c"
+  },
+  "environment": {
+    "python": "3.12.14",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "numpy": "2.4.6",
+    "pandas": "2.3.3",
+    "pandapower": "3.5.6",
+    "simbench": "1.6.3"
+  },
+  "networks": {
+    "1-LV-rural1--2-sw": {
+      "pv_scale": 1.0,
+      "hosting_capacity": 0.71484375
+    },
+    "1-LV-rural2--2-sw": {
+      "pv_scale": 2.92896174863388,
+      "hosting_capacity": 2.09375
+    },
+    "1-LV-rural3--2-sw": {
+      "pv_scale": 4.3497267759562845,
+      "hosting_capacity": 3.109375
+    },
+    "1-LV-semiurb4--2-sw": {
+      "pv_scale": 3.726775956284153,
+      "hosting_capacity": 2.6640625
+    },
+    "1-LV-semiurb5--2-sw": {
+      "pv_scale": 6.950819672131147,
+      "hosting_capacity": 4.96875
+    },
+    "1-LV-urban6--2-sw": {
+      "pv_scale": 6.0109289617486334,
+      "hosting_capacity": 4.296875
+    }
+  },
+  "physics_fingerprint": "290e73712c31de53eac372a9edbd8b313d8e65266f078123b7c5f82aad85b91f",
+  "model_variants": {
+    "tap_raise_lv": {
+      "tap_steps": -1,
+      "slack_vm_pu": null,
+      "pv_reactive": "none",
+      "pv_cosphi": 1.0,
+      "storage": "idle"
+    },
+    "tap_lower_lv": {
+      "tap_steps": 1,
+      "slack_vm_pu": null,
+      "pv_reactive": "none",
+      "pv_cosphi": 1.0,
+      "storage": "idle"
+    },
+    "pv_cosphi_p": {
+      "tap_steps": 0,
+      "slack_vm_pu": null,
+      "pv_reactive": "cosphi_p",
+      "pv_cosphi": 0.9,
+      "storage": "idle"
+    },
+    "pv_fixed_095": {
+      "tap_steps": 0,
+      "slack_vm_pu": null,
+      "pv_reactive": "fixed",
+      "pv_cosphi": 0.95,
+      "storage": "idle"
+    },
+    "storage_greedy": {
+      "tap_steps": 0,
+      "slack_vm_pu": null,
+      "pv_reactive": "none",
+      "pv_cosphi": 1.0,
+      "storage": "greedy"
+    },
+    "storage_profile": {
+      "tap_steps": 0,
+      "slack_vm_pu": null,
+      "pv_reactive": "none",
+      "pv_cosphi": 1.0,
+      "storage": "profile_charging"
+    },
+    "mv_high": {
+      "tap_steps": 0,
+      "slack_vm_pu": 1.055,
+      "pv_reactive": "none",
+      "pv_cosphi": 1.0,
+      "storage": "idle"
+    },
+    "joint_realistic": {
+      "tap_steps": 0,
+      "slack_vm_pu": 1.055,
+      "pv_reactive": "cosphi_p",
+      "pv_cosphi": 0.9,
+      "storage": "greedy"
+    },
+    "joint_loading": {
+      "tap_steps": 1,
+      "slack_vm_pu": null,
+      "pv_reactive": "fixed",
+      "pv_cosphi": 0.95,
+      "storage": "idle"
+    }
+  },
+  "ensemble": [
+    "tap_raise_lv",
+    "tap_lower_lv",
+    "pv_cosphi_p",
+    "pv_fixed_095",
+    "storage_greedy",
+    "storage_profile"
+  ],
+  "online_settings": {
+    "beta": 0.1,
+    "gamma": 0.01,
+    "tau_min": -0.1,
+    "tau_max": 0.4,
+    "gamma_level": 0.03
+  },
+  "decision_settings": {
+    "margin_scale": [
+      0.10000000149011612,
+      0.10000000149011612,
+      100.0,
+      100.0
+    ],
+    "replay_days": 28,
+    "risk_max_count": 1,
+    "point_margin_tau_grid": [
+      0.0,
+      1.0,
+      0.01
+    ],
+    "severe_margin": 0.2,
+    "long_run_steps": 4,
+    "exploratory_betas": [
+      0.05,
+      0.2
+    ],
+    "material_change": 0.1,
+    "pairs": [
+      "scenario_aci - replay_aci",
+      "replay_aci - static_dev",
+      "replay_aci - static_beta",
+      "replay_aci - static_aci",
+      "replay_aci - point_margin",
+      "scenario_aci - static_dev",
+      "scenario_aci - static_beta",
+      "scenario_aci - static_aci",
+      "scenario_aci - point_margin",
+      "ensemble - replay_aci",
+      "ensemble - point_aci",
+      "point - ensemble"
+    ],
+    "bootstrap": "circular block bootstrap over days, 7-day blocks, 2000 resamples, seed 42"
+  },
+  "data_license": "SimBench data: ODbL 1.0 / DbCL; not redistributed"
+}

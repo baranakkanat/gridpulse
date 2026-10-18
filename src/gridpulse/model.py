@@ -34,54 +34,57 @@ NUM_BOOST_ROUND = 500
 EARLY_STOPPING_ROUNDS = 50
 
 
-def feature_matrix(rows: pd.DataFrame) -> pd.DataFrame:
-    return rows[list(FEATURES)]
+def feature_matrix(rows: pd.DataFrame, features: tuple[str, ...] = FEATURES) -> pd.DataFrame:
+    return rows[list(features)]
 
 
-def train(train_rows: pd.DataFrame, validation_rows: pd.DataFrame) -> tuple[lgb.Booster, dict]:
+def train(
+    train_rows: pd.DataFrame,
+    validation_rows: pd.DataFrame,
+    features: tuple[str, ...] = FEATURES,
+    num_boost_round: int = NUM_BOOST_ROUND,
+) -> tuple[lgb.Booster, dict]:
     """Fit on complete training rows; stop early on the validation L1 (MAE).
 
     Rows with an unavailable feature or target are excluded, not filled. Feature bins are
     built from the training rows only. Returns the booster, truncated to its best
     iteration, and a description of the fit.
     """
-    fit_rows, stop_rows = (
-        train_rows[is_usable(train_rows)],
-        validation_rows[is_usable(validation_rows)],
-    )
+    fit_rows = train_rows[is_usable(train_rows, features)]
+    stop_rows = validation_rows[is_usable(validation_rows, features)]
     train_set = lgb.Dataset(
-        feature_matrix(fit_rows), label=fit_rows[TARGET], feature_name=list(FEATURES)
+        feature_matrix(fit_rows, features), label=fit_rows[TARGET], feature_name=list(features)
     )
     validation_set = lgb.Dataset(
-        feature_matrix(stop_rows), label=stop_rows[TARGET], reference=train_set
+        feature_matrix(stop_rows, features), label=stop_rows[TARGET], reference=train_set
     )
     booster = lgb.train(
         PARAMS,
         train_set,
-        num_boost_round=NUM_BOOST_ROUND,
+        num_boost_round=num_boost_round,
         valid_sets=[validation_set],
         valid_names=["validation"],
         callbacks=[lgb.early_stopping(EARLY_STOPPING_ROUNDS, verbose=False)],
     )
     info = {
         "lightgbm_version": version("lightgbm"),
-        "features": list(FEATURES),
+        "features": list(features),
         "params": PARAMS,
-        "num_boost_round": NUM_BOOST_ROUND,
+        "num_boost_round": num_boost_round,
         "early_stopping_rounds": EARLY_STOPPING_ROUNDS,
         "best_iteration": booster.best_iteration,
         "num_trees": booster.num_trees(),
         "best_validation_l1_mw": float(booster.best_score["validation"]["l1"]),
-        "training_rows": _row_summary(train_rows, fit_rows),
-        "early_stopping_rows": _row_summary(validation_rows, stop_rows),
+        "training_rows": _row_summary(train_rows, fit_rows, features),
+        "early_stopping_rows": _row_summary(validation_rows, stop_rows, features),
     }
     return booster, info
 
 
-def _row_summary(rows: pd.DataFrame, used: pd.DataFrame) -> dict:
+def _row_summary(rows: pd.DataFrame, used: pd.DataFrame, features: tuple[str, ...]) -> dict:
     targets = used["target_timestamp_utc"]
     return {
-        **availability_counts(rows),
+        **availability_counts(rows, features),
         "first_target_utc": utc_iso(targets.min()) if len(used) else None,
         "last_target_utc": utc_iso(targets.max()) if len(used) else None,
     }
@@ -116,9 +119,13 @@ def save_and_verify(
 
 
 def predict(booster: lgb.Booster, rows: pd.DataFrame) -> np.ndarray:
-    """Predictions in MW for rows whose features are all available; NaN for the others."""
-    complete = has_features(rows)
+    """Predictions in MW for rows whose model features are all available; NaN otherwise.
+
+    The features are those the booster was trained on, in its own order.
+    """
+    features = tuple(booster.feature_name())
+    complete = has_features(rows, features)
     predictions = np.full(len(rows), np.nan)
     if complete.any():
-        predictions[complete] = booster.predict(feature_matrix(rows[complete]))
+        predictions[complete] = booster.predict(feature_matrix(rows[complete], features))
     return predictions

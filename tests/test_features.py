@@ -3,7 +3,14 @@ import pandas as pd
 import pytest
 from conftest import hourly_index, hours_since_epoch
 
-from gridpulse.features import FEATURES, TARGET, availability_counts, feature_table
+from gridpulse.features import (
+    FEATURES,
+    HOLIDAY_FEATURES,
+    TARGET,
+    availability_counts,
+    feature_table,
+    with_holiday_flags,
+)
 
 HOUR = pd.Timedelta(hours=1)
 
@@ -153,3 +160,13 @@ def test_feature_columns_are_the_documented_model_inputs(load):
     )
     assert TARGET not in FEATURES
     assert set(FEATURES) <= set(rows.columns)
+
+
+def test_holiday_flags_follow_german_local_dates_of_target_and_sources(load):
+    # Origin 2018-12-26 00:00 UTC is 01:00 local on the Second Day of Christmas.
+    rows = with_holiday_flags(one_day(load, "2018-12-26"))
+
+    assert rows[list(HOLIDAY_FEATURES)].dtypes.tolist() == [np.int8] * 3
+    assert rows["target_is_holiday"].tolist() == [1] * 23 + [0]  # 23:00 UTC is 27 Dec local
+    assert rows["lag_24h_source_is_holiday"].tolist() == [1] * 23 + [1]  # 25/26 Dec local
+    assert rows["lag_168h_source_is_holiday"].tolist() == [0] * 24  # 19-20 Dec local

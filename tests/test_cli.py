@@ -276,3 +276,34 @@ def test_test_period_data_cannot_influence_the_fitted_model(lightgbm_run, write_
     }
     assert metrics[clean]["validation"] == metrics[tmp_path / "shifted"]["validation"]
     assert metrics[clean]["test"] != metrics[tmp_path / "shifted"]["test"]
+
+
+def test_forecast_study_follows_the_registered_rules(lightgbm_run, tmp_path):
+    _, csv = lightgbm_run
+    assert run_baseline(csv, tmp_path / "study", "forecast-study") == 0
+    read = lambda name: json.loads((tmp_path / "study" / name).read_text())  # noqa: E731
+    c1, c2, c3 = (
+        read("c1_boosting_cap.json"),
+        read("c2_holiday_ablation.json"),
+        read("c3_intervals.json"),
+    )
+
+    gain = c1["relative_2018_mae_gain_of_higher_cap"]
+    assert c1["chosen_cap"] == (3000 if gain >= 0.01 else 500)
+    assert c1["arms"]["500"]["training"]["num_boost_round"] == 500
+    mae = {
+        arm: c2["periods"]["validation"]["comparison"]["common_sample"][arm]["mae_mw"]
+        for arm in ("lightgbm_a", "lightgbm_b")
+    }
+    assert c2["selected_for_c3"] == min(mae, key=mae.get)
+    assert c2["training"]["lightgbm_b"]["features"][-3:] == [
+        "target_is_holiday",
+        "lag_24h_source_is_holiday",
+        "lag_168h_source_is_holiday",
+    ]
+    # 2018 is evaluated from 26 February (first full 56-day window), 2019 entirely.
+    assert c3["periods"]["validation"]["n_evaluable"] == 309 * 24
+    assert c3["periods"]["test"]["n_evaluable"] == 365 * 24
+    intervals = pd.read_csv(tmp_path / "study" / "c3_intervals.csv")
+    assert intervals["forecast_origin_utc"].min() == "2018-02-26T00:00:00Z"
+    assert (intervals["n_calibration"] == 56).all()

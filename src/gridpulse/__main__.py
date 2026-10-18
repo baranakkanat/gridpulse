@@ -1,11 +1,18 @@
-"""Command-line entry point: `python -m gridpulse {validate,baseline,compare,train-lightgbm}`."""
+"""Command-line entry point.
+
+`python -m gridpulse {validate,baseline,compare,train-lightgbm,forecast-study,grid-study,
+dual-study,sense-study}`
+"""
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import math
 import platform
 import sys
+from dataclasses import asdict
 from datetime import UTC, datetime
 from importlib.metadata import version
 from pathlib import Path
@@ -375,6 +382,339 @@ def run_train_lightgbm(input_path: Path, output_dir: Path) -> int:
     return 0
 
 
+def run_forecast_study(input_path: Path, output_dir: Path) -> int:
+    from gridpulse import forecast_study as study
+
+    started = datetime.now(UTC)
+    load, report = _experiment_load(input_path)
+    results = study.run_forecast_study(load)
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    _write_json(output_dir / "data_quality.json", report)
+    _write_json(output_dir / "c1_boosting_cap.json", results["c1"])
+    _write_json(output_dir / "c2_holiday_ablation.json", results["c2"])
+    _first_column(results["c2_calendar"], "period").to_csv(
+        output_dir / "c2_calendar_analysis.csv", index=False
+    )
+    _write_json(output_dir / "c3_intervals.json", results["c3"])
+    results["c3_breakdown"].to_csv(output_dir / "c3_coverage_breakdown.csv", index=False)
+    results["c3_intervals"].to_csv(
+        output_dir / "c3_intervals.csv", index=False, date_format=CSV_DATE_FORMAT
+    )
+    metadata = _run_metadata(
+        started,
+        report,
+        models={
+            "lightgbm_version": version("lightgbm"),
+            "c1_caps": list(study.C1_CAPS),
+            "c2_arms": {arm: list(features) for arm, features in study.C2_FEATURES.items()},
+            "c3": {
+                "method": "rolling split conformal on absolute residuals, per lead",
+                "window_days": study.C3_WINDOW_DAYS,
+                "alpha": study.C3_ALPHA,
+                "evaluated_origins": {
+                    split: [utc_iso(start), utc_iso(end)]
+                    for split, (start, end) in study.C3_PERIODS.items()
+                },
+            },
+        },
+        evaluation={
+            "protocol": "docs/research_protocol.md section 2 (registered before running)",
+            "selection_period": "validation (2018); test (2019) was inspected in earlier phases",
+            "metrics": METRIC_DEFINITIONS,
+            "calendar": _calendar_metadata("all models"),
+            "bootstrap": (
+                "circular block bootstrap over days, 7-day blocks, 2000 resamples, seed 42"
+            ),
+            "training_seconds": results["training_seconds"],
+            "source_sha256": _source_hashes(),
+        },
+    )
+    _write_json(output_dir / "run_metadata.json", metadata)
+
+    c1 = results["c1"]
+    print(
+        f"C1: 2018 MAE gain of cap {study.C1_CAPS[1]}: "
+        f"{c1['relative_2018_mae_gain_of_higher_cap']:.2%} -> cap {c1['chosen_cap']}"
+    )
+    for split, period in results["c2"]["periods"].items():
+        scores = period["comparison"]["common_sample"]
+        diff = period["daily_mae_difference_b_minus_a_mw"]
+        print(
+            f"C2 {split:>10}: MAE A={_fmt(scores['lightgbm_a']['mae_mw'])} "
+            f"B={_fmt(scores['lightgbm_b']['mae_mw'])} MW, B-A={_fmt(diff['estimate'])} "
+            f"[{_fmt(diff['ci_low'])}, {_fmt(diff['ci_high'])}]"
+        )
+    for split, summary in results["c3"]["periods"].items():
+        coverage = summary["coverage"]
+        print(
+            f"C3 {split:>10}: coverage {coverage['estimate']:.3f} "
+            f"[{coverage['ci_low']:.3f}, {coverage['ci_high']:.3f}], mean width "
+            f"{_fmt(summary['mean_width_mw']['estimate'])} MW"
+        )
+    print(f"outputs written to {output_dir}")
+    return 0
+
+
+def run_grid_study(period: str, output_dir: Path, workers: int | None) -> int:
+    try:
+        from gridpulse import grid_study as study
+        from gridpulse.grid import NETWORK_CODE
+    except ImportError as error:
+        raise RuntimeError(f"{error}; install the grid extra: uv sync --all-extras") from error
+
+    started = datetime.now(UTC)
+    results = study.run_grid_study(period, output_dir / "physics_cache", workers)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    results["outcomes"].to_csv(output_dir / f"{period}_daily_outcomes.csv", index=False)
+    _write_json(output_dir / f"{period}_summary.json", results["summary"])
+    _write_json(output_dir / f"{period}_calibration.json", results["calibration"])
+    if results["storage_sensitivity"] is not None:
+        _write_json(
+            output_dir / f"{period}_storage_sensitivity.json", results["storage_sensitivity"]
+        )
+    with open(output_dir / f"{period}_passports.jsonl", "w") as file:
+        for passport in results["passports"]:
+            file.write(json.dumps(passport) + "\n")
+    start, end = study.PERIODS[period]
+    metadata = {
+        "gridpulse_version": version("gridpulse"),
+        "run_started_utc": started.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "protocol": "docs/research_protocol.md section 3 (registered before evaluation runs)",
+        "period": period,
+        "days_utc": {"start": utc_iso(start), "end_exclusive": utc_iso(end)},
+        "source_sha256": _source_hashes(),
+        "environment": {
+            "python": platform.python_version(),
+            "platform": platform.platform(),
+            **{name: version(name) for name in ("numpy", "pandas", "pandapower", "simbench")},
+        },
+        "network": {
+            "simbench_code": NETWORK_CODE,
+            "modification": (
+                "all storage units held at 0 MW, i.e. PV and load without battery dispatch "
+                "(protocol s. 3.1, 3.6b); benchmark transformer tap made effective (s. 3.6b)"
+            ),
+            "limits": "benchmark bus min/max_vm_pu; line and trafo max_loading_percent",
+            "solver": "pandapower AC Newton-Raphson, recycle of PQ injections, reset per day",
+            "data_license": "SimBench data: ODbL 1.0 / DbCL; not redistributed",
+        },
+        "settings": {
+            "cap_levels": study.CAP_LEVELS.tolist(),
+            "static_cap": study.STATIC_CAP,
+            "forecast": f"mean of previous {study.FORECAST_DAYS} days, same UTC quarter-hour",
+            "scenario_window_days": study.WINDOW_DAYS,
+            "alpha": study.ALPHA,
+            "exploratory_alphas": list(study.EXPLORATORY_ALPHAS),
+            "fallbacks": list(study.FALLBACKS),
+            "bootstrap": (
+                "circular block bootstrap over days, 7-day blocks, 2000 resamples, seed 42"
+            ),
+        },
+    }
+    metadata["physics_cache"] = results["physics_cache"]
+    _write_json(output_dir / f"{period}_run_metadata.json", metadata)
+
+    summary, calibration = results["summary"], results["calibration"]
+    for policy in ("no_action", "static_70", "point", "risk", "selective_robust", "oracle"):
+        totals = summary["totals"][policy]
+        print(
+            f"{period} {policy:<17} violation steps {totals['violation_steps']:6.0f}  "
+            f"curtailed {totals['curtailed_mwh']:7.3f} MWh"
+        )
+    skill = calibration["brier_skill_score"]
+    print(
+        f"{period} BSS {skill['estimate']:.3f} [{skill['ci_low']:.3f}, {skill['ci_high']:.3f}], "
+        f"deferred days {summary['h4_selective']['deferred_days']} of {summary['days']}"
+    )
+    print(f"outputs written to {output_dir}")
+    return 0
+
+
+def _json_safe(value):
+    """Replace non-finite floats (an inf peak margin after a failed flow) by strings, so
+    the output stays valid JSON."""
+    if isinstance(value, dict):
+        return {key: _json_safe(item) for key, item in value.items()}
+    if isinstance(value, list | tuple):
+        return [_json_safe(item) for item in value]
+    if hasattr(value, "item") and not hasattr(value, "__len__"):  # numpy scalar
+        value = value.item()
+    if isinstance(value, float) and not math.isfinite(value):
+        return str(value)
+    return value
+
+
+def run_dual_study(stage: str, output_dir: Path, workers: int | None, networks) -> int:
+    try:
+        from gridpulse import dual_study as study
+    except ImportError as error:
+        raise RuntimeError(f"{error}; install the grid extra: uv sync --all-extras") from error
+
+    networks = list(networks or study.HOSTING_CAPACITY)
+    unknown = sorted(set(networks) - set(study.HOSTING_CAPACITY))
+    if unknown:
+        raise ValueError(f"unregistered networks: {unknown}")
+    started = datetime.now(UTC)
+    cache_dir = output_dir / "physics_cache"
+    if stage == "physics":
+        provenance = study.compute_all_physics(cache_dir, networks, workers)
+        output_dir.mkdir(parents=True, exist_ok=True)
+        _write_json(output_dir / "physics_provenance.json", provenance)
+        print(f"physics cached in {cache_dir}")
+        return 0
+    if stage == "evaluation" and any(output_dir.glob("evaluation_*")):
+        raise RuntimeError(
+            "evaluation outputs already exist; the protocol (s. 4.6) allows one evaluation run"
+        )
+    online = study.OnlineSettings()
+    results = study.run_dual_study(stage, cache_dir, networks, online)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    for name in ("summaries", "diagnostics", "materiality", "hypotheses"):
+        if results[name] is not None:
+            _write_json(output_dir / f"{stage}_{name}.json", _json_safe(results[name]))
+    rows = pd.DataFrame(results["rows"])
+    rows.insert(1, "date", (study.grid_study.FIRST_DAY + pd.to_timedelta(rows["day"], "D")).dt.date)
+    rows.to_csv(output_dir / f"{stage}_daily_outcomes.csv", index=False)
+    days = study.grid_study.period_days(stage)
+    days = [d for d in days if study.FIRST_DECISION_DAY <= d <= study.LAST_DAY]
+    first_day = study.grid_study.FIRST_DAY
+    metadata = {
+        "gridpulse_version": version("gridpulse"),
+        "run_started_utc": started.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "protocol": "docs/research_protocol.md section 4 with amendment 4A",
+        "period": stage,
+        "scored_days_utc": {
+            "first": utc_iso(first_day + pd.Timedelta(days=days[0])),
+            "last": utc_iso(first_day + pd.Timedelta(days=days[-1])),
+            "count": len(days),
+        },
+        "development_tuning_days": "2016-02-05 .. 2016-06-30 (UTC days 35..181)",
+        "confirmatory_networks": [c for c in networks if c != study.DEVELOPMENT_NETWORK],
+        "development_network": study.DEVELOPMENT_NETWORK,
+        "source_sha256": _source_hashes(),
+        "environment": {
+            "python": platform.python_version(),
+            "platform": platform.platform(),
+            **{name: version(name) for name in ("numpy", "pandas", "pandapower", "simbench")},
+        },
+        "networks": {
+            code: {
+                "pv_scale": study.pv_scale(code),
+                "hosting_capacity": study.HOSTING_CAPACITY[code],
+            }
+            for code in networks
+        },
+        "physics_fingerprint": study.physics_fingerprint(),
+        "model_variants": {name: asdict(v) for name, v in study.VARIANTS.items()},
+        "ensemble": list(study.ENSEMBLE),
+        "online_settings": asdict(online),
+        "decision_settings": {
+            "margin_scale": study.MARGIN_SCALE.tolist(),
+            "replay_days": study.REPLAY_DAYS,
+            "risk_max_count": study.RISK_MAX_COUNT,
+            "point_margin_tau_grid": [float(study.TAU_GRID[0]), float(study.TAU_GRID[-1]), 0.01],
+            "severe_margin": study.SEVERE_MARGIN,
+            "long_run_steps": study.LONG_RUN_STEPS,
+            "exploratory_betas": list(study.EXPLORATORY_BETAS),
+            "material_change": study.MATERIAL_CHANGE,
+            "pairs": [f"{a} - {b}" for a, b in study.PAIRS],
+            "bootstrap": "circular block bootstrap over days, 7-day blocks, 2000 resamples, "
+            "seed 42",
+        },
+        "data_license": "SimBench data: ODbL 1.0 / DbCL; not redistributed",
+    }
+    _write_json(output_dir / f"{stage}_run_metadata.json", metadata)
+    for code in networks:
+        totals = results["summaries"][code]["cells"]["forecast/nominal"]["totals"]
+        print(
+            code,
+            " ".join(
+                f"{p}={totals[p]['avoidable_violation_steps']:.0f}/{totals[p]['curtailed_mwh']:.2f}"
+                for p in ("no_action", "static_dev", "scenario_robust", "replay_aci", "oracle")
+            ),
+        )
+    print(f"outputs written to {output_dir}")
+    return 0
+
+
+def run_sense_study(stage: str, output_dir: Path, workers: int | None, networks) -> int:
+    try:
+        from gridpulse import dual_study, fullstate, sensing
+    except ImportError as error:
+        raise RuntimeError(f"{error}; install the grid extra: uv sync --all-extras") from error
+
+    networks = list(networks or dual_study.HOSTING_CAPACITY)
+    unknown = sorted(set(networks) - set(dual_study.HOSTING_CAPACITY))
+    if unknown:
+        raise ValueError(f"unregistered networks: {unknown}")
+    workers = workers or 8
+    cache_dir = output_dir / "fullstate_cache"
+    if stage == "physics":
+        days = list(range(dual_study.FIRST_DECISION_DAY, dual_study.LAST_DAY + 1))
+        provenance = {
+            f"{code}/{truth}": fullstate.compute_states(code, truth, days, cache_dir, workers)
+            for code in networks
+            for truth in fullstate.TRUTHS
+        }
+        output_dir.mkdir(parents=True, exist_ok=True)
+        _write_json(output_dir / "fullstate_provenance.json", provenance)
+        print(f"full states cached in {cache_dir}")
+        return 0
+    if stage == "evaluation" and any(output_dir.glob("evaluation_*")):
+        raise RuntimeError(
+            "evaluation outputs already exist; the protocol allows one evaluation run"
+        )
+    gate = None
+    if stage == "evaluation":
+        gate_file = output_dir / "development_se_gate.json"
+        if not gate_file.exists():
+            raise RuntimeError("run the development stage first (it fixes the SE gate)")
+        gate = json.loads(gate_file.read_text())
+    started = datetime.now(UTC)
+    phase4_cache = Path("outputs/dual_study/physics_cache")
+    output = sensing.run_study(stage, phase4_cache, cache_dir, networks, workers, gate)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    _write_json(output_dir / f"{stage}_results.json", _json_safe(output["results"]))
+    _write_json(output_dir / f"{stage}_hypotheses.json", _json_safe(output["hypotheses"]))
+    if "se_gate" in output:
+        _write_json(output_dir / f"{stage}_se_gate.json", _json_safe(output["se_gate"]))
+    metadata = {
+        "gridpulse_version": version("gridpulse"),
+        "run_started_utc": started.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "protocol": "docs/phase5_protocol.md",
+        "stage": stage,
+        "networks": networks,
+        "source_sha256": _source_hashes(),
+        "phase5_protocol_sha256": hashlib.sha256(
+            (Path(__file__).resolve().parents[2] / "docs" / "phase5_protocol.md").read_bytes()
+        ).hexdigest(),
+        "fullstate_fingerprint": fullstate.fingerprint(),
+        "phase4_physics_fingerprint": dual_study.physics_fingerprint(),
+        "conditions": {name: asdict(model) for name, model in sensing.CONDITIONS.items()},
+        "primary_condition": sensing.PRIMARY,
+        "budgets": list(sensing.BUDGETS),
+        "rules": list(sensing.RULES),
+        "random_seeds": len(sensing.RANDOM_SEEDS),
+        "design_truths": list(sensing.DESIGN_TRUTHS),
+        "coverage_min": sensing.COVERAGE_MIN,
+        "consistency_thresholds": {
+            "v_pu": sensing.CONSISTENCY_V,
+            "q_fraction": sensing.CONSISTENCY_Q,
+        },
+        "environment": {
+            "python": platform.python_version(),
+            "platform": platform.platform(),
+            **{name: version(name) for name in ("numpy", "pandas", "pandapower", "simbench")},
+        },
+        "data_license": "SimBench data: ODbL 1.0 / DbCL; not redistributed",
+    }
+    _write_json(output_dir / f"{stage}_run_metadata.json", metadata)
+    print(json.dumps(_json_safe(output["hypotheses"]["P"]), indent=1))
+    print(f"outputs written to {output_dir}")
+    return 0
+
+
 def _calendar_metadata(models: str) -> dict:
     return {
         "timezone": LOCAL_TIMEZONE,
@@ -389,6 +729,23 @@ def _calendar_metadata(models: str) -> dict:
             "in holiday_dates. Categories combine the target and the weekly reference "
             f"and are shared by {models}. Labels are used for analysis only."
         ),
+    }
+
+
+def _source_hashes() -> dict:
+    """SHA-256 of the registered protocol (if present) and of every package source file,
+    so a run can be tied to the exact code and protocol text it used."""
+    import hashlib
+
+    files = sorted(Path(__file__).parent.glob("*.py"))
+    protocol = Path(__file__).resolve().parents[2] / "docs" / "research_protocol.md"
+    if protocol.exists():
+        files.append(protocol)
+    return {
+        (file.name if file != protocol else "docs/research_protocol.md"): hashlib.sha256(
+            file.read_bytes()
+        ).hexdigest()
+        for file in files
     }
 
 
@@ -481,6 +838,41 @@ def main(argv: list[str] | None = None) -> int:
         "--output-dir", type=Path, required=True, help="directory for model and outputs"
     )
 
+    study = commands.add_parser(
+        "forecast-study",
+        help="Track 1 experiments C1-C3: boosting cap, holiday flags, rolling intervals",
+    )
+    study.add_argument("--input", type=Path, required=True, help="path to the CSV file")
+    study.add_argument("--output-dir", type=Path, required=True, help="directory for outputs")
+
+    grid = commands.add_parser(
+        "grid-study",
+        help="Track 2: PV-cap decisions on a SimBench LV grid (development or evaluation period)",
+    )
+    grid.add_argument("--period", choices=("development", "evaluation"), required=True)
+    grid.add_argument("--output-dir", type=Path, required=True, help="directory for outputs")
+    grid.add_argument("--workers", type=int, default=None, help="parallel power-flow workers")
+
+    dual = commands.add_parser(
+        "dual-study",
+        help="Phase 4: PV-cap decisions under forecast and physical-model uncertainty "
+        "(physics cache, then development or evaluation decisions)",
+    )
+    dual.add_argument("--stage", choices=("physics", "development", "evaluation"), required=True)
+    dual.add_argument("--output-dir", type=Path, required=True, help="directory for outputs")
+    dual.add_argument("--workers", type=int, default=None, help="parallel power-flow workers")
+    dual.add_argument("--networks", nargs="*", default=None, help="subset of registered networks")
+
+    sense = commands.add_parser(
+        "sense-study",
+        help="Phase 5: decisions under limited measurement availability "
+        "(full-state physics, then development or evaluation)",
+    )
+    sense.add_argument("--stage", choices=("physics", "development", "evaluation"), required=True)
+    sense.add_argument("--output-dir", type=Path, required=True, help="directory for outputs")
+    sense.add_argument("--workers", type=int, default=None, help="parallel power-flow workers")
+    sense.add_argument("--networks", nargs="*", default=None, help="subset of registered networks")
+
     args = parser.parse_args(argv)
     try:
         if args.command == "validate":
@@ -489,6 +881,14 @@ def main(argv: list[str] | None = None) -> int:
             return run_baseline(args.input, args.output_dir)
         if args.command == "compare":
             return run_compare(args.input, args.output_dir)
+        if args.command == "forecast-study":
+            return run_forecast_study(args.input, args.output_dir)
+        if args.command == "grid-study":
+            return run_grid_study(args.period, args.output_dir, args.workers)
+        if args.command == "dual-study":
+            return run_dual_study(args.stage, args.output_dir, args.workers, args.networks)
+        if args.command == "sense-study":
+            return run_sense_study(args.stage, args.output_dir, args.workers, args.networks)
         return run_train_lightgbm(args.input, args.output_dir)
     except (OSError, ValueError, RuntimeError) as error:
         print(f"error: {error}", file=sys.stderr)
