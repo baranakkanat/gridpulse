@@ -10,7 +10,7 @@ forecasts, one learned model (LightGBM), and leakage-free, paired temporal evalu
 Phase 3 adds pre-registered research experiments: forecast reliability on national load,
 and uncertainty-aware decisions on a simulated distribution grid.
 
-## Current scope (Phases 0, 1, 1B, 2A, 3, 4, 5 and 6)
+## Current scope (Phases 0, 1, 1B, 2A, 3, 4, 5, 6 and 7)
 
 Implemented:
 
@@ -51,6 +51,11 @@ Implemented:
   - noise-aware alarm rules for the feedback;
   - a chi-square test for state estimation;
   - protected, frozen study stages.
+- **Phase 7:**
+  - signed constraint margins (voltage in p.u., loading in %, never added);
+  - a model-residual correction from substation measurements, with meter consistency
+    checks and operational evidence labels;
+  - an exploratory, offline static-HTML demonstrator.
 - Chronological train / validation / test periods, with 2020 reserved and unused.
 - MAE, RMSE and WAPE on valid prediction/target pairs only, overall and per lead hour,
   with explicit counts of excluded pairs.
@@ -613,6 +618,85 @@ Each stage took about 17–19 minutes with 3 workers. Report tables:
 uv run python docs/provenance/phase6/scripts/report.py evaluation > outputs/noise_study/logs/evaluation_report.md
 ```
 
+## Research experiments (Phase 7: continuous margins and model-residual correction)
+
+**Question.** Can continuous, uncertainty-aware constraint-margin estimates improve
+decisions over binary threshold alarms, under limited observability and model mismatch?
+
+**What changed.**
+
+- **The planner now uses continuous substation residuals instead of counted alarms.**
+  - The busbar voltage minus the nominal model's prediction at the metered injections
+    gives an offset v̂.
+  - The transformer and feeder-head current ratios give ρ.
+  - The replayed nominal exceedances are corrected by v̂ and ρ, with a fixed safety margin
+    tuned on development days. This is the classic offset-free MPC bias update, not a new
+    method.
+- **Remote meters are checked** against the busbar residual. Evidence labels separate
+  "meter bias suspected" from "cannot tell bias from model error"; they never estimate a
+  bias.
+- **The Phase 4–6 code paths and frozen results are unchanged.** The corrector is opt-in.
+
+The protocol (with amendment 7A) is [docs/phase7_protocol.md](docs/phase7_protocol.md),
+and the results are in [docs/phase7_results.md](docs/phase7_results.md). This is an
+exploratory replication on previously examined benchmark data, not a confirmatory test.
+
+**Headline results** (five SimBench networks, evaluation half-year):
+
+- **The registered primary hypothesis is not met.**
+  - Substation-only correction has 1 violation under the three model errors, against 513
+    for binary feedback with two exact remote meters, at 41 % more curtailment.
+  - But under the correct model it curtails 27 % more than binary substation feedback
+    (66.2 vs 52.3 MWh; the limit was 10 %). That cost is the cost of its registered
+    safety margin.
+- **Reliability under the tested model errors is large and consistent:** 15 of 15 cases,
+  against 9 for two exact meters and 14 for exact full metering. The busbar residual
+  matches the true tap or MV offset to within 0.0001 p.u., and so also protects buses no
+  sensor sees.
+- **It depends on two things the binary policies do not:**
+  - an accurate busbar voltage: the tolerated bias is about the safety margin, and −0.005
+    p.u. costs 260 violations;
+  - exact customer injection data, which were assumed and not tested.
+- **Remote meters add almost nothing** for these common-mode errors once the correction is
+  in place. Local errors (argued, not tested, to be beyond what the substation can
+  attribute) and time-varying errors (lagged by the daily averaging) were not tested.
+
+Run the development stage, freeze, then the single evaluation. All reuse the Phase 4 and
+Phase 5 physics caches:
+
+```bash
+uv run python -m gridpulse margin-study --stage development --output-dir outputs/margin_study
+```
+
+```bash
+uv run python -m gridpulse margin-study --stage freeze --output-dir outputs/margin_study
+```
+
+```bash
+uv run python -m gridpulse margin-study --stage evaluation --output-dir outputs/margin_study
+```
+
+Each stage took 2–3 minutes with 3 workers. The code has changed since the freeze, for
+the demonstrator and review fixes, so a new evaluation is refused, by design
+([docs/provenance/phase7/README.md](docs/provenance/phase7/README.md)). Report tables:
+
+```bash
+uv run python docs/provenance/phase7/scripts/report.py evaluation > outputs/margin_study/logs/evaluation_report.md
+```
+
+**Exploratory demonstrator.** This writes one static HTML page (no scripts, no network
+access) for a network and truth. The page re-runs three frozen policies, checks them
+against the frozen outputs, and shows:
+- what is measured;
+- the true signed margins on the network diagram;
+- the caps per quarter-hour and the operator's estimates.
+
+It is synthetic benchmark data, not an operator tool:
+
+```bash
+uv run python -m gridpulse demonstrate --network 1-LV-semiurb4--2-sw --truth tap_raise_lv --output-dir outputs/demonstrator
+```
+
 ## Tests and checks
 
 ```bash
@@ -644,6 +728,9 @@ src/gridpulse/sensing.py     Phase 5 measurement model, placement, detection, fe
 src/gridpulse/estimation.py  Phase 5 WLS state estimation, pseudo-measurements, observability
 src/gridpulse/noise_study.py Phase 6 noise-aware feedback study, hypotheses, state-estimation test
 src/gridpulse/runguard.py    Phase 6 stage manifests, atomic writes, freeze and rerun protection
+src/gridpulse/margins.py     Phase 7 signed margins, residual corrector, evidence labels, coverage
+src/gridpulse/margin_study.py  Phase 7 study plan, observability, hypotheses
+src/gridpulse/demonstrator.py  Phase 7 exploratory static-HTML demonstrator
 src/gridpulse/__main__.py    command-line interface and output/metadata writing
 tests/                       unit tests and end-to-end CLI tests on synthetic data
 docs/methodology.md          Phase 0-2A protocol, decisions, limitations
@@ -655,5 +742,11 @@ docs/phase5_results.md       Phase 5 results, verdicts and limitations
 docs/phase6_protocol.md      Phase 6 pre-registered protocol and amendment 6A
 docs/phase6_literature.md    Phase 6 literature review
 docs/phase6_results.md       Phase 6 results, verdicts and limitations
+docs/phase7_protocol.md      Phase 7 pre-registered protocol and amendment 7A
+docs/phase7_literature.md    Phase 7 literature review
+docs/phase7_results.md       Phase 7 results, verdicts, reviews and limitations
+docs/provenance/             per-phase registration logs, hashes and report scripts
+docs/learning_guide.md       concepts behind the methods, with equations and code locations
+docs/technical_limitations.md  limitations across all phases
 docs/kibtek_pilot_concept.md concept for a possible offline utility pilot (no contact made)
 ```

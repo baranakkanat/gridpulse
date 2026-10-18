@@ -1,7 +1,7 @@
 """Command-line entry point.
 
 `python -m gridpulse {validate,baseline,compare,train-lightgbm,forecast-study,grid-study,
-dual-study,sense-study,noise-study}`
+dual-study,sense-study,noise-study,margin-study,demonstrate}`
 """
 
 from __future__ import annotations
@@ -795,6 +795,93 @@ def run_noise_study(stage: str, output_dir: Path, workers: int | None, networks)
     return 0
 
 
+def run_demonstrator(network: str, truth: str, output_dir: Path) -> int:
+    """Phase 7 exploratory demonstrator (docs/phase7_results.md s. 12): a static HTML page."""
+    try:
+        from gridpulse import demonstrator, dual_study, noise_study
+    except ImportError as error:
+        raise RuntimeError(f"{error}; install the grid extra: uv sync --all-extras") from error
+
+    if network not in dual_study.HOSTING_CAPACITY:
+        raise ValueError(f"unregistered network: {network}")
+    truths = ("nominal", *noise_study.MISMATCH)
+    if truth not in truths:
+        raise ValueError(f"truth {truth} not in the Phase 7 study; one of {list(truths)}")
+    if not demonstrator.FROZEN.exists():
+        raise RuntimeError(f"{demonstrator.FROZEN} missing: run the Phase 7 evaluation first")
+    path = demonstrator.write(network, truth, output_dir)
+    print(f"demonstrator page written to {path} (exploratory; synthetic benchmark data)")
+    return 0
+
+
+def run_margin_study(stage: str, output_dir: Path, workers: int | None, networks) -> int:
+    """Phase 7 (docs/phase7_protocol.md): development, freeze, then one evaluation, guarded
+    by `runguard` as Phase 6. Placements are the frozen Phase 6 development design."""
+    try:
+        from gridpulse import dual_study, margin_study, runguard
+    except ImportError as error:
+        raise RuntimeError(f"{error}; install the grid extra: uv sync --all-extras") from error
+
+    networks = list(networks or dual_study.HOSTING_CAPACITY)
+    unknown = sorted(set(networks) - set(dual_study.HOSTING_CAPACITY))
+    if unknown:
+        raise ValueError(f"unregistered networks: {unknown}")
+    if stage != "freeze" and not set(networks) - {dual_study.DEVELOPMENT_NETWORK}:
+        raise ValueError("the hypotheses need at least one network besides the development one")
+    protocol = margin_study.PROTOCOL
+    if stage == "freeze":
+        record = runguard.freeze(output_dir, protocol)
+        print(f"frozen at {record['frozen_utc']}: {len(record['code_sha256'])} hashes")
+        return 0
+    if stage == "evaluation":
+        runguard.require_freeze(output_dir, protocol)
+    design = Path("outputs/noise_study/development_results.json")
+    placements = json.loads(design.read_text())["placements"]
+    identity = {
+        "study": "phase7-margin-study",
+        "experiment": "continuous model-residual correction vs binary alarms; exploratory "
+        "replication on previously examined SimBench networks and 2016 profiles",
+        "stage": stage,
+        "networks": networks,
+        "placements_source": str(design),
+        "placements_sha256": runguard.sha256(design),
+    }
+    runguard.begin(output_dir, stage, identity, protocol)
+    started = datetime.now(UTC)
+    output = margin_study.run_study(
+        stage, Path("outputs/dual_study/physics_cache"),
+        Path("outputs/sense_study/fullstate_cache"), networks, workers or 3, placements,
+    )  # fmt: skip
+    written = [output_dir / f"{stage}_results.json", output_dir / f"{stage}_hypotheses.json"]
+    _write_json(written[0], _json_safe(output["results"]))
+    _write_json(written[1], _json_safe(output["hypotheses"]))
+    metadata = {
+        "gridpulse_version": version("gridpulse"),
+        "run_started_utc": started.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "identity": identity,
+        "plan": [list(row) for row in margin_study.PLAN],
+        "corrector_defaults": asdict(margin_study.mg.CorrectorSettings()),
+        "conditions": {name: asdict(m) for name, m in margin_study.CONDITIONS.items()},
+        "phase4_physics_fingerprint": dual_study.physics_fingerprint(),
+        "environment": {
+            "python": platform.python_version(),
+            "platform": platform.platform(),
+            **{
+                name: version(name)
+                for name in ("numpy", "pandas", "pandapower", "simbench", "scipy")
+            },
+        },
+        "data_license": "SimBench data: ODbL 1.0 / DbCL; not redistributed",
+    }
+    path = output_dir / f"{stage}_run_metadata.json"
+    _write_json(path, metadata)
+    written.append(path)
+    runguard.complete(output_dir, stage, written)
+    print(json.dumps(_json_safe(output["hypotheses"]), indent=1)[:3000])
+    print(f"outputs written to {output_dir}")
+    return 0
+
+
 def _calendar_metadata(models: str) -> dict:
     return {
         "timezone": LOCAL_TIMEZONE,
@@ -963,6 +1050,25 @@ def main(argv: list[str] | None = None) -> int:
     noise.add_argument("--workers", type=int, default=None, help="parallel workers (default 3)")
     noise.add_argument("--networks", nargs="*", default=None, help="subset of registered networks")
 
+    margin = commands.add_parser(
+        "margin-study",
+        help="Phase 7: continuous model-residual correction vs binary alarm feedback "
+        "(development, freeze, then one evaluation; reuses the Phase 4/5 physics caches)",
+    )
+    margin.add_argument("--stage", choices=("development", "freeze", "evaluation"), required=True)
+    margin.add_argument("--output-dir", type=Path, required=True, help="directory for outputs")
+    margin.add_argument("--workers", type=int, default=None, help="parallel workers (default 3)")
+    margin.add_argument("--networks", nargs="*", default=None, help="subset of registered networks")
+
+    demo = commands.add_parser(
+        "demonstrate",
+        help="Phase 7 exploratory demonstrator: one static HTML page per network and truth, "
+        "re-running three frozen policies (needs the frozen Phase 7 evaluation outputs)",
+    )
+    demo.add_argument("--network", default="1-LV-semiurb4--2-sw", help="registered network")
+    demo.add_argument("--truth", default="tap_raise_lv", help="true model (nominal or mismatch)")
+    demo.add_argument("--output-dir", type=Path, required=True, help="directory for the page")
+
     args = parser.parse_args(argv)
     try:
         if args.command == "validate":
@@ -981,6 +1087,10 @@ def main(argv: list[str] | None = None) -> int:
             return run_sense_study(args.stage, args.output_dir, args.workers, args.networks)
         if args.command == "noise-study":
             return run_noise_study(args.stage, args.output_dir, args.workers, args.networks)
+        if args.command == "margin-study":
+            return run_margin_study(args.stage, args.output_dir, args.workers, args.networks)
+        if args.command == "demonstrate":
+            return run_demonstrator(args.network, args.truth, args.output_dir)
         return run_train_lightgbm(args.input, args.output_dir)
     except (OSError, ValueError, RuntimeError) as error:
         print(f"error: {error}", file=sys.stderr)

@@ -135,6 +135,7 @@ class MeasurementModel:
     remote_missing: float = 0.0  # probability that a remote sensor-day is missing
     remote_delay_days: int = 0
     sigma_bias_remote: float = 0.0  # p.u.; fixed per meter (Phase 6 sensitivity only)
+    bias_v_substation: float = 0.0  # p.u.; fixed busbar voltage-transformer error (Phase 7)
 
 
 def _noisy(values: np.ndarray, sigma: float, rng, relative: bool = False) -> np.ndarray:
@@ -225,6 +226,8 @@ def _measure_identified(
         sigma = model.sigma_loading
         out["trafo_loading"] = noisy(trafo[:, 2:3], sigma, "trafo_loading", (0,), True)
         out["busbar_vm"] = noisy(trafo[:, 3:4], model.sigma_v_substation, "busbar_voltage", (0,))
+        if model.bias_v_substation:
+            out["busbar_vm"] = out["busbar_vm"] + model.bias_v_substation
         out["trafo_p"] = noisy(trafo[:, 0:1], sigma, "trafo_p", (0,), True)
         out["trafo_q"] = noisy(trafo[:, 1:2], sigma, "trafo_q", (0,), True)
     if config.heads:
@@ -258,6 +261,8 @@ def measure(
         if day is None:
             raise ValueError("identity-based noise needs the day")
         return _measure_identified(state, levels, config, layout, model, noise, day)
+    if getattr(model, "bias_v_substation", 0.0):  # Phase 7 bias exists only with a NoiseBank
+        raise ValueError("bias_v_substation needs identity-based noise (a NoiseBank)")
     steps = np.arange(STEPS)
     column = {b: i for i, b in enumerate(layout.buses)}
     out = {}
@@ -533,6 +538,7 @@ def consistency_residuals(readings: dict, nominal_state: dict, levels, daylight,
 def run_feedback_policy(
     ctx: DecisionContext, policy: str, config: Config, model: MeasurementModel, seed: int,
     online: ds.OnlineSettings, detector=None, *, noise: NoiseBank | None = None, alarm=None,
+    corrector=None, trace: dict | None = None,
 ) -> list[dict]:  # fmt: skip
     """Run one policy day by day from the first decision day; return records of the scored
     days.
@@ -559,9 +565,12 @@ def run_feedback_policy(
     records = []
     for day in decision_days:
         if policy in ("replay_aci", "replay_robust"):
-            replay = np.stack(
-                [ctx.plan_norm[j][ds.REALISED] for j in range(day - ds.REPLAY_DAYS, day)]
-            ).max(axis=0)
+            if corrector is not None:  # Phase 7: planning model corrected from readings
+                replay = corrector.replay(day)
+            else:
+                replay = np.stack(
+                    [ctx.plan_norm[j][ds.REALISED] for j in range(day - ds.REPLAY_DAYS, day)]
+                ).max(axis=0)
             margin = tau if policy == "replay_aci" else 0.0
             levels = ds.first_safe(replay, margin)
             no_feasible = bool((~(replay <= -margin).any(axis=1)).any())
@@ -576,6 +585,8 @@ def run_feedback_policy(
         if policy not in ("replay_aci", "replay_robust"):
             no_feasible = False
         daylight = ctx.available[day].sum(axis=1) > 0
+        if trace is not None:  # applied cap levels per day (Phase 7 demonstrator only)
+            trace[day] = levels.copy()
         readings = measure(
             ctx.states[day], levels, config, ctx.layout, model, rng, noise=noise, day=day
         )
@@ -608,6 +619,8 @@ def run_feedback_policy(
                     "false_alarm_steps": int((flagged & ~violated).sum()),
                     "missed_steps": int((~flagged & violated & daylight).sum()),
                     "intervention_steps": int(((levels > 0) & daylight).sum()),
+                    # estimates in force when this day's caps were decided (Phase 7)
+                    **({} if corrector is None else corrector.state()),
                 }
             )
         if ctx.nominal_states is not None and config.transformer:
@@ -615,6 +628,8 @@ def run_feedback_policy(
                 readings, ctx.nominal_states[day], levels, daylight, ctx.trafo_mva
             )
             inconsistent = abs(dv) > CONSISTENCY_V or abs(dq) > CONSISTENCY_Q
+        if corrector is not None:  # sees only readings, the applied caps and daylight
+            corrector.observe(day, readings, levels, daylight)
         if policy == "replay_aci":
             tau = float(
                 np.clip(

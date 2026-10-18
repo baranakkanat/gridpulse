@@ -535,3 +535,221 @@ is right.
 3. *Should a utility install more meters?*
    - In this benchmark, two well-placed meters gave most of the value.
    - Their accuracy, and especially their bias, decide whether that value is real.
+
+## 13. Phase 7 concepts: margins, noise versus bias, blindness, and what evidence a utility needs
+
+Each concept below is tied to the code and to a Phase 5–7 number. File references are to
+`src/gridpulse/`.
+
+### 13.1 What a continuous voltage margin means
+
+For a bus with limits V_min and V_max (p.u.):
+
+  m_V = min(V_max − V, V − V_min)
+
+- m_V > 0: the voltage is inside the band, at distance m_V from the nearer limit.
+- m_V < 0: a violation of magnitude −m_V.
+- Example: V = 1.104 p.u. with V_max = 1.10 gives m_V = −0.004.
+- A binary alarm keeps only the sign. The margin also keeps "how far": 0.001 inside
+  and 0.03 inside are very different situations.
+- **Code:**
+  - `margins.voltage_margin`;
+  - `margins.violation_magnitude` (max(−m, 0));
+  - `margins.violation_runs` (durations).
+- The demonstrator colours each bus by m_V.
+
+### 13.2 Why voltage and loading margins have different units
+
+  m_L = 100 − loading (percentage points of the thermal rating)
+
+**Why they differ.**
+
+- Voltage is a network state, set by the flows along the feeder.
+- Loading is a thermal quantity: current relative to what the cable or transformer can
+  carry.
+- A sum such as "0.004 p.u. + 3 %" has no physical meaning, so GridPulse never adds them.
+
+**How the planner still makes one decision.**
+
+- It normalises each exceedance by a fixed scale (`dual_study.MARGIN_SCALE`: 0.1 p.u.,
+  100 %), so 0.001 p.u. counts as much as 1 %.
+- It then takes the **maximum**, not a sum (`dual_study.normalised`).
+- That scale is a modelling choice, not physics.
+
+**The Phase 7 lesson** (review A2). One normalised safety margin of 0.02 acted as 2 %
+on loading where loading bound (correct model), and as 0.002 p.u. on voltage where
+voltage bound (tap and MV errors). It was tuned on one and applied to the other. Margins
+should be set per physical quantity.
+
+### 13.3 How measurement noise affects threshold detection
+
+A reading y = V + e, with e ~ N(0, σ²), raises an alarm when y > V_max. For a true
+margin m:
+
+  P(alarm) = P(e > m) = Φ(−m/σ)
+
+With σ = 0.01 p.u. (the Phase 5/6 meter assumption):
+
+- a real violation of 0.002 p.u. (m = −0.002) is detected with probability
+  Φ(0.2) ≈ 0.58;
+- a bus 0.01 p.u. *inside* the band alarms with probability Φ(−1) ≈ 0.16.
+
+**Consequences.**
+
+- A count-based feedback adds up those false alarms. In Phase 6, two noisy meters cost
+  144 MWh against 53 MWh with exact readings.
+- Phase 7 instead averages a continuous residual. Over n independent readings the noise
+  falls as σ/√n: busbar σ 0.002 becomes about 0.0003 over a day's daylight.
+- **Code:** `sensing.AlarmRule`, `noise_study.RULES`, and the daylight mean in
+  `margins.ResidualCorrector.observe`.
+
+### 13.4 How persistent calibration bias differs from random noise
+
+  y = V + b + e, with b fixed per instrument and e independent per reading.
+
+- **Averaging removes e, not b.** The uncertainty of a daily mean of n readings is
+  u = √(σ_b² + σ_r²/n), not σ/√n.
+- **Phase 7 coverage.** Intervals ±2u/√n that ignore b covered the true value 10–40 % of
+  the time instead of 95 % (`margins.interval_coverage`).
+- **Busbar bias.** A bias at the busbar passes one-for-one into v̂. The tolerated bias
+  was about the safety margin.
+- **Meter bias.** It can be *detected* by comparing residuals: a meter whose model
+  residual differs from the busbar's by more than 0.005 p.u. is inconsistent. Which of
+  the two is wrong cannot be decided without a trusted reference. That is why the labels
+  say "suspected" or "cannot tell", never "bias = x".
+- **Code:**
+  - `sensing.MeasurementModel` (`sigma_bias_remote`, `bias_v_substation`);
+  - `sensing.NoiseBank.bias`;
+  - `margins.evidence_label`.
+
+### 13.5 Why short violations are difficult to detect
+
+- **Phase 6 persistence.** A persistence rule (k consecutive alarms) suppresses noise but
+  also every event shorter than k quarter-hours. In Phase 6 most closed-loop violations
+  were shorter than 45 minutes, so a 45-minute rule missed them even with exact
+  readings.
+- **Averaging hides short events too.** A five-minute overvoltage inside a 15-minute
+  average may never show above the limit.
+- **GridPulse simulates at 15-minute resolution,** so sub-quarter-hour events are not
+  modelled at all. That is a limitation, not a result.
+- **Code:** `margins.violation_runs` (run lengths; runs of 1 h or more are reported as
+  "long runs").
+
+### 13.6 Why sparse measurements create spatial blindness
+
+On a radial feeder with PV export, the voltage at bus k is approximately
+
+  V_k ≈ V_busbar + Σ_{j on the path to k} (R_j P_j + X_j Q_j) / V
+
+- **Each bus depends on the flows along its own path.** A meter sees only its own bus,
+  and a voltage reading cannot reveal a cable overload mid-feeder.
+- **Phase 7, at no action** (`margin_study.observability`):
+  - under the MV error, 963 violations were overvoltages only at unmetered buses;
+  - under the correct model, 370 were line overloads on unmeasured cables.
+- **The exception: common-mode errors.**
+  - A tap or MV error shifts V_busbar, and with it every V_k, by almost the same Δ.
+  - The busbar residual measures Δ to within 0.0001 p.u., and the correction then
+    protects unmetered buses.
+  - A local error (one inverter, one cable) has no such shortcut.
+
+### 13.7 Why a converged state estimator can still be wrong
+
+Weighted least squares finds
+
+  x̂ = argmin_x Σ_i (z_i − h_i(x))² / σ_i²
+
+- It converges whenever the problem is well posed. With few real measurements, the
+  pseudo-measurements (forecasts) dominate, and x̂ follows them.
+- **The chi-square test** compares J(x̂) with χ²_{m−n}(1 − α). It checks that the
+  residuals look like noise, not that the state is right.
+- **What it misses.** A tap or MV offset is absorbed into the voltage reference, and a
+  large local error with balanced totals passes. Phases 5 and 6 found it blind to voltage
+  offsets, with 1.5–37 % false flags under a correct model.
+- **Code:** `estimation.estimate`, and the chi-square test in `noise_study`.
+- **The Phase 7 alternative.** Do not estimate the full state. Estimate the few
+  low-dimensional quantities the substation can identify (v̂, ρ), and state what it
+  cannot see.
+
+### 13.8 How measurement uncertainty affects decision quality
+
+The decision is a cap level per quarter-hour. The outcome is a pair: (violations,
+curtailed MWh). Measurement error reaches the outcome through the feedback signal.
+
+| Error type | Feedback | Effect | Example |
+|---|---|---|---|
+| Random noise | Binary | False alarms, so extra curtailment | Phase 6: 144 against 53 MWh |
+| Bias | Continuous | A systematic shift of the plan, low or high | Busbar −0.005 p.u.: 260 mismatch violations. +0.005 p.u.: 1378 against 1027 MWh (+34 %) |
+
+**Lesson.** Judge a measurement by how it changes the decision, against an
+exact-reading run (C1x) and the oracle, not by its accuracy alone.
+
+**Code:** `margins.ResidualCorrector.replay`, `dual_study.first_safe`.
+
+### 13.9 Why more conservative decisions have economic costs
+
+Curtailed energy is
+
+  E = Σ_t Σ_PV (P_available − P_capped) · Δt,  with Δt = 0.25 h
+
+**Where a safety margin costs energy.**
+
+- A margin s deepens the cap at every quarter-hour where the corrected worst case comes
+  within s of the limit.
+- That includes days on which nothing would have happened. In Phase 7, C1 curtailed
+  5.7 MWh on correct-model days with no avoidable violation, against 2.4–3.2 MWh for the
+  binary policies.
+
+**Phase 7 numbers.**
+
+- H1(b) failed: 66.2 against 52.3 MWh under the correct model. Of that cost, 17.3 MWh is
+  the margin (Rdev − R0).
+- Under model errors the oracle needs 569 MWh, and C1 uses 1027.
+
+**Why results are a pair.** GridPulse reports (violations, MWh) as a trade-off, with no
+composite score. Converting a violation into money needs a value the project does not
+have.
+
+**Code:**
+- `dual_study.score`;
+- `margins.tuned_safety_margin`;
+- `unneeded_curtailment_mwh` in the study summaries.
+
+### 13.10 What evidence a utility would need before relying on the system
+
+What Phase 7 provides:
+
+- a benchmark comparison;
+- a list of failure modes: local, time-varying and opposite-direction errors; injection
+  data errors; busbar bias;
+- a protocol template.
+
+It provides none of the field evidence below. Before relying on the system, a utility
+would need at least:
+
+1. **Field residuals.** The model against substation measurements on a real feeder, and
+   whether its errors are common-mode.
+2. **Measurement-chain accuracy.** Busbar voltage calibration first.
+3. **Independent feeder-end validation.** A substation match cannot validate feeder-end
+   voltages.
+4. **A pre-registered, out-of-sample evaluation on real historical data,** with failures
+   reported.
+5. **Offline shadow comparison** against the utility's actual decisions, before any use.
+6. **Software assurance:** reproducible, frozen versions with an audit trail (`runguard`,
+   `docs/provenance/`).
+7. **The utility's own engineering review and approval,** and compliance with data
+   protection.
+
+See `docs/kibtek_pilot_concept.md`.
+
+### 13.11 Questions to be ready for (Phase 7)
+
+1. *Did the continuous method beat binary alarms?*
+   - On reliability under the tested model errors, yes: 1 against 513 violations,
+     without remote voltage meters, at 41 % more curtailment under those errors.
+   - On cost under the correct model, no: 27 % more curtailment, so the registered
+     hypothesis failed.
+2. *Is the method new?* No. It is the offset-free MPC bias update. The new part is the
+   benchmark comparison and the quantified dependence on busbar accuracy.
+3. *Can it replace remote meters?* Only for errors common to the feeder, and only if the
+   busbar measurement and the customer data are accurate. Local errors are expected to
+   need local measurements (argued, not tested).

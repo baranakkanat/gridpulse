@@ -1,0 +1,103 @@
+2026-10-18T21:29:34Z Phase 7 protocol registered before the Phase 7 development and evaluation stages. Before registration only the development-only probe (docs/provenance/phase7/scripts/development_probe.py) was run; it read no evaluation day (disclosed in protocol s. 11). The author knows the ORIGINAL Phase 5/6 evaluation results for the same days.
+protocol and literature:
+59cff4f082e5e1e4ae7c2cf81c85b46f0b8c75f05f0eebd58f97877a99fd3bb3  docs/phase7_protocol.md
+6240769c550f0e4e807772131d97936c3793b19a4cc565a7ea1ab5b91b23eefd  docs/phase7_literature.md
+source and dependency pins:
+6bce1a2b9f93a3b043fef2c2c7fc39c8e3a2a8f2d040a81bea7095bb2649ffc7  src/gridpulse/__init__.py
+49b426989617a7262db792e69b04a439290769bf1ed4ebfeb367c8f10cfb53bf  src/gridpulse/__main__.py
+ba2ee1e2860ea72982ec111709bcca42e182a6a145e6426b961a06409f732c50  src/gridpulse/baseline.py
+81f79eee5f9c4b9972d8f32a9bd0e8cab83ce2a5fc29afbaea89dd4e4ba9edab  src/gridpulse/calendar_analysis.py
+516bab19590c74d550c36da19ca3ff852306185ded575a2af6c1cb4ea8a279b4  src/gridpulse/data.py
+668bd51caada6e6c75424aed69cecdb2dd3ed6a597a9740751e69343c135e9a7  src/gridpulse/dual_study.py
+909e4258ca57a740fdc1ab0dc5be503d1575048df00cf068f999474fd4ac3a56  src/gridpulse/estimation.py
+c82e02d1ffe0f450091766010a452113182703f13e0b19cdcbde4db556820677  src/gridpulse/evaluation.py
+b78cbd8fd2e7be2842a30a4df5fd3fba0a185784df956bb80850d8b63773945e  src/gridpulse/features.py
+95f225603f10ba88dd85bd515115006ed3ba8fdbe4be7ad0b95d1a9f50df9f98  src/gridpulse/forecast_study.py
+3d282c79f60f10278a024a904660881600e82f0ba11a8709d0cbfe8ee776cd6e  src/gridpulse/fullstate.py
+ffce015bab478e47cfdf6f3bf286c7ce70a25c5a4f0f86d8f9fff7723422f7f6  src/gridpulse/grid.py
+173e223a94d943359627a2b2c77ebb2d4b15ac00f408e966340956efc2a652a2  src/gridpulse/grid_study.py
+d946b0615608038d5da312cbefe4177680cf8cd8ed3ec9c87c164f78ee8593e8  src/gridpulse/margin_study.py
+ea821b77cd7926e0f2ed26da7d686ddd19e28e1388cbc07368af5242d5836baa  src/gridpulse/margins.py
+7165b6c596c247a4e595e75489e2a29dd24f0e97d4e2b3fa942c611aee663c04  src/gridpulse/model.py
+d0989386d8494e3804dbb451487fb587af8c492503dfa846a4681f0e2c673ce6  src/gridpulse/noise_study.py
+48f054225e9cf2e8c9bd847a62ddf077eb8095fea5ad4f8efcc69e53fa4e027d  src/gridpulse/runguard.py
+21a24b91501163cf71f3e80d7db7243d999c829a4527159f651f378ae11af0c4  src/gridpulse/sensing.py
+a8655dde621339d6f68823cf07be17b914dbce1fc1d538f3680845bb7a2d035c  src/gridpulse/uncertainty.py
+9a83314c3d3266158dfeb72f03fd842dc344c10adedaa04e6b62f14a94273a4d  pyproject.toml
+4c8809c63fddc04c1b410fe8149f5087c7347889311ffbcb3f683726641e2216  uv.lock
+probe script and output (git-ignored):
+4c350877f4b03321247bb8995231a99bca74e26e4049e5b0180814786a284e63  docs/provenance/phase7/scripts/development_probe.py
+bd337bd4d83819a5f47af5ffeba97bc626419e7229a85221d45c28057b705832  outputs/margin_study/exploratory/development_probe.json
+placement design used (frozen Phase 6 development output):
+8c587b16d1898e133f63ebcbc55c63e1efc828233a3bbf3c1a067a57f1923dbd  outputs/noise_study/development_results.json
+
+2026-10-18T21:43:35Z amendment 7A recorded (protocol, before any freeze or evaluation). First registered development stage archived unchanged in outputs/margin_study/development_v1/ (hashes below). Code changed per 7A; development stage re-run. Current hashes:
+37001f07e3b69ab1c8358b318de4c6ceaca79662c30cad29e77802b67f6883ec  docs/phase7_protocol.md
+6240769c550f0e4e807772131d97936c3793b19a4cc565a7ea1ab5b91b23eefd  docs/phase7_literature.md
+6bce1a2b9f93a3b043fef2c2c7fc39c8e3a2a8f2d040a81bea7095bb2649ffc7  src/gridpulse/__init__.py
+49b426989617a7262db792e69b04a439290769bf1ed4ebfeb367c8f10cfb53bf  src/gridpulse/__main__.py
+ba2ee1e2860ea72982ec111709bcca42e182a6a145e6426b961a06409f732c50  src/gridpulse/baseline.py
+81f79eee5f9c4b9972d8f32a9bd0e8cab83ce2a5fc29afbaea89dd4e4ba9edab  src/gridpulse/calendar_analysis.py
+516bab19590c74d550c36da19ca3ff852306185ded575a2af6c1cb4ea8a279b4  src/gridpulse/data.py
+668bd51caada6e6c75424aed69cecdb2dd3ed6a597a9740751e69343c135e9a7  src/gridpulse/dual_study.py
+909e4258ca57a740fdc1ab0dc5be503d1575048df00cf068f999474fd4ac3a56  src/gridpulse/estimation.py
+c82e02d1ffe0f450091766010a452113182703f13e0b19cdcbde4db556820677  src/gridpulse/evaluation.py
+b78cbd8fd2e7be2842a30a4df5fd3fba0a185784df956bb80850d8b63773945e  src/gridpulse/features.py
+95f225603f10ba88dd85bd515115006ed3ba8fdbe4be7ad0b95d1a9f50df9f98  src/gridpulse/forecast_study.py
+3d282c79f60f10278a024a904660881600e82f0ba11a8709d0cbfe8ee776cd6e  src/gridpulse/fullstate.py
+ffce015bab478e47cfdf6f3bf286c7ce70a25c5a4f0f86d8f9fff7723422f7f6  src/gridpulse/grid.py
+173e223a94d943359627a2b2c77ebb2d4b15ac00f408e966340956efc2a652a2  src/gridpulse/grid_study.py
+7747b602513fdfc5a9415d8bec2b7d1a0081bc433ec08cee5f7b414bdbbf3840  src/gridpulse/margin_study.py
+be40af8a0bacd2e08b782edc0420a80f9675587c4c55302bbbb6663697fba444  src/gridpulse/margins.py
+7165b6c596c247a4e595e75489e2a29dd24f0e97d4e2b3fa942c611aee663c04  src/gridpulse/model.py
+d0989386d8494e3804dbb451487fb587af8c492503dfa846a4681f0e2c673ce6  src/gridpulse/noise_study.py
+48f054225e9cf2e8c9bd847a62ddf077eb8095fea5ad4f8efcc69e53fa4e027d  src/gridpulse/runguard.py
+56f08e276ea27f311fd1a453e9d0906bf359992333f01d8ee35aa5d0579d31ba  src/gridpulse/sensing.py
+a8655dde621339d6f68823cf07be17b914dbce1fc1d538f3680845bb7a2d035c  src/gridpulse/uncertainty.py
+9a83314c3d3266158dfeb72f03fd842dc344c10adedaa04e6b62f14a94273a4d  pyproject.toml
+4c8809c63fddc04c1b410fe8149f5087c7347889311ffbcb3f683726641e2216  uv.lock
+archived development_v1:
+164b6beca2d5185e460390817425c23b92d1d172c530ec86268f756dbc11b621  outputs/margin_study/development_v1/development_hypotheses.json
+0e5b9db285533d9477b31ccb0e6d09858c3ef1d46a99c5a3f4eaf81c40da3484  outputs/margin_study/development_v1/development_manifest.json
+8130efe00a28060ed8e63570d9de4748ea8cc0543b68c5d6aa58fe4d3a68a5de  outputs/margin_study/development_v1/development_results.json
+b937466ca05588ba3c4e3d0a834d546fa71909d6d42e6053d0cd543a0f76f78b  outputs/margin_study/development_v1/development_run_metadata.json
+
+2026-10-18T21:45:59Z amended development stage (2 min) completed and verified; pre-freeze check passed (792 shared run summaries identical to development_v1 except the 24 C3full runs; paired comparisons unchanged); FROZEN. Freeze and development output sha256:
+9dfa448a897f2c848b3706bc144b87adee9297d169b493f91db6d6780ce756b5  outputs/margin_study/freeze.json
+70568f415780c6e7ae533d430746a05769470c75215e2274c5c0e196874d45e1  outputs/margin_study/development_hypotheses.json
+1d7a4af16b37809cc70f5014f408a954122c12896fcd8ceaf9c108235de2d451  outputs/margin_study/development_manifest.json
+6a99f2329c379619636b1605c69d62e99821ba00d77abaf8b88c25bc64d629df  outputs/margin_study/development_results.json
+e8ebef971c0f24bc12a319bf5904e960bd3ff594ae24c3322f73519c5df821af  outputs/margin_study/development_run_metadata.json
+
+2026-10-18T21:49:20Z evaluation stage completed (single run, 3 min) and verified. Output sha256:
+af4ac08c9a4452fef7eaa36c29591ba59aab4c9de53f8804bf1fea893198cfa2  outputs/margin_study/evaluation_hypotheses.json
+b2550db5401e86ddb05b2bc2b06ddc7158a29af71c6e74cf9af7efddd785badb  outputs/margin_study/evaluation_manifest.json
+8823b52d24064edc20c7887073460b2dece8367c90d3a8d025f234e2d5e5ce61  outputs/margin_study/evaluation_results.json
+0e616a8d3d42aece93a30ce74948a834e7d8c64f7a7cbd95d2c33e640976332e  outputs/margin_study/evaluation_run_metadata.json
+
+2026-10-18T22:08:07Z post-evaluation engineering record (after the reviews; no registered output changed).
+Correction to the 21:45:59Z entry: the pre-freeze check found 746 of 792 shared run summaries identical to development_v1. The 46 differences were the 24 C3full runs (the 7A line-current fix) and 22 C3b/C3nb runs whose labels alone differed (4 C3b, 18 C3nb; the 7A label change). Both are allowed by amendment 7A items 1 and 3. The paired comparisons, observability, coverage and safety margins were unchanged. The entry said "except the 24 C3full runs".
+Metadata omission: evaluation_run_metadata.json lists noise_study.CONDITIONS, so it does not include the four busbar_bias_* conditions. They are defined in the frozen src/gridpulse/margin_study.py (hash above). The code now records margin_study.CONDITIONS.
+Code changed after the evaluation:
+- sensing.py: an opt-in `trace` argument of run_feedback_policy (demonstrator), and measure() without a NoiseBank now refuses bias_v_substation. Removing exactly these two additions gives the frozen hash 56f08e276ea27f311fd1a453e9d0906bf359992333f01d8ee35aa5d0579d31ba.
+- __main__.py: the `demonstrate` command; the run metadata records margin_study.CONDITIONS; margin-study refuses a network subset with no network besides the development one before it starts a stage.
+- new: demonstrator.py, tests/test_demonstrator.py; tests/test_margins.py gained four tests (future-read guard, lag plus meter delay, label precedence and the legacy-path guard, a cache-gated loader check).
+- new evaluator-side script: docs/provenance/phase7/scripts/true_offsets.py (outputs/margin_study/exploratory/true_offsets.json).
+Consequence: runguard.require_freeze refuses a new Phase 7 evaluation (code differs from the freeze), as intended; runguard.verify("evaluation") returns [] (outputs intact).
+Replay on the current tree (all changes above in place): Phase 7 ms.task 1-LV-semiurb4--2-sw nominal, 1738 of 1738 stored values identical; tap_raise_lv, 1739 of 1739 identical; Phase 6 ns.task 1-LV-semiurb4--2-sw nominal, 607 of 607 run summaries identical.
+Current sha256:
+f11a6116e48bf92823d891b0055e66816737b6aafdf97d4cad85e0ae0f3656e4  src/gridpulse/__main__.py
+c1322d60ad9c882dd1648e8e1da369215ef012aba2fd5fb96601c11f569ab9bc  src/gridpulse/sensing.py
+24318ac880ddc06c2ea67c3cefc626af325d2c9f54edb934db751f83f372daa1  src/gridpulse/demonstrator.py
+88936391204da8da833587e1e1db511ce67aaaec1e93ad78007dd0be23b62cdb  tests/test_margins.py
+7fa1360332f03925daf48b5f3c43e4b37dc4e6a85bd5a6cc8bb9a1801c430129  tests/test_demonstrator.py
+32448a99ba055bc1409814ef0e65ffb7df4ea93b5fc945f6b3ed187efe2cfe8d  docs/provenance/phase7/scripts/true_offsets.py
+44d7799055a071afabeef8a11554fdb615f0db9c20b58802eb9f81b626aa3929  outputs/margin_study/exploratory/true_offsets.json
+
+2026-10-18T22:23:52Z addendum after the final evidence gate (no registered output changed): wording fixes; the demonstrator re-run check now also compares curtailed MWh; review reports archived. Current sha256:
+aa29cdc49fcc4faae90431f826139b94ba05e3486d6293e53d7f9d339f946038  src/gridpulse/__main__.py
+c1322d60ad9c882dd1648e8e1da369215ef012aba2fd5fb96601c11f569ab9bc  src/gridpulse/sensing.py
+c6ea5157992c0e941dd00fba80dbc8198876cecec20ddf2d6b36fd7ddc3c6d24  src/gridpulse/demonstrator.py
+88936391204da8da833587e1e1db511ce67aaaec1e93ad78007dd0be23b62cdb  tests/test_margins.py
+7fa1360332f03925daf48b5f3c43e4b37dc4e6a85bd5a6cc8bb9a1801c430129  tests/test_demonstrator.py
+88919b496b5d15eea9901ad01680861d4ff4b6b2149c55a1915a63d8c6b92a9a  docs/provenance/phase7/post_evaluation_reviews.md

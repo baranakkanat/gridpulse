@@ -242,3 +242,60 @@ specific limits are repeated next to the results in `docs/experiment_results.md`
   - It cannot stop a deliberate rerun in another directory, and it is not a
     tamper-proof record. The outputs and the provenance folder are not under version
     control until the user commits them.
+
+## Phase 7 (continuous margins, model-residual correction)
+
+- **Exploratory replication, not confirmation.**
+  - Same networks, profiles and periods as Phases 4–6. The decision rules were set after
+    a development probe, with the Phase 5/6 results known (protocol s. 11).
+  - The registered primary hypothesis H1 was not met (cost). H2, H4 and H5 pass by
+    construction.
+- **The method is not new.** It is the offset-free MPC / DMC bias update (Muske &
+  Badgwell 2002; Pannocchia & Rawlings 2003) applied to day-ahead PV caps, with a fixed
+  back-off.
+- **Model errors tested.**
+  - Only three constant errors were tested: tap, MV level and PV at fixed cos φ. All
+    raise voltage or loading.
+  - Not tested:
+    - negative offsets;
+    - a reversed reactive-power error;
+    - MV voltage varying within the day;
+    - local errors (one inverter, one cable, phase imbalance);
+    - voltage-dependent loads;
+    - inverter Q(U), P(U) and the apparent-power limit.
+  - The substation is expected to correct only errors common to the feeder (argued, not
+    tested: no local error was simulated).
+- **Injection data are assumed exact.**
+  - The residual is the reading minus the nominal model at the metered customer
+    injections, so any systematic injection error passes into ρ one-for-one.
+  - Delay was tested (C1lag); error was not.
+  - The binary policies' feedback signal has no such dependence.
+- **The busbar measurement is trusted.**
+  - The tolerated busbar bias is about the safety margin (0.002–0.004 p.u.).
+  - At ±0.005 p.u. the labels flip on about half the correct-model days.
+  - No outcome exists for a biased reference.
+- **The safety margin is one normalised number.** It acts as a loading margin under the
+  correct model and as a voltage margin under tap and MV errors. It was tuned on the
+  spring half, where loading binds.
+- **The correction can over-correct.**
+  - The daylight median of the current ratio over-corrects a PV-loaded cable (semiurb4:
+    ρ_line 0.195, 22.2 against the oracle's 8.8 MWh).
+  - The `max` rule for checked meters passes positive meter noise and accepted positive
+    biases upward.
+- **The labels are operational definitions.**
+  - "Evidence sufficient" means only small substation residuals.
+  - The split between "meter bias suspected" and "cannot tell bias from model error"
+    follows from the label definitions and the simulated truths. It does not identify a
+    bias.
+- **Statistics.**
+  - 5 networks; the 15 cells share days and profiles. Noise replications vary only the
+    noise.
+  - 28-day blocks give about 6.5 blocks per half-year, so those intervals are unstable.
+  - The seasonal explanation of the H1 cost is consistent with the data but untested.
+- **Post-evaluation code changes.** The code changed after the single evaluation (a
+  demonstrator hook and review fixes). The replay evidence shows no result changed, but
+  the frozen evaluation cannot be re-run under its freeze.
+- **The demonstrator is exploratory.**
+  - It shows ground truth for evaluation only.
+  - It picks a day and a quarter-hour by a fixed rule on the no-action state.
+  - It is not an operator interface or a safety assessment.
