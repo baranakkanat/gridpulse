@@ -1,0 +1,85 @@
+2026-10-18T23:11:34Z Phase 8 protocol registered before any Phase 8 experiment and before any Phase 8 code. Seen before registration (protocol s. 2): all Phase 4-7 results; the development-only type diagnosis (scripts/diagnose_types.py; outputs in outputs/robust_study/exploratory/diag_*.json); topology-only facts for the stress cases; the Phase 8 literature review. The user committed Phase 7 as 4d1363d; the working tree was clean before Phase 8.
+protocol and literature:
+2cc2d955d37409c8b937529224ac794638cd4f2df5aabf00419bb6643decc1cc  docs/phase8_protocol.md
+9698a25f89011b22b971feed36399116ff9d76d6388d937465a51486b3253454  docs/phase8_literature.md
+4c1a9495d65024588267faa4dc53de5225969a37139f54a20b254fe68ffb04d2  docs/provenance/phase8/scripts/diagnose_types.py
+source and dependency pins at registration (HEAD 4d1363d, unmodified):
+6bce1a2b9f93a3b043fef2c2c7fc39c8e3a2a8f2d040a81bea7095bb2649ffc7  src/gridpulse/__init__.py
+aa29cdc49fcc4faae90431f826139b94ba05e3486d6293e53d7f9d339f946038  src/gridpulse/__main__.py
+ba2ee1e2860ea72982ec111709bcca42e182a6a145e6426b961a06409f732c50  src/gridpulse/baseline.py
+81f79eee5f9c4b9972d8f32a9bd0e8cab83ce2a5fc29afbaea89dd4e4ba9edab  src/gridpulse/calendar_analysis.py
+516bab19590c74d550c36da19ca3ff852306185ded575a2af6c1cb4ea8a279b4  src/gridpulse/data.py
+c6ea5157992c0e941dd00fba80dbc8198876cecec20ddf2d6b36fd7ddc3c6d24  src/gridpulse/demonstrator.py
+668bd51caada6e6c75424aed69cecdb2dd3ed6a597a9740751e69343c135e9a7  src/gridpulse/dual_study.py
+909e4258ca57a740fdc1ab0dc5be503d1575048df00cf068f999474fd4ac3a56  src/gridpulse/estimation.py
+c82e02d1ffe0f450091766010a452113182703f13e0b19cdcbde4db556820677  src/gridpulse/evaluation.py
+b78cbd8fd2e7be2842a30a4df5fd3fba0a185784df956bb80850d8b63773945e  src/gridpulse/features.py
+95f225603f10ba88dd85bd515115006ed3ba8fdbe4be7ad0b95d1a9f50df9f98  src/gridpulse/forecast_study.py
+3d282c79f60f10278a024a904660881600e82f0ba11a8709d0cbfe8ee776cd6e  src/gridpulse/fullstate.py
+ffce015bab478e47cfdf6f3bf286c7ce70a25c5a4f0f86d8f9fff7723422f7f6  src/gridpulse/grid.py
+173e223a94d943359627a2b2c77ebb2d4b15ac00f408e966340956efc2a652a2  src/gridpulse/grid_study.py
+7747b602513fdfc5a9415d8bec2b7d1a0081bc433ec08cee5f7b414bdbbf3840  src/gridpulse/margin_study.py
+be40af8a0bacd2e08b782edc0420a80f9675587c4c55302bbbb6663697fba444  src/gridpulse/margins.py
+7165b6c596c247a4e595e75489e2a29dd24f0e97d4e2b3fa942c611aee663c04  src/gridpulse/model.py
+d0989386d8494e3804dbb451487fb587af8c492503dfa846a4681f0e2c673ce6  src/gridpulse/noise_study.py
+48f054225e9cf2e8c9bd847a62ddf077eb8095fea5ad4f8efcc69e53fa4e027d  src/gridpulse/runguard.py
+c1322d60ad9c882dd1648e8e1da369215ef012aba2fd5fb96601c11f569ab9bc  src/gridpulse/sensing.py
+a8655dde621339d6f68823cf07be17b914dbce1fc1d538f3680845bb7a2d035c  src/gridpulse/uncertainty.py
+9a83314c3d3266158dfeb72f03fd842dc344c10adedaa04e6b62f14a94273a4d  pyproject.toml
+4c8809c63fddc04c1b410fe8149f5087c7347889311ffbcb3f683726641e2216  uv.lock
+diagnosis outputs (git-ignored):
+f900fff97412badacd5a35c863907aec6128a87114d5dc2e2f5ce7273b15cc7f  outputs/robust_study/exploratory/diag_1-LV-rural2--2-sw.json
+07513a847972bf8cbde1b24da111eadb11a9d6ce5fd1c006fe9f05bb95ab1f85  outputs/robust_study/exploratory/diag_1-LV-rural3--2-sw.json
+6be25420843955ebea3432ceccff8ccb87c42a2c592c6e1fce70004a003bec68  outputs/robust_study/exploratory/diag_1-LV-semiurb4--2-sw.json
+a06e9dac376bb9e6776bd919cf47faf0629ed96130aab93ed861214f9596c1d6  outputs/robust_study/exploratory/diag_1-LV-semiurb5--2-sw.json
+1648374888216d73fb8674e4f38bd2157dc15741c9a42e916a41533655f2bde4  outputs/robust_study/exploratory/diag_1-LV-urban6--2-sw.json
+
+2026-10-18T23:52:58Z amendment 8A recorded (protocol s. 13), before any development run, after two AI-assisted pre-evaluation reviews. Code changed per 8A in reserves.py, robust_study.py, __main__.py and demonstrator.py; stress.py (physics) unchanged, so the cache being computed stays valid. New tests in tests/test_reserves.py. Current hashes:
+a5e4db9eaa3a7c003fa08fb5d148a86e95236d816982d3595ddb10c6e699c8c9  docs/phase8_protocol.md
+7cd0896417264037a1e7b9b304258e66d796726c13f5322d382b0217b1c5e67a  src/gridpulse/reserves.py
+541c8afd995923196b6194464e53f1c07ac3f0abb1ffd0192b9a0cc727b05552  src/gridpulse/robust_study.py
+405de99fe9f73da627b643e1fff9d12de61e795e1caddbc05e1dabedee2a6c40  src/gridpulse/stress.py
+433845cc7ef8e0f3d26a6c4f42e5c630f0cea45992dbf1ae927ebeaba7799f2d  src/gridpulse/__main__.py
+e7a614d4193727b8074458a5b958d34b6a807b474ff663e079d3f6499b1ef0ad  src/gridpulse/demonstrator.py
+f298f8337c80b518c97e6098cb0b06457c7b0401fb8daef1078f9b8680e4e486  tests/test_reserves.py
+b5d1cecd34c6dda53efa56a89416a30dcffd8ea6c468ed04de1779900db4a22e  tests/test_demonstrator.py
+
+2026-10-19T01:12:04Z development stage completed (5 min) and verified; checks passed (C1 reproduces the frozen Phase 7 development summaries, every key; tap_lower_lv raw margins equal Phase 4 in all six networks; each stress truth creates avoidable violations beyond nominal in at least one network); physics stage verified (no failed flows, nothing dropped); FROZEN. Freeze and output sha256:
+d191bb5dd416b7b9d5ed306f6cb2b68bcbe170aef753ad2cbb96a2114ab762bc  outputs/robust_study/freeze.json
+c07399f1d42c839fa271aa6ba03ae72b23bd2b90193e4731c0860f45f8878324  outputs/robust_study/physics_summary.json
+2065a9ba7bd9ed61f2785445e02fa9001a9ca4f549a274fa5d67dc1cfe894970  outputs/robust_study/physics_manifest.json
+add42c9046f44dd9f2449b3c02bb47f682bcb5476422e09a24534e3db9f1f9a1  outputs/robust_study/development_hypotheses.json
+1ab77dc5ffa602a16e074c62c14cdb01c48a8ce7b0af48928a23637d5047bbf1  outputs/robust_study/development_manifest.json
+128c5c37455a7c03dc5d203d6703e42c5565032a26c21d004f651614129cb2cf  outputs/robust_study/development_results.json
+1a1db0be4eda132760ba66b0cfe0c676cee6c27320a8b4316ef95fa27acd35c6  outputs/robust_study/development_run_metadata.json
+
+2026-10-19T01:36:32Z single evaluation completed (01:12:07Z start, 9.6 min) and verified; then four AI-assisted post-evaluation reviews (physics/measurement, decision/statistics, software/reproducibility, novelty); confirmed findings applied to docs only (docs/phase8_results.md s. 11). No code under src/ changed after the freeze (all 27 frozen hashes equal the current files). Evaluation output sha256:
+2bd40534e6fd6c06e8e7a2c2a21a84b76b101d5fc15b648add957cb4fc6c0d2d  outputs/robust_study/evaluation_hypotheses.json
+615bb8006b63a858b61b44144b6350584bde3fd331cf6f8446cccebc862352ff  outputs/robust_study/evaluation_manifest.json
+a70c0aed35f97d48eb1587c7f7e5b0eec995c4d7c523cccd6dcbef8afff802ef  outputs/robust_study/evaluation_results.json
+3208bee3d0cf889d6103b01d75710c0bd84f2ee87adb37ce818d3f78d4af1d1a  outputs/robust_study/evaluation_run_metadata.json
+Deviations disclosed:
+- docs/provenance/phase8/scripts/diagnose_types.py was reformatted by `ruff check --fix` / `ruff format` at 23:22Z, 11 min after registration (registered sha256 4c1a9495d650...; the registered bytes are reconstructible from the session scratchpad and hash to that value). The Python ASTs differ only in split import statements (`import json, sys` -> two imports; one `from gridpulse import a, b, ...` -> five), which is semantically identical; its outputs (diag_*.json, hashes above) are unchanged.
+- The physics cache was computed 23:16-01:05Z by scripts/physics_driver.py, which calls stress.compute, the same function as the `physics` stage; the stage (01:06Z) then recomputed nothing, recorded failed-flow shares (all 0) and folder digests, and the evaluation re-checked the digests.
+- Amendment 8A was written while the physics was running, after two pre-evaluation reviewers had inspected some cached statistics (mv_daily slack peak, rural1 no-action counts); it changed the "created" counting and gates, not the predictions, hypotheses or thresholds.
+- tests/test_reserves.py helper `_real_layout_plan` simplified after the freeze (tests are not in the freeze hashes; no behaviour change).
+- The Phase 7 demonstrator pages were regenerated after registration while demonstrator.py was extended; they are byte-identical to before.
+Unhashed scripts, now hashed:
+4ee43b8e02029a2625b2bf7944ff79f8d07fa690720e1b54d66dbccbd364bb0d  docs/provenance/phase8/scripts/physics_driver.py
+fbc82cc8f1af57cbe4dfad3800278a26777c539b093064f83369d915bc14417f  docs/provenance/phase8/scripts/report.py
+79b26a1db2512f900f0cd593b99cf04a36210cb6ebd6838b889ccebf2e63d71b  docs/provenance/phase8/scripts/diagnose_types.py
+34dbafbc1334299524560118782958ecabc2b573a71865c52597295cb3c812a9  tests/test_reserves.py
+
+2026-10-19T01:49:32Z post-gate record (final AI-assisted evidence gate: NEEDS WORK, documentation only; all items addressed).
+- Registered texts preserved: docs/provenance/phase8/protocol_registered.md and literature_registered.md, reconstructed byte-for-byte (sha256 below equal the registration entry: 2cc2d955... and 9698a25f...). Amendment 8A was append-only (protocol s. 13), so the registered predictions and thresholds (s. 9) are unchanged verbatim.
+- Script headers: diagnose_types.py says "run verbatim on 2026-10-19"; the run was 2026-10-18 ~23:01Z (local date given), and the file differs from the executed copy by its 3-line header and the import reformatting logged above. physics_driver.py differs from the executed copy by its docstring and formatting. Neither file is edited further (to keep the logged hashes).
+- Documentation wording corrected (README, phase8_results, learning_guide s. 14, utility_application_concept): H1 attribution scoped to the tap-step r_V rule; wrong-cable claim scoped to "no tested measurement or policy"; half-year contrasts labelled as plausible/untested; delay failure scoped to C1/C5; rho range per network; development table completed (static, C1s0).
+- Post-freeze presentation-only code change: src/gridpulse/demonstrator.py (Phase 8 page explains the attribution label "none") and src/gridpulse/__main__.py (demonstrate help text). The result-producing modules reserves.py, robust_study.py, stress.py, margins.py and sensing.py equal their frozen hashes; the Phase 7 demonstrator pages regenerate byte-identical; runguard.verify passes for every Phase 8 stage.
+Current sha256:
+2cc2d955d37409c8b937529224ac794638cd4f2df5aabf00419bb6643decc1cc  docs/provenance/phase8/protocol_registered.md
+9698a25f89011b22b971feed36399116ff9d76d6388d937465a51486b3253454  docs/provenance/phase8/literature_registered.md
+a5e4db9eaa3a7c003fa08fb5d148a86e95236d816982d3595ddb10c6e699c8c9  docs/phase8_protocol.md
+61540fceed2e1f17443fea82ebfd139e2b3e4238f3fe4dc57c493d53d90ea799  docs/phase8_literature.md
+31fc86ecdcd28aabf3643d2ead90613475882332759a15386c662840d07da9e6  docs/phase8_results.md
+89c88429f5f979c4f6ff82ca22c0d889b1d23605e2e07a7d1ff93e462cc9d46e  src/gridpulse/demonstrator.py
+55aa42f70b15ed9766a7086f3869bc1342e958a0cdb459a84712d8762f33430f  src/gridpulse/__main__.py

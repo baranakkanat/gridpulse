@@ -739,7 +739,7 @@ would need at least:
 7. **The utility's own engineering review and approval,** and compliance with data
    protection.
 
-See `docs/kibtek_pilot_concept.md`.
+See `docs/utility_application_concept.md`.
 
 ### 13.11 Questions to be ready for (Phase 7)
 
@@ -753,3 +753,107 @@ See `docs/kibtek_pilot_concept.md`.
 3. *Can it replace remote meters?* Only for errors common to the feeder, and only if the
    busbar measurement and the customer data are accurate. Local errors are expected to
    need local measurements (argued, not tested).
+
+## 14. Phase 8 concepts: separating margins, resolution, adaptivity, staleness and blind spots
+
+### 14.1 Separate reserves are established; what they change is an empirical question
+
+With a voltage reserve r_V (p.u.) and a loading reserve r_L (% of rating), the planner
+keeps every replayed exceedance at least its own reserve below zero:
+
+  e_V + r_V ≤ 0 and e_L + r_L ≤ 0, checked separately, never added
+
+(`reserves.reserve_vector`, `ReserveCorrector.replay`). One shared normalised margin s is
+the special case r_V = 0.1·s and r_L = 100·s. Per-constraint tightening is standard in
+chance-constrained OPF and robust MPC (`docs/phase8_literature.md`).
+
+**What Phase 8 found in this benchmark.** Separating the reserves changed little. The
+loading reserve decides the correct-model cost, and it came out the same either way.
+
+### 14.2 Resolution is not structure: always run the control
+
+Phase 7's shared margin came from a grid in steps of 0.002 p.u. / 2 %. Phase 8's reserves
+used steps four times finer.
+
+- **The control.** A shared margin on the same fine grid (C1f) achieved the same
+  correct-model saving as the separate reserves (C5), and more under model errors.
+- **The lesson.** When a new method also changes a resolution, a sample size or a tuning
+  budget, test the old method with the same change. Otherwise the gain is attributed to
+  the wrong cause (`robust_study.primary`, the attribution rule).
+
+### 14.3 Why a voltage reserve cannot be tuned where voltage never binds
+
+Under the correct model only loading constraints bind, so any voltage reserve tuned
+there is zero.
+
+- **C5's approach:** shift every voltage by one tap step (+0.025 p.u.) before tuning
+  (`reserves.tuned_fixed_reserves`). That is a design assumption.
+- **C6's approach:** tune on the operator's corrected model, where voltage binds if the
+  residuals say so (`ReserveCorrector.rolling`).
+
+### 14.4 Adaptive reserves and the season
+
+C6 picks, each day, the smallest reserve with which its own corrected replay would have
+stayed within the requirement over the last 28 days:
+
+  r_k(d) = min { r on the grid : violations_k(W(d), r) ≤ β·|W(d)| }
+
+- **In autumn** (falling PV) the reserve dropped to about zero, and curtailment fell by
+  16–20 % (evaluation half), at more violations within β. A plausible reading, not tested:
+  the replay's worst case already over-predicts tomorrow while PV falls.
+- **In spring** (rising PV) the reserve rose, but three cases still failed; plausibly it
+  lags the season.
+
+On this reading, an adaptive reserve converts a fixed compromise into a lagging tracker.
+Whether the half-year contrast is really seasonal was not tested (one benchmark year).
+
+**C6's blind spot.** C6 calibrates against the operator's own corrected model. Its target
+therefore never contains the model error or a busbar bias: a low-reading busbar cannot
+raise its reserve. Adaptive tightening calibrated on *observed* violations exists
+(Oldewurtel et al. 2013; Korda et al. 2014; adaptive conformal inference). But on a
+feeder the violations are only partly observed.
+
+### 14.5 Which data errors a residual correction absorbs, and which it does not
+
+The plan and the residual reference are both computed from the same metered injections.
+
+- **Traded, not absorbed:** an error that shifts both, such as PV recorded 5 % high,
+  barely moves the voltage residual. It does move the current ratio, which then relaxes
+  loading even where the record is exact. Policies whose tuning enlarged their margins
+  on the same data held; the one without a fixed margin doubled its violations.
+- **Averaged out:** independent per-reading noise disappears in feeder aggregates.
+- **Not absorbed:** staleness. A two-day delay makes the replay older, and a fixed
+  reserve tuned for it costs a third more curtailment.
+
+The general lesson: test systematic and random errors separately, and test timing
+(`stress.metered_sets`; `robust_study.delayed`).
+
+### 14.6 Blind spots that no tuning fixes
+
+- **Time-varying common-mode errors.** An MV voltage that rises with PV at midday is seen
+  by the busbar every quarter-hour. A daylight-mean, next-day correction still cannot
+  follow it. Remote voltage meters (B3) caught most of it in one network.
+- **Local asset-record errors.** A cable about two sizes smaller than recorded carries
+  about the modelled current, but its true rating is lower.
+  - No tested measurement or policy revealed the overload, because the measured currents
+    match the model.
+  - In semiurb4 every policy, oracle excepted, had exactly the no-action count of
+    violations.
+  - Only a corrected asset record, or thermal monitoring of the cable, could close this
+    gap (hypothesis).
+
+A reserve hedges against errors the data can reveal. It cannot replace correct asset
+data, or a measurement of what nothing observes.
+
+### 14.7 Questions to be ready for (Phase 8)
+
+1. *Did separating the margins help?* Not beyond a finer shared margin, with the
+   registered tap-step voltage rule, in this benchmark. Both hypotheses failed, as
+   registered.
+2. *Then what reduces curtailment?* An adaptive reserve did (16–20 %), at the price of
+   more violations within the requirement, and only in the evaluation (falling-PV) half.
+   In the other half it cost more.
+3. *What should a network operator check first?* That the busbar voltage measurement is
+   unbiased. Then its asset records (cable types and ratings), because no tested
+   measurement revealed a wrong rating. Then remote voltages, because a daily-average
+   substation correction cannot follow fast common-mode errors.

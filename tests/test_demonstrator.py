@@ -71,3 +71,30 @@ def test_colour_scale_is_signed():
     assert dm._colour(0.005, 0.01) == "#e67e22"
     assert dm._colour(0.02, 0.01) == "#2e8b57"
     assert dm._colour(np.nan, 0.01) == "#888888"
+
+
+def test_phase8_page_shows_reserves_and_unfavourable_verdicts_as_they_are():
+    sc = _scenario()
+    sc["phase"] = 8
+    sc["truth"] = "mv_daily"
+    sc["policies"][0]["reserves"] = (0.0015, 1.5)
+    sc["tuned"] = {"C1": 0.02, "C1f": 0.015, "C5_r_v": 0.0015, "C5_r_l": 1.5}
+    sc["frozen"] = {"C5": {"avoidable_violation_steps": 3.0, "curtailed_mwh": 10.0,
+                           "meets_beta": True,
+                           "violations_by_type": {"over_v": 2, "under_v": 0, "line": 1,
+                                                  "trafo": 0}}}  # fmt: skip
+    h5 = {p: {"covers": False, "cells": 2} for p in ("B2", "B3", "C1", "C5", "C6")}
+    sc["verdicts"] = {
+        "H1": {"met": False, "attribution": "none", "non_inferior": False,
+               "mismatch_ratio": 0.95, "nominal_ratio": 1.02},
+        "H2": {"met": False, "non_inferior": True, "non_inferior_development": False,
+               "mismatch_ratio": 0.8, "nominal_ratio": 0.7},
+        "H5": h5,
+    }  # fmt: skip
+    page = dm.render(sc)
+    assert "H1, separate fixed reserves (C5) vs C1: not met" in page
+    assert "also in the development half: not met" in page
+    assert "C5 does not cover (2/5)" in page
+    assert "0.0015 p.u. / 1.5 %" in page and "2 / 1" in page  # voltage / loading, separately
+    for external in ("<script", "http://", "https://", "<link", "src="):
+        assert external not in page

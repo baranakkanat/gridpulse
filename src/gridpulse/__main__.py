@@ -1,7 +1,7 @@
 """Command-line entry point.
 
 `python -m gridpulse {validate,baseline,compare,train-lightgbm,forecast-study,grid-study,
-dual-study,sense-study,noise-study,margin-study,demonstrate}`
+dual-study,sense-study,noise-study,margin-study,demonstrate,robust-study}`
 """
 
 from __future__ import annotations
@@ -795,8 +795,146 @@ def run_noise_study(stage: str, output_dir: Path, workers: int | None, networks)
     return 0
 
 
-def run_demonstrator(network: str, truth: str, output_dir: Path) -> int:
-    """Phase 7 exploratory demonstrator (docs/phase7_results.md s. 12): a static HTML page."""
+def run_robust_study(stage: str, output_dir: Path, workers: int | None, networks) -> int:
+    """Phase 8 (docs/phase8_protocol.md): physics, development, freeze, then one evaluation,
+    guarded by `runguard` as Phases 6-7. Placements are the frozen Phase 6 design."""
+    try:
+        from gridpulse import dual_study, robust_study, runguard, stress
+    except ImportError as error:
+        raise RuntimeError(f"{error}; install the grid extra: uv sync --all-extras") from error
+
+    networks = list(networks or dual_study.HOSTING_CAPACITY)
+    unknown = sorted(set(networks) - set(dual_study.HOSTING_CAPACITY))
+    if unknown:
+        raise ValueError(f"unregistered networks: {unknown}")
+    if stage in ("development", "evaluation") and set(networks) != set(dual_study.HOSTING_CAPACITY):
+        raise ValueError("the registered stages use all six networks (protocol s. 4, s. 9)")
+    protocol = robust_study.PROTOCOL
+    if stage == "freeze":
+        checks = json.loads((output_dir / "development_hypotheses.json").read_text())["checks"]
+        if not checks.get("passed"):
+            raise RuntimeError("the development checks (protocol s. 11) did not pass; no freeze")
+        record = runguard.freeze(output_dir, protocol)
+        print(f"frozen at {record['frozen_utc']}: {len(record['code_sha256'])} hashes")
+        return 0
+    if stage == "evaluation":
+        runguard.require_freeze(output_dir, protocol)
+    if stage in ("development", "evaluation") and runguard.verify(output_dir, "physics"):
+        raise RuntimeError("the physics stage is missing or does not verify; run it first")
+    design = Path("outputs/noise_study/development_results.json")
+    if stage == "evaluation":
+        development = json.loads((output_dir / "development_manifest.json").read_text())
+        if development["identity"]["placements_sha256"] != runguard.sha256(design):
+            raise RuntimeError(f"{design} changed since the development stage")
+    identity = {
+        "study": "phase8-robust-study",
+        "experiment": "separate voltage and loading reserves vs the Phase 7 shared margin "
+        "under injection-data, substation and stress conditions; exploratory, on previously "
+        "examined SimBench networks and 2016 profiles",
+        "stage": stage,
+        "networks": networks,
+        "placements_source": str(design),
+        "placements_sha256": runguard.sha256(design),
+    }
+    runguard.begin(output_dir, stage, identity, protocol)
+    started = datetime.now(UTC)
+    conditions = (*stress.TRUTHS, *stress.METERED)
+    if stage == "physics":
+        summary = {
+            code: {
+                condition: {
+                    **stress.compute(code, condition, robust_study.CACHE, workers or 3),
+                    **robust_study.folder_stats(code, condition),
+                }
+                for condition in conditions
+            }
+            for code in networks
+        }
+        dropped = sorted(  # non-convergence rule: failed share over every network > 1 %
+            c for c in conditions
+            if sum(summary[n][c]["failed_share"] * summary[n][c]["rows"] for n in networks)
+            > 0.01 * sum(summary[n][c]["rows"] for n in networks)
+        )  # fmt: skip
+        written = [output_dir / "physics_summary.json"]
+        _write_json(written[0], {"cache": str(robust_study.CACHE), "folders": summary,
+                                 "dropped": dropped})  # fmt: skip
+    else:
+        physics = json.loads((output_dir / "physics_summary.json").read_text())
+        if stage == "evaluation":
+            changed = [
+                f"{code}/{c}" for code in networks for c in conditions
+                if robust_study.folder_stats(code, c)["digest"]
+                != physics["folders"][code][c]["digest"]
+            ]  # fmt: skip
+            if changed:
+                raise RuntimeError(f"physics cache changed since the physics stage: {changed}")
+        placements = json.loads(design.read_text())["placements"]
+        results = robust_study.run_study(
+            stage, Path("outputs/dual_study/physics_cache"),
+            Path("outputs/sense_study/fullstate_cache"), networks, workers or 3, placements,
+            dropped=frozenset(physics["dropped"]),
+        )  # fmt: skip
+        development = None
+        extra = {}
+        if stage == "development":
+            phase7 = json.loads(Path("outputs/margin_study/development_results.json").read_text())
+            extra["checks"] = robust_study.development_checks(
+                results, phase7, Path("outputs/dual_study/physics_cache")
+            )
+        else:
+            development = json.loads((output_dir / "development_results.json").read_text())
+        hypotheses = robust_study.evaluate_hypotheses(results, development)
+        written = [output_dir / f"{stage}_results.json", output_dir / f"{stage}_hypotheses.json"]
+        _write_json(written[0], _json_safe(results))
+        _write_json(written[1], _json_safe({**hypotheses, **extra}))
+    metadata = {
+        "gridpulse_version": version("gridpulse"),
+        "run_started_utc": started.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "run_seconds": round((datetime.now(UTC) - started).total_seconds(), 1),
+        "identity": identity,
+        "plan": {truth: robust_study.plan(truth) for truth in robust_study.TRUTHS},
+        "substation_conditions": {name: asdict(m) for name, m in robust_study.SUBSTATION.items()},
+        "stress_fingerprint": stress.fingerprint(),
+        "stress_settings": {
+            "mv_swing_pu": stress.MV_SWING_PU,
+            "line_r_factor": stress.LINE_R_FACTOR,
+            "line_rating_factor": stress.LINE_RATING_FACTOR,
+            "meter_sigma": stress.METER_SIGMA,
+            "assumed_load_cosphi": stress.ASSUMED_LOAD_COSPHI,
+            "pv_record_factor": stress.PV_RECORD_FACTOR,
+            "missing_p": stress.MISSING_P,
+            "fallback_days": stress.FALLBACK_DAYS,
+            "delay_days": robust_study.DELAY_DAYS,
+            "outage_p": robust_study.OUTAGE_P,
+        },
+        "periods": {
+            "development": "2016-02-05 .. 2016-06-30",
+            "evaluation": "2016-07-01 .. 2016-12-30",
+        },
+        "seeds": "identity hashing (sha256) of network, truth or condition, quantity, "
+        "element and day; noise replications 0-4; no global random seed",
+        "phase4_physics_fingerprint": dual_study.physics_fingerprint(),
+        "environment": {
+            "python": platform.python_version(),
+            "platform": platform.platform(),
+            **{
+                name: version(name)
+                for name in ("numpy", "pandas", "pandapower", "simbench", "scipy")
+            },
+        },
+        "data_license": "SimBench data: ODbL 1.0 / DbCL; not redistributed",
+    }
+    path = output_dir / f"{stage}_run_metadata.json"
+    _write_json(path, metadata)
+    written.append(path)
+    runguard.complete(output_dir, stage, written)
+    print(f"{stage} outputs written to {output_dir}")
+    return 0
+
+
+def run_demonstrator(network: str, truth: str, output_dir: Path, phase: int = 7) -> int:
+    """Exploratory demonstrator (docs/phase7_results.md s. 12; docs/phase8_results.md): a
+    static HTML page per network and truth, checked against the frozen outputs."""
     try:
         from gridpulse import demonstrator, dual_study, noise_study
     except ImportError as error:
@@ -804,12 +942,23 @@ def run_demonstrator(network: str, truth: str, output_dir: Path) -> int:
 
     if network not in dual_study.HOSTING_CAPACITY:
         raise ValueError(f"unregistered network: {network}")
-    truths = ("nominal", *noise_study.MISMATCH)
+    if phase == 8:
+        from gridpulse import robust_study
+
+        truths, frozen = robust_study.TRUTHS, demonstrator.FROZEN8
+    else:
+        truths, frozen = ("nominal", *noise_study.MISMATCH), demonstrator.FROZEN
     if truth not in truths:
-        raise ValueError(f"truth {truth} not in the Phase 7 study; one of {list(truths)}")
-    if not demonstrator.FROZEN.exists():
-        raise RuntimeError(f"{demonstrator.FROZEN} missing: run the Phase 7 evaluation first")
-    path = demonstrator.write(network, truth, output_dir)
+        raise ValueError(f"truth {truth} not in the Phase {phase} study; one of {list(truths)}")
+    if not frozen.exists():
+        raise RuntimeError(f"{frozen} missing: run the Phase {phase} evaluation first")
+    if phase == 8:
+        from gridpulse import runguard
+
+        problems = runguard.verify(frozen.parent, "evaluation")
+        if problems:
+            raise RuntimeError(f"Phase 8 evaluation outputs do not verify: {problems}")
+    path = demonstrator.write(network, truth, output_dir, phase)
     print(f"demonstrator page written to {path} (exploratory; synthetic benchmark data)")
     return 0
 
@@ -1062,12 +1211,25 @@ def main(argv: list[str] | None = None) -> int:
 
     demo = commands.add_parser(
         "demonstrate",
-        help="Phase 7 exploratory demonstrator: one static HTML page per network and truth, "
-        "re-running three frozen policies (needs the frozen Phase 7 evaluation outputs)",
+        help="Phase 7 or 8 exploratory demonstrator: one static HTML page per network and truth, "
+        "re-running frozen policies (needs that phase's frozen evaluation outputs)",
     )
     demo.add_argument("--network", default="1-LV-semiurb4--2-sw", help="registered network")
     demo.add_argument("--truth", default="tap_raise_lv", help="true model (nominal or mismatch)")
     demo.add_argument("--output-dir", type=Path, required=True, help="directory for the page")
+    demo.add_argument("--phase", type=int, choices=(7, 8), default=7, help="Phase 7 or 8 page")
+
+    robust = commands.add_parser(
+        "robust-study",
+        help="Phase 8: separate voltage and loading reserves under injection-data, substation "
+        "and stress conditions (physics, development, freeze, then one evaluation)",
+    )
+    robust.add_argument(
+        "--stage", choices=("physics", "development", "freeze", "evaluation"), required=True
+    )
+    robust.add_argument("--output-dir", type=Path, required=True, help="directory for outputs")
+    robust.add_argument("--workers", type=int, default=None, help="parallel workers (default 3)")
+    robust.add_argument("--networks", nargs="*", default=None, help="subset of registered networks")
 
     args = parser.parse_args(argv)
     try:
@@ -1089,8 +1251,10 @@ def main(argv: list[str] | None = None) -> int:
             return run_noise_study(args.stage, args.output_dir, args.workers, args.networks)
         if args.command == "margin-study":
             return run_margin_study(args.stage, args.output_dir, args.workers, args.networks)
+        if args.command == "robust-study":
+            return run_robust_study(args.stage, args.output_dir, args.workers, args.networks)
         if args.command == "demonstrate":
-            return run_demonstrator(args.network, args.truth, args.output_dir)
+            return run_demonstrator(args.network, args.truth, args.output_dir, args.phase)
         return run_train_lightgbm(args.input, args.output_dir)
     except (OSError, ValueError, RuntimeError) as error:
         print(f"error: {error}", file=sys.stderr)

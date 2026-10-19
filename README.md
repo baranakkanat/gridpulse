@@ -10,7 +10,7 @@ forecasts, one learned model (LightGBM), and leakage-free, paired temporal evalu
 Phase 3 adds pre-registered research experiments: forecast reliability on national load,
 and uncertainty-aware decisions on a simulated distribution grid.
 
-## Current scope (Phases 0, 1, 1B, 2A, 3, 4, 5, 6 and 7)
+## Current scope (Phases 0, 1, 1B, 2A, 3, 4, 5, 6, 7 and 8)
 
 Implemented:
 
@@ -56,6 +56,11 @@ Implemented:
   - a model-residual correction from substation measurements, with meter consistency
     checks and operational evidence labels;
   - an exploratory, offline static-HTML demonstrator.
+- **Phase 8:**
+  - separate voltage (p.u.) and loading (%) reserves, fixed or re-tuned daily;
+  - erroneous, missing and late customer data, and imperfect substation instrumentation;
+  - three stress cases: opposite tap error, MV voltage rising with PV, and a wrong cable
+    record.
 - Chronological train / validation / test periods, with 2020 reserved and unused.
 - MAE, RMSE and WAPE on valid prediction/target pairs only, overall and per lead hour,
   with explicit counts of excluded pairs.
@@ -697,6 +702,78 @@ It is synthetic benchmark data, not an operator tool:
 uv run python -m gridpulse demonstrate --network 1-LV-semiurb4--2-sw --truth tap_raise_lv --output-dir outputs/demonstrator
 ```
 
+## Research experiments (Phase 8: constraint-specific reserves and data availability)
+
+**Questions.**
+
+- Can physically separate voltage and loading reserves cut the Phase 7 correction's
+  curtailment without losing its reliability?
+- How sensitive is it to imperfect customer data, to substation instrumentation, and to
+  model errors not tested before?
+
+The protocol (with amendment 8A, made before any development run) is
+[docs/phase8_protocol.md](docs/phase8_protocol.md), and the results are in
+[docs/phase8_results.md](docs/phase8_results.md). This is an exploratory mechanism study
+on previously examined benchmark data, not a confirmatory test.
+
+**Headline results** (five SimBench networks, evaluation half-year):
+
+- **Both registered hypotheses failed.**
+  - Fixed separate reserves kept Phase 7's reliability but saved only 2.6 % under model
+    errors (the target was 10 %).
+  - A shared margin on the same fine grid saved as much under the correct model and more
+    under model errors (5.4 %). With the registered tap-step voltage rule, separation
+    added nothing; other rules were not tested.
+- **Daily re-tuned reserves curtailed 16–20 % less in the evaluation half** and met the
+  requirement everywhere. But they gave up the near-zero violation level (29 against 1).
+  In the other half-year (rising PV) they were the most reliable policy under model
+  errors, still failed three cases, and cost 12 % more under the correct model.
+- **Customer data.** Meter noise, an assumed load power factor, PV recorded 5 % high and
+  10 % missing data met the registered robustness rule. PV over-recording was traded
+  rather than absorbed: the re-tuned margins grew. A two-day data delay failed the rule
+  for the fixed-reserve policies (C1, C5): it cost them 31–36 % more curtailment.
+- **Substation instrumentation.** A low-reading busbar voltage (−0.005 p.u.) produced the
+  most violations of any tested condition. Here, the smaller the reserve, the smaller
+  the bias it tolerated.
+- **Stress cases, all as predicted before the physics was run.**
+  - Every corrected policy handles an opposite-direction tap error.
+  - No attainable policy handles an MV voltage that rises with PV within the day.
+  - No attainable policy handles a cable whose recorded thermal rating is wrong. The flows
+    match the model, and no tested measurement or policy revealed the overload.
+
+Run the stages in order. They reuse the Phase 4/5 caches and add about 1.6 GB of new
+physics:
+
+```bash
+uv run python -m gridpulse robust-study --stage physics --output-dir outputs/robust_study
+```
+
+```bash
+uv run python -m gridpulse robust-study --stage development --output-dir outputs/robust_study
+```
+
+```bash
+uv run python -m gridpulse robust-study --stage freeze --output-dir outputs/robust_study
+```
+
+```bash
+uv run python -m gridpulse robust-study --stage evaluation --output-dir outputs/robust_study
+```
+
+The physics took about 1 h 50 min with 3 workers, development 5 min and evaluation 10 min.
+Report tables:
+
+```bash
+uv run python docs/provenance/phase8/scripts/report.py evaluation > outputs/robust_study/logs/evaluation_report.md
+```
+
+Phase 8 demonstrator page, for any registered network and truth, including the stress
+truths:
+
+```bash
+uv run python -m gridpulse demonstrate --phase 8 --network 1-LV-rural3--2-sw --truth mv_daily --output-dir outputs/demonstrator
+```
+
 ## Tests and checks
 
 ```bash
@@ -730,7 +807,10 @@ src/gridpulse/noise_study.py Phase 6 noise-aware feedback study, hypotheses, sta
 src/gridpulse/runguard.py    Phase 6 stage manifests, atomic writes, freeze and rerun protection
 src/gridpulse/margins.py     Phase 7 signed margins, residual corrector, evidence labels, coverage
 src/gridpulse/margin_study.py  Phase 7 study plan, observability, hypotheses
-src/gridpulse/demonstrator.py  Phase 7 exploratory static-HTML demonstrator
+src/gridpulse/demonstrator.py  Phase 7/8 exploratory static-HTML demonstrator
+src/gridpulse/reserves.py    Phase 8 separate voltage/loading reserves, delayed data, outages
+src/gridpulse/stress.py      Phase 8 stress-truth and metered-injection physics (own cache)
+src/gridpulse/robust_study.py  Phase 8 study plan, checks, hypotheses
 src/gridpulse/__main__.py    command-line interface and output/metadata writing
 tests/                       unit tests and end-to-end CLI tests on synthetic data
 docs/methodology.md          Phase 0-2A protocol, decisions, limitations
@@ -745,8 +825,11 @@ docs/phase6_results.md       Phase 6 results, verdicts and limitations
 docs/phase7_protocol.md      Phase 7 pre-registered protocol and amendment 7A
 docs/phase7_literature.md    Phase 7 literature review
 docs/phase7_results.md       Phase 7 results, verdicts, reviews and limitations
+docs/phase8_protocol.md      Phase 8 pre-registered protocol and amendment 8A
+docs/phase8_literature.md    Phase 8 literature review
+docs/phase8_results.md       Phase 8 results, verdicts, reviews and limitations
 docs/provenance/             per-phase registration logs, hashes and report scripts
 docs/learning_guide.md       concepts behind the methods, with equations and code locations
 docs/technical_limitations.md  limitations across all phases
-docs/kibtek_pilot_concept.md concept for a possible offline utility pilot (no contact made)
+docs/utility_application_concept.md  how the methods could support offline network analyses (not validated)
 ```

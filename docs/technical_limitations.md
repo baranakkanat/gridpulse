@@ -299,3 +299,37 @@ specific limits are repeated next to the results in `docs/experiment_results.md`
   - It shows ground truth for evaluation only.
   - It picks a day and a quarter-hour by a fixed rule on the no-action state.
   - It is not an operator interface or a safety assessment.
+
+## Phase 8 (constraint-specific reserves, data availability, stress cases)
+
+- **Exploratory, on examined data.** Same networks, profiles and half-years as Phases 4–7.
+  The stress truths and data conditions are new physics on the same days. No independent
+  benchmark exists. Both registered hypotheses failed.
+- **One benchmark year, two seasons.** The evaluation half has falling PV; the
+  development half has rising PV.
+  - Fixed reserves over-protect in autumn.
+  - The rolling reserves fall to about zero in autumn and lag in spring.
+  - The seasonal contrast is a property of this year, not a law.
+- **The reserves are stylised.**
+  - C5's voltage reserve is tuned on a one-tap-step shift of the nominal model, a design
+    assumption.
+  - Any reserve is one number per type and network. None is derived from sensitivities
+    or error distributions, as chance-constrained formulations do.
+- **The data conditions are stylised.**
+  - Meter noise is independent per quarter-hour, so it averages out.
+  - Only I3 is a systematic meter error, and its effect was traded through re-tuned
+    margins rather than absorbed.
+  - The I4 fallback can reuse a true value for about 1 % of element-days.
+  - Delay and outages are whole days.
+- **The stress cases are stylised and singular.**
+  - **mv_daily:** MV voltage follows the network's own PV share, peaking at about +0.018
+    p.u.
+  - **line_local:** one cable is wrong, by about two cross-sections.
+  - **tap_lower_lv:** one tap step.
+  - Errors at several places at once, phase imbalance, voltage-dependent loads and
+    inverter Q(U)/P(U) are not modelled.
+- **Curtailment accounting** uses the true available PV. On curtailed days, metered
+  "available" PV could not be measured in practice, which is optimistic for every
+  policy.
+- **A low-reading busbar remains a single point of failure** for every substation-
+  residual policy. The smaller the reserve, the smaller the tolerated bias.
