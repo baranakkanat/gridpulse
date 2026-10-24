@@ -1,0 +1,234 @@
+{
+  "stage": "G (registration s. 11)",
+  "registration": {
+    "path": "docs/provenance/phase9/phase9_registration.md",
+    "sha256_on_disk": "737a252dab231b9c5303d4b5e8ad1af0adb93051f0de621d41a38f82af5bc4e1",
+    "expected_sha256": "737a252dab231b9c5303d4b5e8ad1af0adb93051f0de621d41a38f82af5bc4e1",
+    "state": {
+      "path": "docs/provenance/phase9/phase9_registration.md",
+      "commit": null,
+      "committed": false,
+      "unmodified": false,
+      "ok": false,
+      "sha256": "737a252dab231b9c5303d4b5e8ad1af0adb93051f0de621d41a38f82af5bc4e1",
+      "expected_sha256": "737a252dab231b9c5303d4b5e8ad1af0adb93051f0de621d41a38f82af5bc4e1",
+      "reasons": [
+        "docs/provenance/phase9/phase9_registration.md is not tracked in any commit (`git log` returned no commit)"
+      ]
+    },
+    "note": "Stage G may run before this file is committed (s. 11); it reproduces frozen arrays and computes no Phase 9 statistic"
+  },
+  "physics_key": "0ddb53ee56a5af81757fadc56aff33dd2f30bb121da8410bcb240e1cc83f4a79",
+  "physics_key_prefix": "0ddb53ee56a5af81",
+  "schema_version": 1,
+  "level": 0,
+  "tolerances_pu": {
+    "PASS": "<= 1e-06",
+    "WARN": "(1e-06, 1e-05]",
+    "ABORT": "> 1e-05"
+  },
+  "scored_days": {
+    "count": 183,
+    "first": 182,
+    "last": 364
+  },
+  "pool": {
+    "pool_worked": false,
+    "workers": 1,
+    "reason": "the process pool could not start: PermissionError: [Errno 1] Operation not permitted",
+    "requested_workers": 3,
+    "runs": 2,
+    "wall_seconds": 173.632
+  },
+  "verdict": "PASS",
+  "networks": {
+    "1-LV-semiurb4--2-sw": {
+      "spec": {
+        "network": "1-LV-semiurb4--2-sw",
+        "line": 37,
+        "error": "E-R",
+        "factor": 1.5,
+        "rating_factor": 0.8
+      },
+      "spec_key": "c666cd51b55b64c0c78afbfa7ae043985322d9deb094b8ef2cecb8ab8ce824ff",
+      "E": 1.1920928955078125e-07,
+      "E_argmax": {
+        "day": 182,
+        "step": 33,
+        "bus": 19
+      },
+      "E_verdict": "PASS",
+      "E_C": 1.429539972518688e-10,
+      "E_C_argmax_bus": 38,
+      "E_C_verdict": "PASS",
+      "nan_pattern_identical": true,
+      "nan_pattern_differs_on_days": [],
+      "verdict": "PASS",
+      "structural": {
+        "cable_equals_stress_local_line": {
+          "engine_line": 37,
+          "stress_local_line": 37,
+          "registered": 37,
+          "ok": true
+        },
+        "line_table_equals_stress_network": {
+          "fields": [
+            "r_ohm_per_km",
+            "x_ohm_per_km",
+            "c_nf_per_km",
+            "length_km",
+            "max_i_ka"
+          ],
+          "ok": true
+        },
+        "storage_schedule_equals_nominal": {
+          "shape": [
+            365,
+            96,
+            4
+          ],
+          "ok": true
+        },
+        "day_lists_equal_q1_registration_inputs": {
+          "scored": true,
+          "with_daylight": 170,
+          "without_daylight": [
+            250,
+            267,
+            295,
+            297,
+            322,
+            335,
+            336,
+            338,
+            343,
+            352,
+            354,
+            356,
+            357
+          ],
+          "ok": true,
+          "scored_days": 183,
+          "retained_days": 170,
+          "retained_registered": 170,
+          "retained_matches_registration": true
+        },
+        "downstream_registered": [
+          39,
+          40
+        ],
+        "ok": true
+      },
+      "retained_days": 170,
+      "failed_truth_total": 0,
+      "failed_truth_per_day": {},
+      "nan_nominal_total": 0,
+      "runtime_seconds": 85.781,
+      "worker_pid": 28094,
+      "workers": 1,
+      "pool_worked": false
+    },
+    "1-LV-urban6--2-sw": {
+      "spec": {
+        "network": "1-LV-urban6--2-sw",
+        "line": 3,
+        "error": "E-R",
+        "factor": 1.5,
+        "rating_factor": 0.8
+      },
+      "spec_key": "8b97b84d5256f9f7261aa30a0ccb3f48f9e60d468189f3b30e180215342e2b6b",
+      "E": 1.1920928955078125e-07,
+      "E_argmax": {
+        "day": 182,
+        "step": 30,
+        "bus": 10
+      },
+      "E_verdict": "PASS",
+      "E_C": 1.4333350215870143e-10,
+      "E_C_argmax_bus": 34,
+      "E_C_verdict": "PASS",
+      "nan_pattern_identical": true,
+      "nan_pattern_differs_on_days": [],
+      "verdict": "PASS",
+      "structural": {
+        "cable_equals_stress_local_line": {
+          "engine_line": 3,
+          "stress_local_line": 3,
+          "registered": 3,
+          "ok": true
+        },
+        "line_table_equals_stress_network": {
+          "fields": [
+            "r_ohm_per_km",
+            "x_ohm_per_km",
+            "c_nf_per_km",
+            "length_km",
+            "max_i_ka"
+          ],
+          "ok": true
+        },
+        "storage_schedule_equals_nominal": {
+          "shape": [
+            365,
+            96,
+            7
+          ],
+          "ok": true
+        },
+        "day_lists_equal_q1_registration_inputs": {
+          "scored": true,
+          "with_daylight": 175,
+          "without_daylight": [
+            295,
+            297,
+            322,
+            335,
+            352,
+            354,
+            356,
+            357
+          ],
+          "ok": true,
+          "scored_days": 183,
+          "retained_days": 175,
+          "retained_registered": 175,
+          "retained_matches_registration": true
+        },
+        "downstream_registered": [
+          6,
+          9,
+          19,
+          20,
+          23,
+          25,
+          29,
+          32,
+          34,
+          40,
+          42,
+          43
+        ],
+        "ok": true
+      },
+      "retained_days": 175,
+      "failed_truth_total": 0,
+      "failed_truth_per_day": {},
+      "nan_nominal_total": 0,
+      "runtime_seconds": 87.846,
+      "worker_pid": 28094,
+      "workers": 1,
+      "pool_worked": false
+    }
+  },
+  "artefacts_kept": [
+    {
+      "path": "sweep/0ddb53ee56a5af81/1-LV-semiurb4--2-sw/E-R-1.5-line37.npz",
+      "written": true
+    },
+    {
+      "path": "sweep/0ddb53ee56a5af81/1-LV-urban6--2-sw/E-R-1.5-line3.npz",
+      "written": true
+    }
+  ],
+  "consequence": "On PASS or WARN the two reductions are this run's W6 artefacts, at no extra flows (s. 11.5). On ABORT no sweep statistic is computed and the board reports to the owner (s. 11.6)."
+}
