@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1204" height="486" viewBox="0 0 1204 486" role="img">
+<title>C - Safety against utilisation, every policy</title>
+<desc>rural3, P1 and P3. x = the median over the 10 near conditions of the companion utilisation Sum(e)/Sum(e_B5), with utilisation 0 for an unsafe or degenerate record and a mean over replicates otherwise. y = the share of near conditions with an unsafe record in either replicate. Bars are Clopper-Pearson 95 % intervals with n = 10 conditions, the protocol's n (s. 9: replicates are nested). A and A' are regime-independent references and so repeat across both panels; CERT, ALWAYS and RAND are replicate-0 policies over B2 and B2p. Source: results/envelopes_rural3.json, results/oracle_rural3.json, runs/oracle_rural3.npz and results/ambiguity_rural3.json (policies). Contains information from SimBench (simbench.de), made available under the Open Database License (ODbL 1.0). See analysis/export_envelope_shift/DATA_ATTRIBUTION.md.</desc>
+<style>text{font-family:Helvetica,Arial,sans-serif;fill:#000000}.fig{font-size:13px;font-weight:bold}.panel{font-size:11px;font-weight:bold}.axis{font-size:10px}.tick{font-size:9px}.legend{font-size:9px}.point{font-size:7.5px;fill:#404040}.note{font-size:8px;fill:#404040}</style>
+<text x="12" y="26" class="fig">C - Safety against utilisation, every policy</text>
+<text x="12" y="40" class="note">rural3, P1 and P3. x = the median over the 10 near conditions of the companion utilisation Sum(e)/Sum(e_B5), with utilisation 0 for an unsafe or degenerate record and a mean over replicates otherwise. y = the share of near</text>
+<text x="12" y="51" class="note">conditions with an unsafe record in either replicate. Bars are Clopper-Pearson 95 % intervals with n = 10 conditions, the protocol's n (s. 9: replicates are nested). A and A' are regime-independent references and so repeat</text>
+<text x="12" y="62" class="note">across both panels; CERT, ALWAYS and RAND are replicate-0 policies over B2 and B2p. Source: results/envelopes_rural3.json, results/oracle_rural3.json, runs/oracle_rural3.npz and results/ambiguity_rural3.json (policies).</text>
+<text x="86" y="90" class="panel">P1, near set</text>
+<rect x="86" y="102" width="382" height="274" fill="none" stroke="#000000" stroke-width="0.9"/>
+<line x1="103.36" y1="376" x2="103.36" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="103.36" y="392" class="tick" text-anchor="middle">0</text>
+<line x1="190.18" y1="376" x2="190.18" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="190.18" y="392" class="tick" text-anchor="middle">0.25</text>
+<line x1="277" y1="376" x2="277" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="277" y="392" class="tick" text-anchor="middle">0.5</text>
+<line x1="363.82" y1="376" x2="363.82" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="363.82" y="392" class="tick" text-anchor="middle">0.75</text>
+<line x1="450.64" y1="376" x2="450.64" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="450.64" y="392" class="tick" text-anchor="middle">1</text>
+<line x1="82" y1="361.83" x2="86" y2="361.83" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="365.33" class="tick" text-anchor="end">0</text>
+<line x1="82" y1="302.78" x2="86" y2="302.78" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="306.28" class="tick" text-anchor="end">0.25</text>
+<line x1="82" y1="243.72" x2="86" y2="243.72" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="247.22" class="tick" text-anchor="end">0.5</text>
+<line x1="82" y1="184.67" x2="86" y2="184.67" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="188.17" class="tick" text-anchor="end">0.75</text>
+<line x1="82" y1="125.62" x2="86" y2="125.62" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="129.12" class="tick" text-anchor="end">1</text>
+<line x1="103.36" y1="198.49" x2="103.36" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="100.76" y1="198.49" x2="105.96" y2="198.49" stroke="#000000" stroke-width="1.0"/>
+<line x1="100.76" y1="125.62" x2="105.96" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="103.36" y1="198.49" x2="103.36" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="100.76" y1="198.49" x2="105.96" y2="198.49" stroke="#000000" stroke-width="1.0"/>
+<line x1="100.76" y1="125.62" x2="105.96" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="103.36" y1="198.49" x2="103.36" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="100.76" y1="198.49" x2="105.96" y2="198.49" stroke="#000000" stroke-width="1.0"/>
+<line x1="100.76" y1="125.62" x2="105.96" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="103.36" y1="198.49" x2="103.36" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="100.76" y1="198.49" x2="105.96" y2="198.49" stroke="#000000" stroke-width="1.0"/>
+<line x1="100.76" y1="125.62" x2="105.96" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="425.53" y1="361.23" x2="425.53" y2="256.71" stroke="#000000" stroke-width="1.0"/>
+<line x1="422.93" y1="361.23" x2="428.13" y2="361.23" stroke="#000000" stroke-width="1.0"/>
+<line x1="422.93" y1="256.71" x2="428.13" y2="256.71" stroke="#000000" stroke-width="1.0"/>
+<line x1="447.76" y1="361.83" x2="447.76" y2="288.96" stroke="#000000" stroke-width="1.0"/>
+<line x1="445.16" y1="361.83" x2="450.36" y2="361.83" stroke="#000000" stroke-width="1.0"/>
+<line x1="445.16" y1="288.96" x2="450.36" y2="288.96" stroke="#000000" stroke-width="1.0"/>
+<line x1="103.36" y1="256.97" x2="103.36" y2="131.58" stroke="#000000" stroke-width="1.0"/>
+<line x1="100.76" y1="256.97" x2="105.96" y2="256.97" stroke="#000000" stroke-width="1.0"/>
+<line x1="100.76" y1="131.58" x2="105.96" y2="131.58" stroke="#000000" stroke-width="1.0"/>
+<line x1="355.34" y1="361.83" x2="355.34" y2="288.96" stroke="#000000" stroke-width="1.0"/>
+<line x1="352.74" y1="361.83" x2="357.94" y2="361.83" stroke="#000000" stroke-width="1.0"/>
+<line x1="352.74" y1="288.96" x2="357.94" y2="288.96" stroke="#000000" stroke-width="1.0"/>
+<line x1="452.92" y1="346.06" x2="452.92" y2="207.71" stroke="#000000" stroke-width="1.0"/>
+<line x1="450.32" y1="346.06" x2="455.52" y2="346.06" stroke="#000000" stroke-width="1.0"/>
+<line x1="450.32" y1="207.71" x2="455.52" y2="207.71" stroke="#000000" stroke-width="1.0"/>
+<line x1="435.12" y1="361.83" x2="435.12" y2="288.96" stroke="#000000" stroke-width="1.0"/>
+<line x1="432.52" y1="361.83" x2="437.72" y2="361.83" stroke="#000000" stroke-width="1.0"/>
+<line x1="432.52" y1="288.96" x2="437.72" y2="288.96" stroke="#000000" stroke-width="1.0"/>
+<line x1="103.36" y1="198.49" x2="103.36" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="100.76" y1="198.49" x2="105.96" y2="198.49" stroke="#000000" stroke-width="1.0"/>
+<line x1="100.76" y1="125.62" x2="105.96" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="426.34" y1="361.23" x2="426.34" y2="256.71" stroke="#000000" stroke-width="1.0"/>
+<line x1="423.74" y1="361.23" x2="428.94" y2="361.23" stroke="#000000" stroke-width="1.0"/>
+<line x1="423.74" y1="256.71" x2="428.94" y2="256.71" stroke="#000000" stroke-width="1.0"/>
+<line x1="103.36" y1="198.49" x2="103.36" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="100.76" y1="198.49" x2="105.96" y2="198.49" stroke="#000000" stroke-width="1.0"/>
+<line x1="100.76" y1="125.62" x2="105.96" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<polygon points="103.36,122.22 106.76,125.62 103.36,129.02 99.96,125.62" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="103.36,122.22 106.76,125.62 103.36,129.02 99.96,125.62" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="103.36,122.22 106.76,125.62 103.36,129.02 99.96,125.62" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="103.36,122.22 106.76,125.62 103.36,129.02 99.96,125.62" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="425.53,334.81 428.93,338.21 425.53,341.61 422.13,338.21" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="447.76,358.43 451.16,361.83 447.76,365.23 444.36,361.83" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="103.36,169.46 106.76,172.86 103.36,176.26 99.96,172.86" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="355.34,358.43 358.74,361.83 355.34,365.23 351.94,361.83" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="452.92,287.57 456.32,290.97 452.92,294.37 449.52,290.97" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="435.12,358.43 438.52,361.83 435.12,365.23 431.72,361.83" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="103.36,122.22 106.76,125.62 103.36,129.02 99.96,125.62" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="426.34,334.81 429.74,338.21 426.34,341.61 422.94,338.21" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="103.36,122.22 106.76,125.62 103.36,129.02 99.96,125.62" fill="none" stroke="#000000" stroke-width="1.2"/>
+<text x="109.36" y="120.62" class="point">B0</text>
+<text x="109.36" y="120.62" class="point">B1</text>
+<text x="109.36" y="120.62" class="point">B2</text>
+<text x="109.36" y="120.62" class="point">B2m</text>
+<text x="431.53" y="333.21" class="point">B2p</text>
+<text x="453.76" y="356.83" class="point">B3</text>
+<text x="109.36" y="167.86" class="point">B4box</text>
+<text x="361.34" y="356.83" class="point">B4</text>
+<text x="458.92" y="285.97" class="point">A</text>
+<text x="441.12" y="356.83" class="point">A'</text>
+<text x="109.36" y="120.62" class="point">CERT</text>
+<text x="432.34" y="333.21" class="point">ALWAYS</text>
+<text x="109.36" y="120.62" class="point">RAND</text>
+<text x="277" y="412" class="axis" text-anchor="middle">median companion utilisation Sum(e)/Sum(e_B5) (dimensionless)</text>
+<text transform="translate(32,239) rotate(-90)" class="axis" text-anchor="middle">near-set unsafe conditions / conditions</text>
+<polygon points="489,105.10 492.40,108.50 489,111.90 485.60,108.50" fill="none" stroke="#000000" stroke-width="1.2"/>
+<text x="499" y="112" class="legend">policy</text>
+<text x="676" y="90" class="panel">P3, near set</text>
+<rect x="676" y="102" width="382" height="274" fill="none" stroke="#000000" stroke-width="0.9"/>
+<line x1="693.36" y1="376" x2="693.36" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="693.36" y="392" class="tick" text-anchor="middle">0</text>
+<line x1="780.18" y1="376" x2="780.18" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="780.18" y="392" class="tick" text-anchor="middle">0.25</text>
+<line x1="867" y1="376" x2="867" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="867" y="392" class="tick" text-anchor="middle">0.5</text>
+<line x1="953.82" y1="376" x2="953.82" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="953.82" y="392" class="tick" text-anchor="middle">0.75</text>
+<line x1="1040.64" y1="376" x2="1040.64" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="1040.64" y="392" class="tick" text-anchor="middle">1</text>
+<line x1="672" y1="361.83" x2="676" y2="361.83" stroke="#000000" stroke-width="0.9"/>
+<text x="669" y="365.33" class="tick" text-anchor="end">0</text>
+<line x1="672" y1="302.78" x2="676" y2="302.78" stroke="#000000" stroke-width="0.9"/>
+<text x="669" y="306.28" class="tick" text-anchor="end">0.25</text>
+<line x1="672" y1="243.72" x2="676" y2="243.72" stroke="#000000" stroke-width="0.9"/>
+<text x="669" y="247.22" class="tick" text-anchor="end">0.5</text>
+<line x1="672" y1="184.67" x2="676" y2="184.67" stroke="#000000" stroke-width="0.9"/>
+<text x="669" y="188.17" class="tick" text-anchor="end">0.75</text>
+<line x1="672" y1="125.62" x2="676" y2="125.62" stroke="#000000" stroke-width="0.9"/>
+<text x="669" y="129.12" class="tick" text-anchor="end">1</text>
+<line x1="693.36" y1="198.49" x2="693.36" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="690.76" y1="198.49" x2="695.96" y2="198.49" stroke="#000000" stroke-width="1.0"/>
+<line x1="690.76" y1="125.62" x2="695.96" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="1035.22" y1="361.23" x2="1035.22" y2="256.71" stroke="#000000" stroke-width="1.0"/>
+<line x1="1032.62" y1="361.23" x2="1037.82" y2="361.23" stroke="#000000" stroke-width="1.0"/>
+<line x1="1032.62" y1="256.71" x2="1037.82" y2="256.71" stroke="#000000" stroke-width="1.0"/>
+<line x1="693.36" y1="198.49" x2="693.36" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="690.76" y1="198.49" x2="695.96" y2="198.49" stroke="#000000" stroke-width="1.0"/>
+<line x1="690.76" y1="125.62" x2="695.96" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="693.36" y1="230.74" x2="693.36" y2="126.22" stroke="#000000" stroke-width="1.0"/>
+<line x1="690.76" y1="230.74" x2="695.96" y2="230.74" stroke="#000000" stroke-width="1.0"/>
+<line x1="690.76" y1="126.22" x2="695.96" y2="126.22" stroke="#000000" stroke-width="1.0"/>
+<line x1="1013.86" y1="361.83" x2="1013.86" y2="288.96" stroke="#000000" stroke-width="1.0"/>
+<line x1="1011.26" y1="361.83" x2="1016.46" y2="361.83" stroke="#000000" stroke-width="1.0"/>
+<line x1="1011.26" y1="288.96" x2="1016.46" y2="288.96" stroke="#000000" stroke-width="1.0"/>
+<line x1="1037.23" y1="361.83" x2="1037.23" y2="288.96" stroke="#000000" stroke-width="1.0"/>
+<line x1="1034.63" y1="361.83" x2="1039.83" y2="361.83" stroke="#000000" stroke-width="1.0"/>
+<line x1="1034.63" y1="288.96" x2="1039.83" y2="288.96" stroke="#000000" stroke-width="1.0"/>
+<line x1="693.36" y1="256.97" x2="693.36" y2="131.58" stroke="#000000" stroke-width="1.0"/>
+<line x1="690.76" y1="256.97" x2="695.96" y2="256.97" stroke="#000000" stroke-width="1.0"/>
+<line x1="690.76" y1="131.58" x2="695.96" y2="131.58" stroke="#000000" stroke-width="1.0"/>
+<line x1="890.79" y1="361.83" x2="890.79" y2="288.96" stroke="#000000" stroke-width="1.0"/>
+<line x1="888.19" y1="361.83" x2="893.39" y2="361.83" stroke="#000000" stroke-width="1.0"/>
+<line x1="888.19" y1="288.96" x2="893.39" y2="288.96" stroke="#000000" stroke-width="1.0"/>
+<line x1="1042.92" y1="346.06" x2="1042.92" y2="207.71" stroke="#000000" stroke-width="1.0"/>
+<line x1="1040.32" y1="346.06" x2="1045.52" y2="346.06" stroke="#000000" stroke-width="1.0"/>
+<line x1="1040.32" y1="207.71" x2="1045.52" y2="207.71" stroke="#000000" stroke-width="1.0"/>
+<line x1="1025.12" y1="361.83" x2="1025.12" y2="288.96" stroke="#000000" stroke-width="1.0"/>
+<line x1="1022.52" y1="361.83" x2="1027.72" y2="361.83" stroke="#000000" stroke-width="1.0"/>
+<line x1="1022.52" y1="288.96" x2="1027.72" y2="288.96" stroke="#000000" stroke-width="1.0"/>
+<line x1="693.36" y1="198.49" x2="693.36" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="690.76" y1="198.49" x2="695.96" y2="198.49" stroke="#000000" stroke-width="1.0"/>
+<line x1="690.76" y1="125.62" x2="695.96" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="1013.99" y1="361.83" x2="1013.99" y2="288.96" stroke="#000000" stroke-width="1.0"/>
+<line x1="1011.39" y1="361.83" x2="1016.59" y2="361.83" stroke="#000000" stroke-width="1.0"/>
+<line x1="1011.39" y1="288.96" x2="1016.59" y2="288.96" stroke="#000000" stroke-width="1.0"/>
+<line x1="693.36" y1="198.49" x2="693.36" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<line x1="690.76" y1="198.49" x2="695.96" y2="198.49" stroke="#000000" stroke-width="1.0"/>
+<line x1="690.76" y1="125.62" x2="695.96" y2="125.62" stroke="#000000" stroke-width="1.0"/>
+<polygon points="693.36,122.22 696.76,125.62 693.36,129.02 689.96,125.62" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="1035.22,334.81 1038.62,338.21 1035.22,341.61 1031.82,338.21" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="693.36,122.22 696.76,125.62 693.36,129.02 689.96,125.62" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="693.36,145.84 696.76,149.24 693.36,152.64 689.96,149.24" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="1013.86,358.43 1017.26,361.83 1013.86,365.23 1010.46,361.83" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="1037.23,358.43 1040.63,361.83 1037.23,365.23 1033.83,361.83" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="693.36,169.46 696.76,172.86 693.36,176.26 689.96,172.86" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="890.79,358.43 894.19,361.83 890.79,365.23 887.39,361.83" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="1042.92,287.57 1046.32,290.97 1042.92,294.37 1039.52,290.97" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="1025.12,358.43 1028.52,361.83 1025.12,365.23 1021.72,361.83" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="693.36,122.22 696.76,125.62 693.36,129.02 689.96,125.62" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="1013.99,358.43 1017.39,361.83 1013.99,365.23 1010.59,361.83" fill="none" stroke="#000000" stroke-width="1.2"/>
+<polygon points="693.36,122.22 696.76,125.62 693.36,129.02 689.96,125.62" fill="none" stroke="#000000" stroke-width="1.2"/>
+<text x="699.36" y="120.62" class="point">B0</text>
+<text x="1041.22" y="333.21" class="point">B1</text>
+<text x="699.36" y="120.62" class="point">B2</text>
+<text x="699.36" y="144.24" class="point">B2m</text>
+<text x="1019.86" y="356.83" class="point">B2p</text>
+<text x="1043.23" y="356.83" class="point">B3</text>
+<text x="699.36" y="167.86" class="point">B4box</text>
+<text x="896.79" y="356.83" class="point">B4</text>
+<text x="1048.92" y="285.97" class="point">A</text>
+<text x="1031.12" y="356.83" class="point">A'</text>
+<text x="699.36" y="120.62" class="point">CERT</text>
+<text x="1019.99" y="356.83" class="point">ALWAYS</text>
+<text x="699.36" y="120.62" class="point">RAND</text>
+<text x="867" y="412" class="axis" text-anchor="middle">median companion utilisation Sum(e)/Sum(e_B5) (dimensionless)</text>
+<text transform="translate(622,239) rotate(-90)" class="axis" text-anchor="middle">near-set unsafe conditions / conditions</text>
+<polygon points="1079,105.10 1082.40,108.50 1079,111.90 1075.60,108.50" fill="none" stroke="#000000" stroke-width="1.2"/>
+<text x="1089" y="112" class="legend">policy</text>
+<text x="12" y="468" style="font-size:8px;fill:#595959">Contains information from SimBench (simbench.de), made available under the Open Database License (ODbL 1.0). See analysis/export_envelope_shift/DATA_ATTRIBUTION.md.</text>
+</svg>

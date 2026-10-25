@@ -16,3 +16,5 @@ dist/
 
 # macOS
 .DS_Store
+analysis/export_envelope_shift/results/
+analysis/export_envelope_shift/runs/

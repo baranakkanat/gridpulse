@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="854" height="528" viewBox="0 0 854 528" role="img">
+<title>B - Prediction accuracy against decision safety</title>
+<desc>H2's 9 voltage-model x regime cells. x = the mean over replicates of the test-day MAE of the noise-free predicted voltage against the AC truth on day 156 (96 steps). y = the share of near conditions with an unsafe record in at least one replicate. Bars are Clopper-Pearson 95 % intervals with n = the number of near conditions, the protocol's n (s. 9: replicates are nested), i.e. n = 10 on rural3 and n = 2 on semiurb5; this matches every interval in results/stage_a_summary.json. semiurb5 is drawn hollow and is descriptive (A2). Source: results/envelopes_&lt;network&gt;.json, fields fits[].test_mae and records[].unsafe. Contains information from SimBench (simbench.de), made available under the Open Database License (ODbL 1.0). See analysis/export_envelope_shift/DATA_ATTRIBUTION.md.</desc>
+<style>text{font-family:Helvetica,Arial,sans-serif;fill:#000000}.fig{font-size:13px;font-weight:bold}.panel{font-size:11px;font-weight:bold}.axis{font-size:10px}.tick{font-size:9px}.legend{font-size:9px}.point{font-size:7.5px;fill:#404040}.note{font-size:8px;fill:#404040}</style>
+<text x="12" y="26" class="fig">B - Prediction accuracy against decision safety</text>
+<text x="12" y="40" class="note">H2's 9 voltage-model x regime cells. x = the mean over replicates of the test-day MAE of the noise-free predicted voltage against the AC truth on day 156 (96</text>
+<text x="12" y="51" class="note">steps). y = the share of near conditions with an unsafe record in at least one replicate. Bars are Clopper-Pearson 95 % intervals with n = the number of near</text>
+<text x="12" y="62" class="note">conditions, the protocol's n (s. 9: replicates are nested), i.e. n = 10 on rural3 and n = 2 on semiurb5; this matches every interval in</text>
+<text x="12" y="73" class="note">results/stage_a_summary.json. semiurb5 is drawn hollow and is descriptive (A2). Source: results/envelopes_&lt;network&gt;.json, fields fits[].test_mae and</text>
+<text x="12" y="84" class="note">records[].unsafe.</text>
+<text x="86" y="112" class="panel">rural3 verdict cells (filled); semiurb5 descriptive (A2, hollow)</text>
+<rect x="86" y="124" width="512" height="294" fill="none" stroke="#000000" stroke-width="0.9"/>
+<line x1="178.94" y1="418" x2="178.94" y2="422" stroke="#000000" stroke-width="0.9"/>
+<text x="178.94" y="434" class="tick" text-anchor="middle">5e-4</text>
+<line x1="298.51" y1="418" x2="298.51" y2="422" stroke="#000000" stroke-width="0.9"/>
+<text x="298.51" y="434" class="tick" text-anchor="middle">0.001</text>
+<line x1="418.08" y1="418" x2="418.08" y2="422" stroke="#000000" stroke-width="0.9"/>
+<text x="418.08" y="434" class="tick" text-anchor="middle">0.0015</text>
+<line x1="537.65" y1="418" x2="537.65" y2="422" stroke="#000000" stroke-width="0.9"/>
+<text x="537.65" y="434" class="tick" text-anchor="middle">0.002</text>
+<line x1="82" y1="404.99" x2="86" y2="404.99" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="408.49" class="tick" text-anchor="end">0</text>
+<line x1="82" y1="339.95" x2="86" y2="339.95" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="343.45" class="tick" text-anchor="end">0.25</text>
+<line x1="82" y1="274.90" x2="86" y2="274.90" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="278.40" class="tick" text-anchor="end">0.5</text>
+<line x1="82" y1="209.86" x2="86" y2="209.86" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="213.36" class="tick" text-anchor="end">0.75</text>
+<line x1="82" y1="144.81" x2="86" y2="144.81" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="148.31" class="tick" text-anchor="end">1</text>
+<line x1="86" y1="326.94" x2="598" y2="326.94" stroke="#7f7f7f" stroke-width="0.8" stroke-dasharray="4 3"/>
+<text x="595" y="323.94" class="tick" text-anchor="end">H2's 0.30 risk floor</text>
+<line x1="512.23" y1="225.08" x2="512.23" y2="144.81" stroke="#e69f00" stroke-width="1.0"/>
+<line x1="509.63" y1="225.08" x2="514.83" y2="225.08" stroke="#e69f00" stroke-width="1.0"/>
+<line x1="509.63" y1="144.81" x2="514.83" y2="144.81" stroke="#e69f00" stroke-width="1.0"/>
+<line x1="533.80" y1="398.43" x2="533.80" y2="260.31" stroke="#e69f00" stroke-width="1.0"/>
+<line x1="531.20" y1="398.43" x2="536.40" y2="398.43" stroke="#e69f00" stroke-width="1.0"/>
+<line x1="531.20" y1="260.31" x2="536.40" y2="260.31" stroke="#e69f00" stroke-width="1.0"/>
+<line x1="562.69" y1="404.33" x2="562.69" y2="289.21" stroke="#e69f00" stroke-width="1.0"/>
+<line x1="560.09" y1="404.33" x2="565.29" y2="404.33" stroke="#e69f00" stroke-width="1.0"/>
+<line x1="560.09" y1="289.21" x2="565.29" y2="289.21" stroke="#e69f00" stroke-width="1.0"/>
+<circle cx="512.23" cy="144.81" r="3.40" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<circle cx="533.80" cy="352.96" r="3.40" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<circle cx="562.69" cy="378.97" r="3.40" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<text x="518.23" y="139.81" class="point">P1</text>
+<text x="539.80" y="347.96" class="point">P2</text>
+<text x="568.69" y="373.97" class="point">P3</text>
+<line x1="327.82" y1="401.72" x2="327.82" y2="148.09" stroke="#e69f00" stroke-width="1.0"/>
+<line x1="325.22" y1="401.72" x2="330.42" y2="401.72" stroke="#e69f00" stroke-width="1.0"/>
+<line x1="325.22" y1="148.09" x2="330.42" y2="148.09" stroke="#e69f00" stroke-width="1.0"/>
+<line x1="327.31" y1="404.99" x2="327.31" y2="185.95" stroke="#e69f00" stroke-width="1.0"/>
+<line x1="324.71" y1="404.99" x2="329.91" y2="404.99" stroke="#e69f00" stroke-width="1.0"/>
+<line x1="324.71" y1="185.95" x2="329.91" y2="185.95" stroke="#e69f00" stroke-width="1.0"/>
+<line x1="349.17" y1="404.99" x2="349.17" y2="185.95" stroke="#e69f00" stroke-width="1.0"/>
+<line x1="346.57" y1="404.99" x2="351.77" y2="404.99" stroke="#e69f00" stroke-width="1.0"/>
+<line x1="346.57" y1="185.95" x2="351.77" y2="185.95" stroke="#e69f00" stroke-width="1.0"/>
+<rect x="324.42" y="271.50" width="6.80" height="6.80" fill="none" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="323.91" y="401.59" width="6.80" height="6.80" fill="none" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="345.77" y="401.59" width="6.80" height="6.80" fill="none" stroke="#e69f00" stroke-width="1.2"/>
+<text x="333.82" y="269.90" class="point">P1</text>
+<text x="333.31" y="399.99" class="point">P2</text>
+<text x="355.17" y="399.99" class="point">P3</text>
+<line x1="259.56" y1="225.08" x2="259.56" y2="144.81" stroke="#56b4e9" stroke-width="1.0"/>
+<line x1="256.96" y1="225.08" x2="262.16" y2="225.08" stroke="#56b4e9" stroke-width="1.0"/>
+<line x1="256.96" y1="144.81" x2="262.16" y2="144.81" stroke="#56b4e9" stroke-width="1.0"/>
+<line x1="260.40" y1="225.08" x2="260.40" y2="144.81" stroke="#56b4e9" stroke-width="1.0"/>
+<line x1="257.80" y1="225.08" x2="263" y2="225.08" stroke="#56b4e9" stroke-width="1.0"/>
+<line x1="257.80" y1="144.81" x2="263" y2="144.81" stroke="#56b4e9" stroke-width="1.0"/>
+<line x1="334.09" y1="225.08" x2="334.09" y2="144.81" stroke="#56b4e9" stroke-width="1.0"/>
+<line x1="331.49" y1="225.08" x2="336.69" y2="225.08" stroke="#56b4e9" stroke-width="1.0"/>
+<line x1="331.49" y1="144.81" x2="336.69" y2="144.81" stroke="#56b4e9" stroke-width="1.0"/>
+<circle cx="259.56" cy="144.81" r="3.40" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<circle cx="260.40" cy="144.81" r="3.40" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<circle cx="334.09" cy="144.81" r="3.40" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<text x="265.56" y="139.81" class="point">P1</text>
+<text x="266.40" y="139.81" class="point">P2</text>
+<text x="340.09" y="139.81" class="point">P3</text>
+<line x1="231.68" y1="363.85" x2="231.68" y2="144.81" stroke="#56b4e9" stroke-width="1.0"/>
+<line x1="229.08" y1="363.85" x2="234.28" y2="363.85" stroke="#56b4e9" stroke-width="1.0"/>
+<line x1="229.08" y1="144.81" x2="234.28" y2="144.81" stroke="#56b4e9" stroke-width="1.0"/>
+<line x1="291.72" y1="363.85" x2="291.72" y2="144.81" stroke="#56b4e9" stroke-width="1.0"/>
+<line x1="289.12" y1="363.85" x2="294.32" y2="363.85" stroke="#56b4e9" stroke-width="1.0"/>
+<line x1="289.12" y1="144.81" x2="294.32" y2="144.81" stroke="#56b4e9" stroke-width="1.0"/>
+<line x1="342.58" y1="363.85" x2="342.58" y2="144.81" stroke="#56b4e9" stroke-width="1.0"/>
+<line x1="339.98" y1="363.85" x2="345.18" y2="363.85" stroke="#56b4e9" stroke-width="1.0"/>
+<line x1="339.98" y1="144.81" x2="345.18" y2="144.81" stroke="#56b4e9" stroke-width="1.0"/>
+<rect x="228.28" y="141.41" width="6.80" height="6.80" fill="none" stroke="#56b4e9" stroke-width="1.2"/>
+<rect x="288.32" y="141.41" width="6.80" height="6.80" fill="none" stroke="#56b4e9" stroke-width="1.2"/>
+<rect x="339.18" y="141.41" width="6.80" height="6.80" fill="none" stroke="#56b4e9" stroke-width="1.2"/>
+<text x="237.68" y="139.81" class="point">P1</text>
+<text x="297.72" y="139.81" class="point">P2</text>
+<text x="348.58" y="139.81" class="point">P3</text>
+<line x1="133.96" y1="404.99" x2="133.96" y2="324.73" stroke="#009e73" stroke-width="1.0"/>
+<line x1="131.36" y1="404.99" x2="136.56" y2="404.99" stroke="#009e73" stroke-width="1.0"/>
+<line x1="131.36" y1="324.73" x2="136.56" y2="324.73" stroke="#009e73" stroke-width="1.0"/>
+<line x1="125.73" y1="404.99" x2="125.73" y2="324.73" stroke="#009e73" stroke-width="1.0"/>
+<line x1="123.13" y1="404.99" x2="128.33" y2="404.99" stroke="#009e73" stroke-width="1.0"/>
+<line x1="123.13" y1="324.73" x2="128.33" y2="324.73" stroke="#009e73" stroke-width="1.0"/>
+<line x1="126.87" y1="404.99" x2="126.87" y2="324.73" stroke="#009e73" stroke-width="1.0"/>
+<line x1="124.27" y1="404.99" x2="129.47" y2="404.99" stroke="#009e73" stroke-width="1.0"/>
+<line x1="124.27" y1="324.73" x2="129.47" y2="324.73" stroke="#009e73" stroke-width="1.0"/>
+<circle cx="133.96" cy="404.99" r="3.40" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<circle cx="125.73" cy="404.99" r="3.40" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<circle cx="126.87" cy="404.99" r="3.40" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<text x="139.96" y="399.99" class="point">P1</text>
+<text x="131.73" y="399.99" class="point">P2</text>
+<text x="132.87" y="399.99" class="point">P3</text>
+<line x1="125.61" y1="404.99" x2="125.61" y2="185.95" stroke="#009e73" stroke-width="1.0"/>
+<line x1="123.01" y1="404.99" x2="128.21" y2="404.99" stroke="#009e73" stroke-width="1.0"/>
+<line x1="123.01" y1="185.95" x2="128.21" y2="185.95" stroke="#009e73" stroke-width="1.0"/>
+<line x1="121.31" y1="404.99" x2="121.31" y2="185.95" stroke="#009e73" stroke-width="1.0"/>
+<line x1="118.71" y1="404.99" x2="123.91" y2="404.99" stroke="#009e73" stroke-width="1.0"/>
+<line x1="118.71" y1="185.95" x2="123.91" y2="185.95" stroke="#009e73" stroke-width="1.0"/>
+<line x1="126.94" y1="404.99" x2="126.94" y2="185.95" stroke="#009e73" stroke-width="1.0"/>
+<line x1="124.34" y1="404.99" x2="129.54" y2="404.99" stroke="#009e73" stroke-width="1.0"/>
+<line x1="124.34" y1="185.95" x2="129.54" y2="185.95" stroke="#009e73" stroke-width="1.0"/>
+<rect x="122.21" y="401.59" width="6.80" height="6.80" fill="none" stroke="#009e73" stroke-width="1.2"/>
+<rect x="117.91" y="401.59" width="6.80" height="6.80" fill="none" stroke="#009e73" stroke-width="1.2"/>
+<rect x="123.54" y="401.59" width="6.80" height="6.80" fill="none" stroke="#009e73" stroke-width="1.2"/>
+<text x="131.61" y="399.99" class="point">P1</text>
+<text x="127.31" y="399.99" class="point">P2</text>
+<text x="132.94" y="399.99" class="point">P3</text>
+<text x="342" y="454" class="axis" text-anchor="middle">test-day MAE against AC truth (pu)</text>
+<text transform="translate(32,271) rotate(-90)" class="axis" text-anchor="middle">near-set unsafe conditions / conditions</text>
+<circle cx="619" cy="130.50" r="3.40" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<text x="629" y="134" class="legend">OLS (B1), rural3</text>
+<rect x="615.60" y="142.10" width="6.80" height="6.80" fill="none" stroke="#e69f00" stroke-width="1.2"/>
+<text x="629" y="149" class="legend">OLS (B1), semiurb5 - descriptive (A2)</text>
+<circle cx="619" cy="160.50" r="3.40" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<text x="629" y="164" class="legend">ridge (B2), rural3</text>
+<rect x="615.60" y="172.10" width="6.80" height="6.80" fill="none" stroke="#56b4e9" stroke-width="1.2"/>
+<text x="629" y="179" class="legend">ridge (B2), semiurb5 - descriptive (A2)</text>
+<circle cx="619" cy="190.50" r="3.40" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<text x="629" y="194" class="legend">NNLS (B3), rural3</text>
+<rect x="615.60" y="202.10" width="6.80" height="6.80" fill="none" stroke="#009e73" stroke-width="1.2"/>
+<text x="629" y="209" class="legend">NNLS (B3), semiurb5 - descriptive (A2)</text>
+<text x="12" y="510" style="font-size:8px;fill:#595959">Contains information from SimBench (simbench.de), made available under the Open Database License (ODbL 1.0). See analysis/export_envelope_shift/DATA_ATTRIBUTION.md.</text>
+</svg>
