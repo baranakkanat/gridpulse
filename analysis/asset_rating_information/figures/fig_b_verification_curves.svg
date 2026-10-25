@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1989" height="846" viewBox="0 0 1989 846" role="img">
+<title>B - What verification recovers, against how much of it is done</title>
+<desc>Protocol s. 7's recovery on the cable-limited networks under U2, against the policy's realised verification count rather than its requested budget (s. 6: a policy that adds pairs or paths may overshoot), n = 200 truth draws. Top row: s. 7's per-draw recovery (the verdict statistic). Bottom row: the energy-weighted recovery (A5, descriptive). The marker at the full pool is not connected; no budget between the last k and the full pool was scored. B7 and B8 coincide with B6 on every cell here and are not drawn twice. OB is the ex-post best set and is searched to k &lt;= 3 only (amendment A3), so its curve stops there. No uncertainty is drawn; the standard errors are in results/stage_a_summary.json, verification.&lt;network&gt;.U2.R. Source: results/eval_&lt;network&gt;_U2.json, fields policies.&lt;policy&gt;.&lt;k&gt;.recovery.mean, policies.&lt;policy&gt;.&lt;k&gt;.export_MWh.mean and policies.&lt;policy&gt;.&lt;k&gt;.realised_units.mean. Contains information from SimBench (simbench.de), made available under the Open Database License (ODbL 1.0). See analysis/asset_rating_information/DATA_ATTRIBUTION.md.</desc>
+<style>text{font-family:Helvetica,Arial,sans-serif;fill:#000000}.fig{font-size:13px;font-weight:bold}.panel{font-size:11px;font-weight:bold}.axis{font-size:10px}.tick{font-size:9px}.legend{font-size:9px}.point{font-size:7.5px;fill:#404040}.note{font-size:8px;fill:#404040}</style>
+<text x="12" y="26" class="fig">B - What verification recovers, against how much of it is done</text>
+<text x="12" y="40" class="note">Protocol s. 7's recovery on the cable-limited networks under U2, against the policy's realised verification count rather than its requested budget (s. 6: a policy that adds pairs or paths may overshoot), n = 200 truth draws. Top row: s. 7's per-draw recovery (the verdict statistic). Bottom row: the energy-weighted recovery (A5, descriptive). The marker at the full</text>
+<text x="12" y="51" class="note">pool is not connected; no budget between the last k and the full pool was scored. B7 and B8 coincide with B6 on every cell here and are not drawn twice. OB is the ex-post best set and is searched to k &lt;= 3 only (amendment A3), so its curve stops there. No uncertainty is drawn; the standard errors are in results/stage_a_summary.json, verification.&lt;network&gt;.U2.R.</text>
+<text x="12" y="62" class="note">Source: results/eval_&lt;network&gt;_U2.json, fields policies.&lt;policy&gt;.&lt;k&gt;.recovery.mean, policies.&lt;policy&gt;.&lt;k&gt;.export_MWh.mean and policies.&lt;policy&gt;.&lt;k&gt;.realised_units.mean.</text>
+<text x="86" y="90" class="panel">semiurb4 (U2): per-draw recovery</text>
+<rect x="86" y="102" width="362" height="274" fill="none" stroke="#000000" stroke-width="0.9"/>
+<line x1="110.97" y1="376" x2="110.97" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="110.97" y="392" class="tick" text-anchor="middle">0</text>
+<line x1="214.99" y1="376" x2="214.99" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="214.99" y="392" class="tick" text-anchor="middle">2</text>
+<line x1="319.01" y1="376" x2="319.01" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="319.01" y="392" class="tick" text-anchor="middle">4</text>
+<line x1="423.03" y1="376" x2="423.03" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="423.03" y="392" class="tick" text-anchor="middle">6</text>
+<line x1="82" y1="364.09" x2="86" y2="364.09" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="367.59" class="tick" text-anchor="end">0</text>
+<line x1="82" y1="304.52" x2="86" y2="304.52" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="308.02" class="tick" text-anchor="end">0.25</text>
+<line x1="82" y1="244.96" x2="86" y2="244.96" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="248.46" class="tick" text-anchor="end">0.5</text>
+<line x1="82" y1="185.39" x2="86" y2="185.39" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="188.89" class="tick" text-anchor="end">0.75</text>
+<line x1="82" y1="125.83" x2="86" y2="125.83" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="129.33" class="tick" text-anchor="end">1</text>
+<line x1="86" y1="244.96" x2="448" y2="244.96" stroke="#7f7f7f" stroke-width="0.8" stroke-dasharray="4 3"/>
+<text x="445" y="241.96" class="tick" text-anchor="end">H5(c)'s 0.5</text>
+<line x1="86" y1="125.83" x2="448" y2="125.83" stroke="#7f7f7f" stroke-width="0.8" stroke-dasharray="4 3"/>
+<text x="445" y="122.83" class="tick" text-anchor="end">the oracle</text>
+<polyline points="162.98,354.42 214.99,334.44 267,309.50 319.01,280.51 423.03,125.83" fill="none" stroke="#000000" stroke-width="1.3"/>
+<circle cx="162.98" cy="354.42" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="214.99" cy="334.44" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="267" cy="309.50" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="319.01" cy="280.51" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="423.03" cy="125.83" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="423.03" cy="125.83" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<polyline points="162.98,299.63 214.99,196.51 267,166.28 319.01,149.60 423.03,125.83" fill="none" stroke="#e69f00" stroke-width="1.3"/>
+<rect x="159.58" y="296.23" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="211.59" y="193.11" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="263.60" y="162.88" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="315.61" y="146.20" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="419.63" y="122.43" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="419.63" y="122.43" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<polyline points="110.97,364.09 214.99,196.51 267,166.28 319.01,149.60 423.03,125.83" fill="none" stroke="#56b4e9" stroke-width="1.3"/>
+<polygon points="110.97,360.69 107.57,367.49 114.37,367.49" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="214.99,193.11 211.59,199.91 218.39,199.91" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="267,162.88 263.60,169.68 270.40,169.68" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="319.01,146.20 315.61,153 322.41,153" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="423.03,122.43 419.63,129.23 426.43,129.23" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="423.03,122.43 419.63,129.23 426.43,129.23" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polyline points="110.97,364.09 110.97,364.09 110.97,364.09 110.97,364.09 423.03,125.83" fill="none" stroke="#009e73" stroke-width="1.3"/>
+<polygon points="110.97,360.69 114.37,364.09 110.97,367.49 107.57,364.09" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="110.97,360.69 114.37,364.09 110.97,367.49 107.57,364.09" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="110.97,360.69 114.37,364.09 110.97,367.49 107.57,364.09" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="110.97,360.69 114.37,364.09 110.97,367.49 107.57,364.09" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="423.03,122.43 426.43,125.83 423.03,129.23 419.63,125.83" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="423.03,122.43 426.43,125.83 423.03,129.23 419.63,125.83" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polyline points="162.98,299.63 213.95,196.51 258.68,166.28" fill="none" stroke="#cc79a7" stroke-width="1.3"/>
+<line x1="159.58" y1="296.23" x2="166.38" y2="303.03" stroke="#cc79a7" stroke-width="1.4"/><line x1="159.58" y1="303.03" x2="166.38" y2="296.23" stroke="#cc79a7" stroke-width="1.4"/>
+<line x1="210.55" y1="193.11" x2="217.35" y2="199.91" stroke="#cc79a7" stroke-width="1.4"/><line x1="210.55" y1="199.91" x2="217.35" y2="193.11" stroke="#cc79a7" stroke-width="1.4"/>
+<line x1="255.28" y1="162.88" x2="262.08" y2="169.68" stroke="#cc79a7" stroke-width="1.4"/><line x1="255.28" y1="169.68" x2="262.08" y2="162.88" stroke="#cc79a7" stroke-width="1.4"/>
+<text x="267" y="412" class="axis" text-anchor="middle">realised verifications (pool units)</text>
+<text transform="translate(32,239) rotate(-90)" class="axis" text-anchor="middle">R, the recovered share of B2's loss</text>
+<circle cx="469" cy="108.50" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<text x="479" y="112" class="legend">B5 (random)</text>
+<rect x="465.60" y="120.10" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<text x="479" y="127" class="legend">B6 (loading rank; B7 and B8 identical)</text>
+<polygon points="469,135.10 465.60,141.90 472.40,141.90" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<text x="479" y="142" class="legend">B8P (VoI greedy, pair look-ahead)</text>
+<polygon points="469,150.10 472.40,153.50 469,156.90 465.60,153.50" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<text x="479" y="157" class="legend">B9 (route rule)</text>
+<line x1="465.60" y1="165.10" x2="472.40" y2="171.90" stroke="#cc79a7" stroke-width="1.4"/><line x1="465.60" y1="171.90" x2="472.40" y2="165.10" stroke="#cc79a7" stroke-width="1.4"/>
+<text x="479" y="172" class="legend">OB (ex-post best, k &lt;= 3)</text>
+<text x="741" y="90" class="panel">semiurb5 (U2): per-draw recovery</text>
+<rect x="741" y="102" width="362" height="274" fill="none" stroke="#000000" stroke-width="0.9"/>
+<line x1="765.97" y1="376" x2="765.97" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="765.97" y="392" class="tick" text-anchor="middle">0</text>
+<line x1="907.82" y1="376" x2="907.82" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="907.82" y="392" class="tick" text-anchor="middle">10</text>
+<line x1="1049.66" y1="376" x2="1049.66" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="1049.66" y="392" class="tick" text-anchor="middle">20</text>
+<line x1="737" y1="364.09" x2="741" y2="364.09" stroke="#000000" stroke-width="0.9"/>
+<text x="734" y="367.59" class="tick" text-anchor="end">0</text>
+<line x1="737" y1="304.52" x2="741" y2="304.52" stroke="#000000" stroke-width="0.9"/>
+<text x="734" y="308.02" class="tick" text-anchor="end">0.25</text>
+<line x1="737" y1="244.96" x2="741" y2="244.96" stroke="#000000" stroke-width="0.9"/>
+<text x="734" y="248.46" class="tick" text-anchor="end">0.5</text>
+<line x1="737" y1="185.39" x2="741" y2="185.39" stroke="#000000" stroke-width="0.9"/>
+<text x="734" y="188.89" class="tick" text-anchor="end">0.75</text>
+<line x1="737" y1="125.83" x2="741" y2="125.83" stroke="#000000" stroke-width="0.9"/>
+<text x="734" y="129.33" class="tick" text-anchor="end">1</text>
+<line x1="741" y1="244.96" x2="1103" y2="244.96" stroke="#7f7f7f" stroke-width="0.8" stroke-dasharray="4 3"/>
+<text x="1100" y="241.96" class="tick" text-anchor="end">H5(c)'s 0.5</text>
+<line x1="741" y1="125.83" x2="1103" y2="125.83" stroke="#7f7f7f" stroke-width="0.8" stroke-dasharray="4 3"/>
+<text x="1100" y="122.83" class="tick" text-anchor="end">the oracle</text>
+<polyline points="780.15,363.93 794.34,363.78 808.52,363.62 822.71,363.39 851.08,356.88 879.45,356.42" fill="none" stroke="#000000" stroke-width="1.3"/>
+<circle cx="780.15" cy="363.93" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="794.34" cy="363.78" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="808.52" cy="363.62" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="822.71" cy="363.39" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="851.08" cy="356.88" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="879.45" cy="356.42" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1078.03" cy="125.83" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<polyline points="780.15,360.98 794.34,235.33 808.52,232.22 822.71,222.67 851.08,217.98 879.45,214.86" fill="none" stroke="#e69f00" stroke-width="1.3"/>
+<rect x="776.75" y="357.58" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="790.94" y="231.93" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="805.12" y="228.82" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="819.31" y="219.27" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="847.68" y="214.58" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="876.05" y="211.46" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="1074.63" y="122.43" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<polyline points="765.97,364.09 794.34,235.33 808.52,232.22 808.52,232.22 836.89,219.67 865.26,215" fill="none" stroke="#56b4e9" stroke-width="1.3"/>
+<polygon points="765.97,360.69 762.57,367.49 769.37,367.49" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="794.34,231.93 790.94,238.73 797.74,238.73" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="808.52,228.82 805.12,235.62 811.92,235.62" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="808.52,228.82 805.12,235.62 811.92,235.62" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="836.89,216.27 833.49,223.07 840.29,223.07" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="865.26,211.60 861.86,218.40 868.66,218.40" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="1078.03,122.43 1074.63,129.23 1081.43,129.23" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polyline points="765.97,364.09 794.34,235.33 794.34,235.33 794.34,235.33 794.34,235.33 794.34,235.33" fill="none" stroke="#009e73" stroke-width="1.3"/>
+<polygon points="765.97,360.69 769.37,364.09 765.97,367.49 762.57,364.09" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="794.34,231.93 797.74,235.33 794.34,238.73 790.94,235.33" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="794.34,231.93 797.74,235.33 794.34,238.73 790.94,235.33" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="794.34,231.93 797.74,235.33 794.34,238.73 790.94,235.33" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="794.34,231.93 797.74,235.33 794.34,238.73 790.94,235.33" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="794.34,231.93 797.74,235.33 794.34,238.73 790.94,235.33" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="1078.03,122.43 1081.43,125.83 1078.03,129.23 1074.63,125.83" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polyline points="780.15,360.98 794.34,235.10 806.96,230.94" fill="none" stroke="#cc79a7" stroke-width="1.3"/>
+<line x1="776.75" y1="357.58" x2="783.55" y2="364.38" stroke="#cc79a7" stroke-width="1.4"/><line x1="776.75" y1="364.38" x2="783.55" y2="357.58" stroke="#cc79a7" stroke-width="1.4"/>
+<line x1="790.94" y1="231.70" x2="797.74" y2="238.50" stroke="#cc79a7" stroke-width="1.4"/><line x1="790.94" y1="238.50" x2="797.74" y2="231.70" stroke="#cc79a7" stroke-width="1.4"/>
+<line x1="803.56" y1="227.54" x2="810.36" y2="234.34" stroke="#cc79a7" stroke-width="1.4"/><line x1="803.56" y1="234.34" x2="810.36" y2="227.54" stroke="#cc79a7" stroke-width="1.4"/>
+<text x="922" y="412" class="axis" text-anchor="middle">realised verifications (pool units)</text>
+<text transform="translate(687,239) rotate(-90)" class="axis" text-anchor="middle">R, the recovered share of B2's loss</text>
+<circle cx="1124" cy="108.50" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<text x="1134" y="112" class="legend">B5 (random)</text>
+<rect x="1120.60" y="120.10" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<text x="1134" y="127" class="legend">B6 (loading rank; B7 and B8 identical)</text>
+<polygon points="1124,135.10 1120.60,141.90 1127.40,141.90" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<text x="1134" y="142" class="legend">B8P (VoI greedy, pair look-ahead)</text>
+<polygon points="1124,150.10 1127.40,153.50 1124,156.90 1120.60,153.50" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<text x="1134" y="157" class="legend">B9 (route rule)</text>
+<line x1="1120.60" y1="165.10" x2="1127.40" y2="171.90" stroke="#cc79a7" stroke-width="1.4"/><line x1="1120.60" y1="171.90" x2="1127.40" y2="165.10" stroke="#cc79a7" stroke-width="1.4"/>
+<text x="1134" y="172" class="legend">OB (ex-post best, k &lt;= 3)</text>
+<text x="1396" y="90" class="panel">urban6 (U2): per-draw recovery</text>
+<rect x="1396" y="102" width="362" height="274" fill="none" stroke="#000000" stroke-width="0.9"/>
+<line x1="1420.97" y1="376" x2="1420.97" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="1420.97" y="392" class="tick" text-anchor="middle">0</text>
+<line x1="1550.99" y1="376" x2="1550.99" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="1550.99" y="392" class="tick" text-anchor="middle">5</text>
+<line x1="1681.02" y1="376" x2="1681.02" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="1681.02" y="392" class="tick" text-anchor="middle">10</text>
+<line x1="1392" y1="364.09" x2="1396" y2="364.09" stroke="#000000" stroke-width="0.9"/>
+<text x="1389" y="367.59" class="tick" text-anchor="end">0</text>
+<line x1="1392" y1="304.52" x2="1396" y2="304.52" stroke="#000000" stroke-width="0.9"/>
+<text x="1389" y="308.02" class="tick" text-anchor="end">0.25</text>
+<line x1="1392" y1="244.96" x2="1396" y2="244.96" stroke="#000000" stroke-width="0.9"/>
+<text x="1389" y="248.46" class="tick" text-anchor="end">0.5</text>
+<line x1="1392" y1="185.39" x2="1396" y2="185.39" stroke="#000000" stroke-width="0.9"/>
+<text x="1389" y="188.89" class="tick" text-anchor="end">0.75</text>
+<line x1="1392" y1="125.83" x2="1396" y2="125.83" stroke="#000000" stroke-width="0.9"/>
+<text x="1389" y="129.33" class="tick" text-anchor="end">1</text>
+<line x1="1396" y1="244.96" x2="1758" y2="244.96" stroke="#7f7f7f" stroke-width="0.8" stroke-dasharray="4 3"/>
+<text x="1755" y="241.96" class="tick" text-anchor="end">H5(c)'s 0.5</text>
+<line x1="1396" y1="125.83" x2="1758" y2="125.83" stroke="#7f7f7f" stroke-width="0.8" stroke-dasharray="4 3"/>
+<text x="1755" y="122.83" class="tick" text-anchor="end">the oracle</text>
+<polyline points="1446.97,363.69 1472.98,363.29 1498.98,360.15 1524.99,359.35 1577,349.67 1629.01,325.06" fill="none" stroke="#000000" stroke-width="1.3"/>
+<circle cx="1446.97" cy="363.69" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1472.98" cy="363.29" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1498.98" cy="360.15" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1524.99" cy="359.35" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1577" cy="349.67" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1629.01" cy="325.06" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1733.03" cy="125.83" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<polyline points="1446.97,356.14 1472.98,342.74 1498.98,330.50 1524.99,233.36 1577,138.13 1629.01,126.66" fill="none" stroke="#e69f00" stroke-width="1.3"/>
+<rect x="1443.57" y="352.74" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="1469.58" y="339.34" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="1495.58" y="327.10" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="1521.59" y="229.96" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="1573.60" y="134.73" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="1625.61" y="123.26" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="1729.63" y="122.43" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<polyline points="1446.97,356.14 1446.97,356.14 1498.98,330.50 1498.98,330.50 1577,138.13 1629.01,126.66" fill="none" stroke="#56b4e9" stroke-width="1.3"/>
+<polygon points="1446.97,352.74 1443.57,359.54 1450.37,359.54" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="1446.97,352.74 1443.57,359.54 1450.37,359.54" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="1498.98,327.10 1495.58,333.90 1502.38,333.90" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="1498.98,327.10 1495.58,333.90 1502.38,333.90" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="1577,134.73 1573.60,141.53 1580.40,141.53" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="1629.01,123.26 1625.61,130.06 1632.41,130.06" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="1733.03,122.43 1729.63,129.23 1736.43,129.23" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polyline points="1420.97,364.09 1420.97,364.09 1420.97,364.09 1524.99,233.36 1550.99,152.70 1629.01,126.66" fill="none" stroke="#009e73" stroke-width="1.3"/>
+<polygon points="1420.97,360.69 1424.37,364.09 1420.97,367.49 1417.57,364.09" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="1420.97,360.69 1424.37,364.09 1420.97,367.49 1417.57,364.09" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="1420.97,360.69 1424.37,364.09 1420.97,367.49 1417.57,364.09" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="1524.99,229.96 1528.39,233.36 1524.99,236.76 1521.59,233.36" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="1550.99,149.30 1554.39,152.70 1550.99,156.10 1547.59,152.70" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="1629.01,123.26 1632.41,126.66 1629.01,130.06 1625.61,126.66" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="1733.03,122.43 1736.43,125.83 1733.03,129.23 1729.63,125.83" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polyline points="1446.97,356.14 1472.72,342.74 1498.46,330.50" fill="none" stroke="#cc79a7" stroke-width="1.3"/>
+<line x1="1443.57" y1="352.74" x2="1450.37" y2="359.54" stroke="#cc79a7" stroke-width="1.4"/><line x1="1443.57" y1="359.54" x2="1450.37" y2="352.74" stroke="#cc79a7" stroke-width="1.4"/>
+<line x1="1469.32" y1="339.34" x2="1476.12" y2="346.14" stroke="#cc79a7" stroke-width="1.4"/><line x1="1469.32" y1="346.14" x2="1476.12" y2="339.34" stroke="#cc79a7" stroke-width="1.4"/>
+<line x1="1495.06" y1="327.10" x2="1501.86" y2="333.90" stroke="#cc79a7" stroke-width="1.4"/><line x1="1495.06" y1="333.90" x2="1501.86" y2="327.10" stroke="#cc79a7" stroke-width="1.4"/>
+<text x="1577" y="412" class="axis" text-anchor="middle">realised verifications (pool units)</text>
+<text transform="translate(1342,239) rotate(-90)" class="axis" text-anchor="middle">R, the recovered share of B2's loss</text>
+<circle cx="1779" cy="108.50" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<text x="1789" y="112" class="legend">B5 (random)</text>
+<rect x="1775.60" y="120.10" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<text x="1789" y="127" class="legend">B6 (loading rank; B7 and B8 identical)</text>
+<polygon points="1779,135.10 1775.60,141.90 1782.40,141.90" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<text x="1789" y="142" class="legend">B8P (VoI greedy, pair look-ahead)</text>
+<polygon points="1779,150.10 1782.40,153.50 1779,156.90 1775.60,153.50" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<text x="1789" y="157" class="legend">B9 (route rule)</text>
+<line x1="1775.60" y1="165.10" x2="1782.40" y2="171.90" stroke="#cc79a7" stroke-width="1.4"/><line x1="1775.60" y1="171.90" x2="1782.40" y2="165.10" stroke="#cc79a7" stroke-width="1.4"/>
+<text x="1789" y="172" class="legend">OB (ex-post best, k &lt;= 3)</text>
+<text x="86" y="450" class="panel">semiurb4 (U2): energy-weighted recovery</text>
+<rect x="86" y="462" width="362" height="274" fill="none" stroke="#000000" stroke-width="0.9"/>
+<line x1="110.97" y1="736" x2="110.97" y2="740" stroke="#000000" stroke-width="0.9"/>
+<text x="110.97" y="752" class="tick" text-anchor="middle">0</text>
+<line x1="214.99" y1="736" x2="214.99" y2="740" stroke="#000000" stroke-width="0.9"/>
+<text x="214.99" y="752" class="tick" text-anchor="middle">2</text>
+<line x1="319.01" y1="736" x2="319.01" y2="740" stroke="#000000" stroke-width="0.9"/>
+<text x="319.01" y="752" class="tick" text-anchor="middle">4</text>
+<line x1="423.03" y1="736" x2="423.03" y2="740" stroke="#000000" stroke-width="0.9"/>
+<text x="423.03" y="752" class="tick" text-anchor="middle">6</text>
+<line x1="82" y1="724.09" x2="86" y2="724.09" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="727.59" class="tick" text-anchor="end">0</text>
+<line x1="82" y1="664.52" x2="86" y2="664.52" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="668.02" class="tick" text-anchor="end">0.25</text>
+<line x1="82" y1="604.96" x2="86" y2="604.96" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="608.46" class="tick" text-anchor="end">0.5</text>
+<line x1="82" y1="545.39" x2="86" y2="545.39" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="548.89" class="tick" text-anchor="end">0.75</text>
+<line x1="82" y1="485.83" x2="86" y2="485.83" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="489.33" class="tick" text-anchor="end">1</text>
+<line x1="86" y1="604.96" x2="448" y2="604.96" stroke="#7f7f7f" stroke-width="0.8" stroke-dasharray="4 3"/>
+<text x="445" y="601.96" class="tick" text-anchor="end">H5(c)'s 0.5</text>
+<line x1="86" y1="485.83" x2="448" y2="485.83" stroke="#7f7f7f" stroke-width="0.8" stroke-dasharray="4 3"/>
+<text x="445" y="482.83" class="tick" text-anchor="end">the oracle</text>
+<polyline points="162.98,721.47 214.99,708.35 267,686.01 319.01,661.57 423.03,485.83" fill="none" stroke="#000000" stroke-width="1.3"/>
+<circle cx="162.98" cy="721.47" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="214.99" cy="708.35" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="267" cy="686.01" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="319.01" cy="661.57" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="423.03" cy="485.83" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="423.03" cy="485.83" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<polyline points="162.98,706.61 214.99,601.67 267,553.15 319.01,528.60 423.03,485.83" fill="none" stroke="#e69f00" stroke-width="1.3"/>
+<rect x="159.58" y="703.21" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="211.59" y="598.27" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="263.60" y="549.75" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="315.61" y="525.20" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="419.63" y="482.43" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="419.63" y="482.43" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<polyline points="110.97,724.09 214.99,601.67 267,553.15 319.01,528.60 423.03,485.83" fill="none" stroke="#56b4e9" stroke-width="1.3"/>
+<polygon points="110.97,720.69 107.57,727.49 114.37,727.49" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="214.99,598.27 211.59,605.07 218.39,605.07" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="267,549.75 263.60,556.55 270.40,556.55" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="319.01,525.20 315.61,532 322.41,532" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="423.03,482.43 419.63,489.23 426.43,489.23" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="423.03,482.43 419.63,489.23 426.43,489.23" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polyline points="110.97,724.09 110.97,724.09 110.97,724.09 110.97,724.09 423.03,485.83" fill="none" stroke="#009e73" stroke-width="1.3"/>
+<polygon points="110.97,720.69 114.37,724.09 110.97,727.49 107.57,724.09" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="110.97,720.69 114.37,724.09 110.97,727.49 107.57,724.09" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="110.97,720.69 114.37,724.09 110.97,727.49 107.57,724.09" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="110.97,720.69 114.37,724.09 110.97,727.49 107.57,724.09" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="423.03,482.43 426.43,485.83 423.03,489.23 419.63,485.83" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="423.03,482.43 426.43,485.83 423.03,489.23 419.63,485.83" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polyline points="162.98,706.61 213.95,601.67 258.68,553.15" fill="none" stroke="#cc79a7" stroke-width="1.3"/>
+<line x1="159.58" y1="703.21" x2="166.38" y2="710.01" stroke="#cc79a7" stroke-width="1.4"/><line x1="159.58" y1="710.01" x2="166.38" y2="703.21" stroke="#cc79a7" stroke-width="1.4"/>
+<line x1="210.55" y1="598.27" x2="217.35" y2="605.07" stroke="#cc79a7" stroke-width="1.4"/><line x1="210.55" y1="605.07" x2="217.35" y2="598.27" stroke="#cc79a7" stroke-width="1.4"/>
+<line x1="255.28" y1="549.75" x2="262.08" y2="556.55" stroke="#cc79a7" stroke-width="1.4"/><line x1="255.28" y1="556.55" x2="262.08" y2="549.75" stroke="#cc79a7" stroke-width="1.4"/>
+<text x="267" y="772" class="axis" text-anchor="middle">realised verifications (pool units)</text>
+<text transform="translate(32,599) rotate(-90)" class="axis" text-anchor="middle">energy-weighted recovered share</text>
+<circle cx="469" cy="468.50" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<text x="479" y="472" class="legend">B5 (random)</text>
+<rect x="465.60" y="480.10" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<text x="479" y="487" class="legend">B6 (loading rank; B7 and B8 identical)</text>
+<polygon points="469,495.10 465.60,501.90 472.40,501.90" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<text x="479" y="502" class="legend">B8P (VoI greedy, pair look-ahead)</text>
+<polygon points="469,510.10 472.40,513.50 469,516.90 465.60,513.50" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<text x="479" y="517" class="legend">B9 (route rule)</text>
+<line x1="465.60" y1="525.10" x2="472.40" y2="531.90" stroke="#cc79a7" stroke-width="1.4"/><line x1="465.60" y1="531.90" x2="472.40" y2="525.10" stroke="#cc79a7" stroke-width="1.4"/>
+<text x="479" y="532" class="legend">OB (ex-post best, k &lt;= 3)</text>
+<text x="741" y="450" class="panel">semiurb5 (U2): energy-weighted recovery</text>
+<rect x="741" y="462" width="362" height="274" fill="none" stroke="#000000" stroke-width="0.9"/>
+<line x1="765.97" y1="736" x2="765.97" y2="740" stroke="#000000" stroke-width="0.9"/>
+<text x="765.97" y="752" class="tick" text-anchor="middle">0</text>
+<line x1="907.82" y1="736" x2="907.82" y2="740" stroke="#000000" stroke-width="0.9"/>
+<text x="907.82" y="752" class="tick" text-anchor="middle">10</text>
+<line x1="1049.66" y1="736" x2="1049.66" y2="740" stroke="#000000" stroke-width="0.9"/>
+<text x="1049.66" y="752" class="tick" text-anchor="middle">20</text>
+<line x1="737" y1="724.09" x2="741" y2="724.09" stroke="#000000" stroke-width="0.9"/>
+<text x="734" y="727.59" class="tick" text-anchor="end">0</text>
+<line x1="737" y1="664.52" x2="741" y2="664.52" stroke="#000000" stroke-width="0.9"/>
+<text x="734" y="668.02" class="tick" text-anchor="end">0.25</text>
+<line x1="737" y1="604.96" x2="741" y2="604.96" stroke="#000000" stroke-width="0.9"/>
+<text x="734" y="608.46" class="tick" text-anchor="end">0.5</text>
+<line x1="737" y1="545.39" x2="741" y2="545.39" stroke="#000000" stroke-width="0.9"/>
+<text x="734" y="548.89" class="tick" text-anchor="end">0.75</text>
+<line x1="737" y1="485.83" x2="741" y2="485.83" stroke="#000000" stroke-width="0.9"/>
+<text x="734" y="489.33" class="tick" text-anchor="end">1</text>
+<line x1="741" y1="604.96" x2="1103" y2="604.96" stroke="#7f7f7f" stroke-width="0.8" stroke-dasharray="4 3"/>
+<text x="1100" y="601.96" class="tick" text-anchor="end">H5(c)'s 0.5</text>
+<line x1="741" y1="485.83" x2="1103" y2="485.83" stroke="#7f7f7f" stroke-width="0.8" stroke-dasharray="4 3"/>
+<text x="1100" y="482.83" class="tick" text-anchor="end">the oracle</text>
+<polyline points="780.15,724.04 794.34,724 808.52,723.96 822.71,723.90 851.08,719.76 879.45,719.56" fill="none" stroke="#000000" stroke-width="1.3"/>
+<circle cx="780.15" cy="724.04" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="794.34" cy="724" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="808.52" cy="723.96" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="822.71" cy="723.90" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="851.08" cy="719.76" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="879.45" cy="719.56" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1078.03" cy="485.83" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<polyline points="780.15,723.23 794.34,641.61 808.52,639.21 822.71,634.14 851.08,630.33 879.45,627.94" fill="none" stroke="#e69f00" stroke-width="1.3"/>
+<rect x="776.75" y="719.83" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="790.94" y="638.21" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="805.12" y="635.81" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="819.31" y="630.74" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="847.68" y="626.93" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="876.05" y="624.54" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="1074.63" y="482.43" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<polyline points="765.97,724.09 794.34,641.61 808.52,639.21 808.52,639.21 836.89,631.72 865.26,628.05" fill="none" stroke="#56b4e9" stroke-width="1.3"/>
+<polygon points="765.97,720.69 762.57,727.49 769.37,727.49" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="794.34,638.21 790.94,645.01 797.74,645.01" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="808.52,635.81 805.12,642.61 811.92,642.61" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="808.52,635.81 805.12,642.61 811.92,642.61" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="836.89,628.32 833.49,635.12 840.29,635.12" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="865.26,624.65 861.86,631.45 868.66,631.45" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="1078.03,482.43 1074.63,489.23 1081.43,489.23" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polyline points="765.97,724.09 794.34,641.61 794.34,641.61 794.34,641.61 794.34,641.61 794.34,641.61" fill="none" stroke="#009e73" stroke-width="1.3"/>
+<polygon points="765.97,720.69 769.37,724.09 765.97,727.49 762.57,724.09" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="794.34,638.21 797.74,641.61 794.34,645.01 790.94,641.61" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="794.34,638.21 797.74,641.61 794.34,645.01 790.94,641.61" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="794.34,638.21 797.74,641.61 794.34,645.01 790.94,641.61" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="794.34,638.21 797.74,641.61 794.34,645.01 790.94,641.61" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="794.34,638.21 797.74,641.61 794.34,645.01 790.94,641.61" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="1078.03,482.43 1081.43,485.83 1078.03,489.23 1074.63,485.83" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polyline points="780.15,723.23 794.34,641.61 806.96,639.20" fill="none" stroke="#cc79a7" stroke-width="1.3"/>
+<line x1="776.75" y1="719.83" x2="783.55" y2="726.63" stroke="#cc79a7" stroke-width="1.4"/><line x1="776.75" y1="726.63" x2="783.55" y2="719.83" stroke="#cc79a7" stroke-width="1.4"/>
+<line x1="790.94" y1="638.21" x2="797.74" y2="645.01" stroke="#cc79a7" stroke-width="1.4"/><line x1="790.94" y1="645.01" x2="797.74" y2="638.21" stroke="#cc79a7" stroke-width="1.4"/>
+<line x1="803.56" y1="635.80" x2="810.36" y2="642.60" stroke="#cc79a7" stroke-width="1.4"/><line x1="803.56" y1="642.60" x2="810.36" y2="635.80" stroke="#cc79a7" stroke-width="1.4"/>
+<text x="922" y="772" class="axis" text-anchor="middle">realised verifications (pool units)</text>
+<text transform="translate(687,599) rotate(-90)" class="axis" text-anchor="middle">energy-weighted recovered share</text>
+<circle cx="1124" cy="468.50" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<text x="1134" y="472" class="legend">B5 (random)</text>
+<rect x="1120.60" y="480.10" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<text x="1134" y="487" class="legend">B6 (loading rank; B7 and B8 identical)</text>
+<polygon points="1124,495.10 1120.60,501.90 1127.40,501.90" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<text x="1134" y="502" class="legend">B8P (VoI greedy, pair look-ahead)</text>
+<polygon points="1124,510.10 1127.40,513.50 1124,516.90 1120.60,513.50" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<text x="1134" y="517" class="legend">B9 (route rule)</text>
+<line x1="1120.60" y1="525.10" x2="1127.40" y2="531.90" stroke="#cc79a7" stroke-width="1.4"/><line x1="1120.60" y1="531.90" x2="1127.40" y2="525.10" stroke="#cc79a7" stroke-width="1.4"/>
+<text x="1134" y="532" class="legend">OB (ex-post best, k &lt;= 3)</text>
+<text x="1396" y="450" class="panel">urban6 (U2): energy-weighted recovery</text>
+<rect x="1396" y="462" width="362" height="274" fill="none" stroke="#000000" stroke-width="0.9"/>
+<line x1="1420.97" y1="736" x2="1420.97" y2="740" stroke="#000000" stroke-width="0.9"/>
+<text x="1420.97" y="752" class="tick" text-anchor="middle">0</text>
+<line x1="1550.99" y1="736" x2="1550.99" y2="740" stroke="#000000" stroke-width="0.9"/>
+<text x="1550.99" y="752" class="tick" text-anchor="middle">5</text>
+<line x1="1681.02" y1="736" x2="1681.02" y2="740" stroke="#000000" stroke-width="0.9"/>
+<text x="1681.02" y="752" class="tick" text-anchor="middle">10</text>
+<line x1="1392" y1="724.09" x2="1396" y2="724.09" stroke="#000000" stroke-width="0.9"/>
+<text x="1389" y="727.59" class="tick" text-anchor="end">0</text>
+<line x1="1392" y1="664.52" x2="1396" y2="664.52" stroke="#000000" stroke-width="0.9"/>
+<text x="1389" y="668.02" class="tick" text-anchor="end">0.25</text>
+<line x1="1392" y1="604.96" x2="1396" y2="604.96" stroke="#000000" stroke-width="0.9"/>
+<text x="1389" y="608.46" class="tick" text-anchor="end">0.5</text>
+<line x1="1392" y1="545.39" x2="1396" y2="545.39" stroke="#000000" stroke-width="0.9"/>
+<text x="1389" y="548.89" class="tick" text-anchor="end">0.75</text>
+<line x1="1392" y1="485.83" x2="1396" y2="485.83" stroke="#000000" stroke-width="0.9"/>
+<text x="1389" y="489.33" class="tick" text-anchor="end">1</text>
+<line x1="1396" y1="604.96" x2="1758" y2="604.96" stroke="#7f7f7f" stroke-width="0.8" stroke-dasharray="4 3"/>
+<text x="1755" y="601.96" class="tick" text-anchor="end">H5(c)'s 0.5</text>
+<line x1="1396" y1="485.83" x2="1758" y2="485.83" stroke="#7f7f7f" stroke-width="0.8" stroke-dasharray="4 3"/>
+<text x="1755" y="482.83" class="tick" text-anchor="end">the oracle</text>
+<polyline points="1446.97,724.03 1472.98,723.97 1498.98,723.37 1524.99,723.25 1577,719.98 1629.01,702.47" fill="none" stroke="#000000" stroke-width="1.3"/>
+<circle cx="1446.97" cy="724.03" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1472.98" cy="723.97" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1498.98" cy="723.37" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1524.99" cy="723.25" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1577" cy="719.98" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1629.01" cy="702.47" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1733.03" cy="485.83" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<polyline points="1446.97,722.96 1472.98,720.15 1498.98,717.02 1524.99,670.64 1577,520.79 1629.01,488.38" fill="none" stroke="#e69f00" stroke-width="1.3"/>
+<rect x="1443.57" y="719.56" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="1469.58" y="716.75" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="1495.58" y="713.62" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="1521.59" y="667.24" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="1573.60" y="517.39" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="1625.61" y="484.98" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="1729.63" y="482.43" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<polyline points="1446.97,722.96 1446.97,722.96 1498.98,717.02 1498.98,717.02 1577,520.79 1629.01,488.38" fill="none" stroke="#56b4e9" stroke-width="1.3"/>
+<polygon points="1446.97,719.56 1443.57,726.36 1450.37,726.36" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="1446.97,719.56 1443.57,726.36 1450.37,726.36" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="1498.98,713.62 1495.58,720.42 1502.38,720.42" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="1498.98,713.62 1495.58,720.42 1502.38,720.42" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="1577,517.39 1573.60,524.19 1580.40,524.19" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="1629.01,484.98 1625.61,491.78 1632.41,491.78" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="1733.03,482.43 1729.63,489.23 1736.43,489.23" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polyline points="1420.97,724.09 1420.97,724.09 1420.97,724.09 1524.99,670.64 1550.99,555.80 1629.01,488.38" fill="none" stroke="#009e73" stroke-width="1.3"/>
+<polygon points="1420.97,720.69 1424.37,724.09 1420.97,727.49 1417.57,724.09" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="1420.97,720.69 1424.37,724.09 1420.97,727.49 1417.57,724.09" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="1420.97,720.69 1424.37,724.09 1420.97,727.49 1417.57,724.09" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="1524.99,667.24 1528.39,670.64 1524.99,674.04 1521.59,670.64" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="1550.99,552.40 1554.39,555.80 1550.99,559.20 1547.59,555.80" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="1629.01,484.98 1632.41,488.38 1629.01,491.78 1625.61,488.38" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="1733.03,482.43 1736.43,485.83 1733.03,489.23 1729.63,485.83" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<polyline points="1446.97,722.96 1472.72,720.15 1498.46,717.02" fill="none" stroke="#cc79a7" stroke-width="1.3"/>
+<line x1="1443.57" y1="719.56" x2="1450.37" y2="726.36" stroke="#cc79a7" stroke-width="1.4"/><line x1="1443.57" y1="726.36" x2="1450.37" y2="719.56" stroke="#cc79a7" stroke-width="1.4"/>
+<line x1="1469.32" y1="716.75" x2="1476.12" y2="723.55" stroke="#cc79a7" stroke-width="1.4"/><line x1="1469.32" y1="723.55" x2="1476.12" y2="716.75" stroke="#cc79a7" stroke-width="1.4"/>
+<line x1="1495.06" y1="713.62" x2="1501.86" y2="720.42" stroke="#cc79a7" stroke-width="1.4"/><line x1="1495.06" y1="720.42" x2="1501.86" y2="713.62" stroke="#cc79a7" stroke-width="1.4"/>
+<text x="1577" y="772" class="axis" text-anchor="middle">realised verifications (pool units)</text>
+<text transform="translate(1342,599) rotate(-90)" class="axis" text-anchor="middle">energy-weighted recovered share</text>
+<circle cx="1779" cy="468.50" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<text x="1789" y="472" class="legend">B5 (random)</text>
+<rect x="1775.60" y="480.10" width="6.80" height="6.80" fill="#e69f00" stroke="#e69f00" stroke-width="1.2"/>
+<text x="1789" y="487" class="legend">B6 (loading rank; B7 and B8 identical)</text>
+<polygon points="1779,495.10 1775.60,501.90 1782.40,501.90" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<text x="1789" y="502" class="legend">B8P (VoI greedy, pair look-ahead)</text>
+<polygon points="1779,510.10 1782.40,513.50 1779,516.90 1775.60,513.50" fill="#009e73" stroke="#009e73" stroke-width="1.2"/>
+<text x="1789" y="517" class="legend">B9 (route rule)</text>
+<line x1="1775.60" y1="525.10" x2="1782.40" y2="531.90" stroke="#cc79a7" stroke-width="1.4"/><line x1="1775.60" y1="531.90" x2="1782.40" y2="525.10" stroke="#cc79a7" stroke-width="1.4"/>
+<text x="1789" y="532" class="legend">OB (ex-post best, k &lt;= 3)</text>
+<text x="12" y="828" style="font-size:8px;fill:#595959">Contains information from SimBench (simbench.de), made available under the Open Database License (ODbL 1.0). See analysis/asset_rating_information/DATA_ATTRIBUTION.md.</text>
+</svg>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1394" height="487" viewBox="0 0 1394 487" role="img">
+<title>F - A rating-only change is invisible; an impedance change is not</title>
+<desc>Protocol s. 8's Controls D and E, which together carry H2. Control D changes one cable's rating alone and the electrical state does not move: the largest absolute change in res_bus.vm_pu and in res_line.i_ka is exactly 0, at n = 2 AC solves on one network, so electrical data carry no information about a rating-only error. Control E changes an impedance as well as the rating, and the state does move: the voltage change is drawn as its 95th percentile and its maximum over every bus and step, and the left panel shows how often the resulting overload is invisible to the nominal model. No uncertainty is drawn; both controls are deterministic comparisons of complete cached years. Source: results/control_d.json, field rating_only_change.comparisons, and results/control_e_&lt;network&gt;.json, fields invisible_overload and distributions.vm_abs_delta_all_buses. Contains information from SimBench (simbench.de), made available under the Open Database License (ODbL 1.0). See analysis/asset_rating_information/DATA_ATTRIBUTION.md.</desc>
+<style>text{font-family:Helvetica,Arial,sans-serif;fill:#000000}.fig{font-size:13px;font-weight:bold}.panel{font-size:11px;font-weight:bold}.axis{font-size:10px}.tick{font-size:9px}.legend{font-size:9px}.point{font-size:7.5px;fill:#404040}.note{font-size:8px;fill:#404040}</style>
+<text x="12" y="26" class="fig">F - A rating-only change is invisible; an impedance change is not</text>
+<text x="12" y="40" class="note">Protocol s. 8's Controls D and E, which together carry H2. Control D changes one cable's rating alone and the electrical state does not move: the largest absolute change in res_bus.vm_pu and in res_line.i_ka is exactly 0, at n = 2 AC solves on one network,</text>
+<text x="12" y="51" class="note">so electrical data carry no information about a rating-only error. Control E changes an impedance as well as the rating, and the state does move: the voltage change is drawn as its 95th percentile and its maximum over every bus and step, and the left panel</text>
+<text x="12" y="62" class="note">shows how often the resulting overload is invisible to the nominal model. No uncertainty is drawn; both controls are deterministic comparisons of complete cached years. Source: results/control_d.json, field rating_only_change.comparisons, and</text>
+<text x="12" y="73" class="note">results/control_e_&lt;network&gt;.json, fields invisible_overload and distributions.vm_abs_delta_all_buses.</text>
+<text x="86" y="101" class="panel">Control E: overloads the nominal model cannot see</text>
+<rect x="86" y="113" width="382" height="264" fill="none" stroke="#000000" stroke-width="0.9"/>
+<line x1="117.83" y1="377" x2="117.83" y2="381" stroke="#000000" stroke-width="0.9"/>
+<text x="117.83" y="393" class="tick" text-anchor="middle">rural1</text>
+<line x1="181.50" y1="377" x2="181.50" y2="381" stroke="#000000" stroke-width="0.9"/>
+<text x="181.50" y="393" class="tick" text-anchor="middle">rural2</text>
+<line x1="245.17" y1="377" x2="245.17" y2="381" stroke="#000000" stroke-width="0.9"/>
+<text x="245.17" y="393" class="tick" text-anchor="middle">rural3</text>
+<line x1="308.83" y1="377" x2="308.83" y2="381" stroke="#000000" stroke-width="0.9"/>
+<text x="308.83" y="393" class="tick" text-anchor="middle">semiurb4</text>
+<line x1="372.50" y1="377" x2="372.50" y2="381" stroke="#000000" stroke-width="0.9"/>
+<text x="372.50" y="393" class="tick" text-anchor="middle">semiurb5</text>
+<line x1="436.17" y1="377" x2="436.17" y2="381" stroke="#000000" stroke-width="0.9"/>
+<text x="436.17" y="393" class="tick" text-anchor="middle">urban6</text>
+<line x1="82" y1="365" x2="86" y2="365" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="368.50" class="tick" text-anchor="end">0</text>
+<line x1="82" y1="305" x2="86" y2="305" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="308.50" class="tick" text-anchor="end">0.25</text>
+<line x1="82" y1="245" x2="86" y2="245" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="248.50" class="tick" text-anchor="end">0.5</text>
+<line x1="82" y1="185" x2="86" y2="185" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="188.50" class="tick" text-anchor="end">0.75</text>
+<line x1="82" y1="125" x2="86" y2="125" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="128.50" class="tick" text-anchor="end">1</text>
+<circle cx="117.83" cy="365" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="181.50" cy="363.02" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="245.17" cy="365" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="308.83" cy="349.22" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="372.50" cy="358.40" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="436.17" cy="353.66" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<rect x="178.10" y="121.60" width="6.80" height="6.80" fill="none" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="305.43" y="225.76" width="6.80" height="6.80" fill="none" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="369.10" y="123.54" width="6.80" height="6.80" fill="none" stroke="#e69f00" stroke-width="1.2"/>
+<rect x="432.77" y="208.48" width="6.80" height="6.80" fill="none" stroke="#e69f00" stroke-width="1.2"/>
+<text x="277" y="413" class="axis" text-anchor="middle">network</text>
+<text transform="translate(32,245) rotate(-90)" class="axis" text-anchor="middle">share of step-levels</text>
+<circle cx="489" cy="119.50" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<text x="499" y="123" class="legend">invisible of all step-levels</text>
+<rect x="485.60" y="131.10" width="6.80" height="6.80" fill="none" stroke="#e69f00" stroke-width="1.2"/>
+<text x="499" y="138" class="legend">invisible of the truly overloaded</text>
+<text x="771" y="101" class="panel">Control D's zero against Control E's measured change</text>
+<rect x="771" y="113" width="382" height="264" fill="none" stroke="#000000" stroke-width="0.9"/>
+<line x1="802.83" y1="377" x2="802.83" y2="381" stroke="#000000" stroke-width="0.9"/>
+<text x="802.83" y="393" class="tick" text-anchor="middle">rural1</text>
+<line x1="866.50" y1="377" x2="866.50" y2="381" stroke="#000000" stroke-width="0.9"/>
+<text x="866.50" y="393" class="tick" text-anchor="middle">rural2</text>
+<line x1="930.17" y1="377" x2="930.17" y2="381" stroke="#000000" stroke-width="0.9"/>
+<text x="930.17" y="393" class="tick" text-anchor="middle">rural3</text>
+<line x1="993.83" y1="377" x2="993.83" y2="381" stroke="#000000" stroke-width="0.9"/>
+<text x="993.83" y="393" class="tick" text-anchor="middle">semiurb4</text>
+<line x1="1057.50" y1="377" x2="1057.50" y2="381" stroke="#000000" stroke-width="0.9"/>
+<text x="1057.50" y="393" class="tick" text-anchor="middle">semiurb5</text>
+<line x1="1121.17" y1="377" x2="1121.17" y2="381" stroke="#000000" stroke-width="0.9"/>
+<text x="1121.17" y="393" class="tick" text-anchor="middle">urban6</text>
+<line x1="767" y1="358.79" x2="771" y2="358.79" stroke="#000000" stroke-width="0.9"/>
+<text x="764" y="362.29" class="tick" text-anchor="end">0</text>
+<line x1="767" y1="286.88" x2="771" y2="286.88" stroke="#000000" stroke-width="0.9"/>
+<text x="764" y="290.38" class="tick" text-anchor="end">0.002</text>
+<line x1="767" y1="214.96" x2="771" y2="214.96" stroke="#000000" stroke-width="0.9"/>
+<text x="764" y="218.46" class="tick" text-anchor="end">0.004</text>
+<line x1="767" y1="143.04" x2="771" y2="143.04" stroke="#000000" stroke-width="0.9"/>
+<text x="764" y="146.54" class="tick" text-anchor="end">0.006</text>
+<circle cx="802.83" cy="309.84" r="3.40" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<circle cx="866.50" cy="315.91" r="3.40" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<circle cx="930.17" cy="318.15" r="3.40" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<circle cx="993.83" cy="352.98" r="3.40" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<circle cx="1057.50" cy="339.79" r="3.40" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<circle cx="1121.17" cy="299.21" r="3.40" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<polygon points="802.83,167.74 799.43,174.54 806.23,174.54" fill="none" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="866.50,265.22 863.10,272.02 869.90,272.02" fill="none" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="930.17,222.64 926.77,229.44 933.57,229.44" fill="none" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="993.83,127.81 990.43,134.61 997.23,134.61" fill="none" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="1057.50,240.12 1054.10,246.92 1060.90,246.92" fill="none" stroke="#009e73" stroke-width="1.2"/>
+<polygon points="1121.17,181 1117.77,187.80 1124.57,187.80" fill="none" stroke="#009e73" stroke-width="1.2"/>
+<line x1="1117.77" y1="355.39" x2="1124.57" y2="362.19" stroke="#0072b2" stroke-width="1.4"/><line x1="1117.77" y1="362.19" x2="1124.57" y2="355.39" stroke="#0072b2" stroke-width="1.4"/>
+<text x="962" y="413" class="axis" text-anchor="middle">network</text>
+<text transform="translate(717,245) rotate(-90)" class="axis" text-anchor="middle">|change| in bus voltage magnitude (p.u.)</text>
+<circle cx="1174" cy="119.50" r="3.40" fill="#56b4e9" stroke="#56b4e9" stroke-width="1.2"/>
+<text x="1184" y="123" class="legend">Control E, |dvm| p95</text>
+<polygon points="1174,131.10 1170.60,137.90 1177.40,137.90" fill="none" stroke="#009e73" stroke-width="1.2"/>
+<text x="1184" y="138" class="legend">Control E, |dvm| max</text>
+<line x1="1170.60" y1="146.10" x2="1177.40" y2="152.90" stroke="#0072b2" stroke-width="1.4"/><line x1="1170.60" y1="152.90" x2="1177.40" y2="146.10" stroke="#0072b2" stroke-width="1.4"/>
+<text x="1184" y="153" class="legend">Control D, max |dvm| and |dI| (exactly 0)</text>
+<text x="12" y="469" style="font-size:8px;fill:#595959">Contains information from SimBench (simbench.de), made available under the Open Database License (ODbL 1.0). See analysis/asset_rating_information/DATA_ATTRIBUTION.md.</text>
+</svg>

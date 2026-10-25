@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1854" height="486" viewBox="0 0 1854 486" role="img">
+<title>C - Export against unsafe steps, per policy</title>
+<desc>The safety-utilisation plane on the cable-limited networks under U2, n = 200 truth draws. y = the policy's mean export as a percentage of the oracle's (B4's); x = the mean share of E-steps that are unsafe. B0 trusts the record and buys its export with unsafe steps; B2 is safe and gives export up; B6 at k = 4 is the H5(c) cell, which buys most of the gap back with four verifications and no unsafe step. No uncertainty is drawn: these are the means of the two read-outs. Source: results/eval_&lt;network&gt;_U2.json, fields policies.&lt;policy&gt;.&lt;budget&gt;.export_MWh.mean and policies.&lt;policy&gt;.&lt;budget&gt;.unsafe.unsafe_step_share. Contains information from SimBench (simbench.de), made available under the Open Database License (ODbL 1.0). See analysis/asset_rating_information/DATA_ATTRIBUTION.md.</desc>
+<style>text{font-family:Helvetica,Arial,sans-serif;fill:#000000}.fig{font-size:13px;font-weight:bold}.panel{font-size:11px;font-weight:bold}.axis{font-size:10px}.tick{font-size:9px}.legend{font-size:9px}.point{font-size:7.5px;fill:#404040}.note{font-size:8px;fill:#404040}</style>
+<text x="12" y="26" class="fig">C - Export against unsafe steps, per policy</text>
+<text x="12" y="40" class="note">The safety-utilisation plane on the cable-limited networks under U2, n = 200 truth draws. y = the policy's mean export as a percentage of the oracle's (B4's); x = the mean share of E-steps that are unsafe. B0 trusts the record and buys its export with unsafe steps; B2 is safe and gives export up; B6 at k = 4 is the H5(c) cell, which buys</text>
+<text x="12" y="51" class="note">most of the gap back with four verifications and no unsafe step. No uncertainty is drawn: these are the means of the two read-outs. Source: results/eval_&lt;network&gt;_U2.json, fields policies.&lt;policy&gt;.&lt;budget&gt;.export_MWh.mean and policies.&lt;policy&gt;.&lt;budget&gt;.unsafe.unsafe_step_share.</text>
+<text x="86" y="90" class="panel">semiurb4 (U2)</text>
+<rect x="86" y="102" width="362" height="274" fill="none" stroke="#000000" stroke-width="0.9"/>
+<line x1="110.97" y1="376" x2="110.97" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="110.97" y="392" class="tick" text-anchor="middle">0</text>
+<line x1="190.80" y1="376" x2="190.80" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="190.80" y="392" class="tick" text-anchor="middle">0.025</text>
+<line x1="270.64" y1="376" x2="270.64" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="270.64" y="392" class="tick" text-anchor="middle">0.05</text>
+<line x1="350.48" y1="376" x2="350.48" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="350.48" y="392" class="tick" text-anchor="middle">0.075</text>
+<line x1="430.32" y1="376" x2="430.32" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="430.32" y="392" class="tick" text-anchor="middle">0.1</text>
+<line x1="82" y1="350.80" x2="86" y2="350.80" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="354.30" class="tick" text-anchor="end">95</text>
+<line x1="82" y1="294.07" x2="86" y2="294.07" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="297.57" class="tick" text-anchor="end">97.5</text>
+<line x1="82" y1="237.33" x2="86" y2="237.33" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="240.83" class="tick" text-anchor="end">100</text>
+<line x1="82" y1="180.60" x2="86" y2="180.60" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="184.10" class="tick" text-anchor="end">102.5</text>
+<line x1="82" y1="123.86" x2="86" y2="123.86" stroke="#000000" stroke-width="0.9"/>
+<text x="79" y="127.36" class="tick" text-anchor="end">105</text>
+<line x1="86" y1="237.33" x2="448" y2="237.33" stroke="#7f7f7f" stroke-width="0.8" stroke-dasharray="4 3"/>
+<text x="445" y="234.33" class="tick" text-anchor="end">the oracle</text>
+<circle cx="423.03" cy="120.90" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="141.60" cy="315.93" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="110.97" cy="357.10" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="111.10" cy="352.21" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="110.97" cy="237.33" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="110.97" cy="258.83" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<text x="429.03" y="115.90" class="point">B0</text>
+<text x="147.60" y="310.93" class="point">B1</text>
+<text x="116.97" y="352.10" class="point">B2</text>
+<text x="117.10" y="347.21" class="point">B3</text>
+<text x="116.97" y="232.33" class="point">B4</text>
+<text x="116.97" y="253.83" class="point">B6 at k = 4</text>
+<text x="267" y="412" class="axis" text-anchor="middle">unsafe E-steps / E-steps (mean over draws)</text>
+<text transform="translate(32,239) rotate(-90)" class="axis" text-anchor="middle">export, in % of the oracle</text>
+<circle cx="469" cy="108.50" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<text x="479" y="112" class="legend">policy</text>
+<text x="696" y="90" class="panel">semiurb5 (U2)</text>
+<rect x="696" y="102" width="362" height="274" fill="none" stroke="#000000" stroke-width="0.9"/>
+<line x1="720.97" y1="376" x2="720.97" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="720.97" y="392" class="tick" text-anchor="middle">0</text>
+<line x1="833.39" y1="376" x2="833.39" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="833.39" y="392" class="tick" text-anchor="middle">0.05</text>
+<line x1="945.82" y1="376" x2="945.82" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="945.82" y="392" class="tick" text-anchor="middle">0.1</text>
+<line x1="692" y1="317" x2="696" y2="317" stroke="#000000" stroke-width="0.9"/>
+<text x="689" y="320.50" class="tick" text-anchor="end">100</text>
+<line x1="692" y1="254.40" x2="696" y2="254.40" stroke="#000000" stroke-width="0.9"/>
+<text x="689" y="257.90" class="tick" text-anchor="end">102.5</text>
+<line x1="692" y1="191.81" x2="696" y2="191.81" stroke="#000000" stroke-width="0.9"/>
+<text x="689" y="195.31" class="tick" text-anchor="end">105</text>
+<line x1="692" y1="129.22" x2="696" y2="129.22" stroke="#000000" stroke-width="0.9"/>
+<text x="689" y="132.72" class="tick" text-anchor="end">107.5</text>
+<line x1="696" y1="317" x2="1058" y2="317" stroke="#7f7f7f" stroke-width="0.8" stroke-dasharray="4 3"/>
+<text x="1055" y="314" class="tick" text-anchor="end">the oracle</text>
+<circle cx="1033.03" cy="120.90" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="812.49" cy="271.28" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="720.97" cy="357.10" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="720.97" cy="356.64" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="720.97" cy="317" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="720.97" cy="341.96" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<text x="1039.03" y="115.90" class="point">B0</text>
+<text x="818.49" y="266.28" class="point">B1</text>
+<text x="726.97" y="352.10" class="point">B2</text>
+<text x="726.97" y="351.64" class="point">B3</text>
+<text x="726.97" y="312" class="point">B4</text>
+<text x="726.97" y="336.96" class="point">B6 at k = 4</text>
+<text x="877" y="412" class="axis" text-anchor="middle">unsafe E-steps / E-steps (mean over draws)</text>
+<text transform="translate(642,239) rotate(-90)" class="axis" text-anchor="middle">export, in % of the oracle</text>
+<circle cx="1079" cy="108.50" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<text x="1089" y="112" class="legend">policy</text>
+<text x="1306" y="90" class="panel">urban6 (U2)</text>
+<rect x="1306" y="102" width="362" height="274" fill="none" stroke="#000000" stroke-width="0.9"/>
+<line x1="1330.97" y1="376" x2="1330.97" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="1330.97" y="392" class="tick" text-anchor="middle">0</text>
+<line x1="1411.99" y1="376" x2="1411.99" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="1411.99" y="392" class="tick" text-anchor="middle">0.025</text>
+<line x1="1493.02" y1="376" x2="1493.02" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="1493.02" y="392" class="tick" text-anchor="middle">0.05</text>
+<line x1="1574.05" y1="376" x2="1574.05" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="1574.05" y="392" class="tick" text-anchor="middle">0.075</text>
+<line x1="1655.08" y1="376" x2="1655.08" y2="380" stroke="#000000" stroke-width="0.9"/>
+<text x="1655.08" y="392" class="tick" text-anchor="middle">0.1</text>
+<line x1="1302" y1="343.26" x2="1306" y2="343.26" stroke="#000000" stroke-width="0.9"/>
+<text x="1299" y="346.76" class="tick" text-anchor="end">98</text>
+<line x1="1302" y1="284.21" x2="1306" y2="284.21" stroke="#000000" stroke-width="0.9"/>
+<text x="1299" y="287.71" class="tick" text-anchor="end">100</text>
+<line x1="1302" y1="225.17" x2="1306" y2="225.17" stroke="#000000" stroke-width="0.9"/>
+<text x="1299" y="228.67" class="tick" text-anchor="end">102</text>
+<line x1="1302" y1="166.13" x2="1306" y2="166.13" stroke="#000000" stroke-width="0.9"/>
+<text x="1299" y="169.63" class="tick" text-anchor="end">104</text>
+<line x1="1302" y1="107.09" x2="1306" y2="107.09" stroke="#000000" stroke-width="0.9"/>
+<text x="1299" y="110.59" class="tick" text-anchor="end">106</text>
+<line x1="1306" y1="284.21" x2="1668" y2="284.21" stroke="#7f7f7f" stroke-width="0.8" stroke-dasharray="4 3"/>
+<text x="1665" y="281.21" class="tick" text-anchor="end">the oracle</text>
+<circle cx="1643.03" cy="120.90" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1425.16" cy="268.64" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1330.97" cy="357.10" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1330.97" cy="356.97" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1330.97" cy="284.21" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<circle cx="1330.97" cy="340.75" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<text x="1649.03" y="115.90" class="point">B0</text>
+<text x="1431.16" y="263.64" class="point">B1</text>
+<text x="1336.97" y="352.10" class="point">B2</text>
+<text x="1336.97" y="351.97" class="point">B3</text>
+<text x="1336.97" y="279.21" class="point">B4</text>
+<text x="1336.97" y="335.75" class="point">B6 at k = 4</text>
+<text x="1487" y="412" class="axis" text-anchor="middle">unsafe E-steps / E-steps (mean over draws)</text>
+<text transform="translate(1252,239) rotate(-90)" class="axis" text-anchor="middle">export, in % of the oracle</text>
+<circle cx="1689" cy="108.50" r="3.40" fill="#000000" stroke="#000000" stroke-width="1.2"/>
+<text x="1699" y="112" class="legend">policy</text>
+<text x="12" y="468" style="font-size:8px;fill:#595959">Contains information from SimBench (simbench.de), made available under the Open Database License (ODbL 1.0). See analysis/asset_rating_information/DATA_ATTRIBUTION.md.</text>
+</svg>

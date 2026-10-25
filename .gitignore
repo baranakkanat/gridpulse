@@ -18,3 +18,5 @@ dist/
 .DS_Store
 analysis/export_envelope_shift/results/
 analysis/export_envelope_shift/runs/
+analysis/asset_rating_information/results/
+analysis/asset_rating_information/runs/
